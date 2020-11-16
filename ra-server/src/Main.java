@@ -16,7 +16,7 @@ public class Main {
         // Chú ý bạn không thể chọn cổng nhỏ hơn 1023 nếu không là người dùng
         // đặc quyền (privileged users (root)).
         try {
-            listener = new ServerSocket(7777);
+            listener = new ServerSocket(3628);
         } catch (IOException e) {
             System.out.println(e);
             System.exit(1);
@@ -60,7 +60,6 @@ public class Main {
 
             try {
 
-
                 // Mở luồng vào ra trên Socket tại Server.
                 BufferedReader is = new BufferedReader(new InputStreamReader(socketOfServer.getInputStream()));
                 BufferedWriter os = new BufferedWriter(new OutputStreamWriter(socketOfServer.getOutputStream()));
@@ -69,20 +68,23 @@ public class Main {
                     // Đọc dữ liệu tới server (Do client gửi tới).
                     String line = is.readLine();
 
-                    // Ghi vào luồng đầu ra của Socket tại Server.
-                    // (Nghĩa là gửi tới Client).
-                    os.write(">> " + line);
-                    // Kết thúc dòng
-                    os.newLine();
-                    // Đẩy dữ liệu đi
-                    os.flush();
+                    if (line != null) {
 
-                    // Nếu người dùng gửi tới QUIT (Muốn kết thúc trò chuyện).
-                    if (line.equals("QUIT")) {
-                        os.write(">> OK");
+                        // Ghi vào luồng đầu ra của Socket tại Server.
+                        // (Nghĩa là gửi tới Client).
+                        os.write(">> " + line);
+                        // Kết thúc dòng
                         os.newLine();
+                        // Đẩy dữ liệu đi
                         os.flush();
-                        break;
+
+                        // Nếu người dùng gửi tới QUIT (Muốn kết thúc trò chuyện).
+                        if (line.equals("QUIT")) {
+                            os.write(">> OK");
+                            os.newLine();
+                            os.flush();
+                            break;
+                        }
                     }
                 }
 
