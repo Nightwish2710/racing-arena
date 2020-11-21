@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
 
@@ -67,14 +68,20 @@ public class Main {
                 while (true) {
                     // Đọc dữ liệu tới server (Do client gửi tới).
                     String line = is.readLine();
-
                     if (line != null) {
-
+                        System.out.println("FROM CLIENT " + line);
                         // Ghi vào luồng đầu ra của Socket tại Server.
                         // (Nghĩa là gửi tới Client).
-                        os.write(">> " + line);
+                        os.write("Replying to >> " + line);
                         // Kết thúc dòng
                         os.newLine();
+
+                        try {
+                            TimeUnit.SECONDS.sleep(3);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
                         // Đẩy dữ liệu đi
                         os.flush();
 
