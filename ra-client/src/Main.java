@@ -1,19 +1,13 @@
 import network.Network;
-<<<<<<< HEAD
 import clientGUI.RacingArenaClient;
-=======
 import network.NetworkConfig;
->>>>>>> 0a7ea91a635faca5a6d3f0e6187ac7d3036aef28
 
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Date;
-<<<<<<< HEAD
 import javax.swing.*;
-=======
 import java.util.Scanner;
->>>>>>> 0a7ea91a635faca5a6d3f0e6187ac7d3036aef28
 
 public class Main {
     private static Network network;
@@ -24,9 +18,8 @@ public class Main {
 //
 //        network.send("HELLO! Testing 1, 2, 3, ...");
 
-<<<<<<< HEAD
         createClientGUI();
-=======
+        
         while (true) {
             Scanner sc = new Scanner(System.in);
             String msg = sc.nextLine();
@@ -37,7 +30,6 @@ public class Main {
                 break;
             }
         }
->>>>>>> 0a7ea91a635faca5a6d3f0e6187ac7d3036aef28
     }
 
     private static void connectToServer() {
