@@ -19,9 +19,10 @@ public class RacingArenaClient extends JFrame {
     private JLabel updatePoint;
 
     private JLabel question;
-    private JLabel updateQuestion;
     private JTextField enterAnswer;
     private JButton sendAnswer;
+    private JLabel updateQuestion;
+    private JProgressBar timer;
 
 
     public RacingArenaClient(String gameName) {
