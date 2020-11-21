@@ -11,28 +11,23 @@ public class Main {
         System.out.println("Server is waiting to accept user...");
         int clientNumber = 0;
 
-
-        // Mở một ServerSocket tại cổng 7777.
-        // Chú ý bạn không thể chọn cổng nhỏ hơn 1023 nếu không là người dùng
-        // đặc quyền (privileged users (root)).
+        // open a Server at port 3628
         try {
             listener = new ServerSocket(3628);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             System.out.println(e);
             System.exit(1);
         }
 
         try {
             while (true) {
-
-
-                // Chấp nhận một yêu cầu kết nối từ phía Client.
-                // Đồng thời nhận được một đối tượng Socket tại server.
-
+                // accept request from Client and receiver object Socket at Server
                 Socket socketOfServer = listener.accept();
                 new Main.ServiceThread(socketOfServer, clientNumber++).start();
             }
-        } finally {
+        }
+        finally {
             listener.close();
         }
 
@@ -51,34 +46,26 @@ public class Main {
             this.clientNumber = clientNumber;
             this.socketOfServer = socketOfServer;
 
-            // Log
             log("New connection with client# " + this.clientNumber + " at " + socketOfServer);
         }
 
         @Override
         public void run() {
 
-            try {
-
-                // Mở luồng vào ra trên Socket tại Server.
+            try { // open output stream on Socket at Server
                 BufferedReader is = new BufferedReader(new InputStreamReader(socketOfServer.getInputStream()));
                 BufferedWriter os = new BufferedWriter(new OutputStreamWriter(socketOfServer.getOutputStream()));
 
-                while (true) {
-                    // Đọc dữ liệu tới server (Do client gửi tới).
+                while (true) { // receiver data sent to Server from Client
                     String line = is.readLine();
 
                     if (line != null) {
-
-                        // Ghi vào luồng đầu ra của Socket tại Server.
-                        // (Nghĩa là gửi tới Client).
+                        // write to output stream of Socker at Server
                         os.write(">> " + line);
-                        // Kết thúc dòng
                         os.newLine();
-                        // Đẩy dữ liệu đi
-                        os.flush();
+                        os.flush(); // push data to Client
 
-                        // Nếu người dùng gửi tới QUIT (Muốn kết thúc trò chuyện).
+                        // end of conversation
                         if (line.equals("QUIT")) {
                             os.write(">> OK");
                             os.newLine();
@@ -87,8 +74,8 @@ public class Main {
                         }
                     }
                 }
-
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 System.out.println(e);
                 e.printStackTrace();
             }
