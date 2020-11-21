@@ -3,18 +3,18 @@ package network;
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Date;
-import java.util.logging.Logger;
 
 public class Network {
     private Socket clientSocket;
     private BufferedWriter outStream;
     private BufferedReader inStream;
+    private ReceiverThread receiverThread;
 
     public Network() {
         clientSocket = null;
         outStream = null;
         inStream = null;
+        receiverThread = null;
     }
 
     public void connect() {
@@ -40,33 +40,36 @@ public class Network {
             // notify of successful connection
             System.out.println(this.getClass().getSimpleName() + ": notification of successful connection.");
         }
+
+        // notify of successful connection
+        System.out.println(this.getClass().getSimpleName() + ": notify of successful connection");
+        // Update GUI
+
+
+        // Start receiver thread, in case we might need
+        //while (true) {
+        //    receiverThread = new ReceiverThread(inStream);
+        //    receiverThread.start();
+        //}
     }
 
-    public void send(String msg) {
+    public void send(int cmd, String msg) {
         try {
-            // write data into output stream of Socket at Client
-            outStream.write("OKAY");
+            outStream.write(msg);
             outStream.newLine();
-            outStream.flush();  // push data to Server
+            outStream.flush();
 
-            // read data sent from Server by reading input stream of Socket at Client
-            String responseLine;
-            while ((responseLine = inStream.readLine()) != null) {
-                System.out.println("Server: " + responseLine);
-                if (responseLine.indexOf("OK") != -1) {
-                    break;
-                }
+            String responseLine = inStream.readLine();
+            System.out.println(this.getClass().getSimpleName() + "server says: " + responseLine);
+
+            if (msg == "q") {
+                outStream.close();
+                clientSocket.close();
             }
-
-            outStream.close();
-            inStream.close();
-            clientSocket.close();
-        }
-        catch (UnknownHostException e) {
-            System.err.println("Try to connect to Unknown Host: " + e);
-        }
-        catch (IOException e) {
-            System.err.println("I/O Exception: " + e);
+        } catch (UnknownHostException e) {
+            System.err.println("Trying to connect to unknown host: " + e);
+        } catch (IOException e) {
+            System.err.println("IOException:  " + e);
         }
     }
 }

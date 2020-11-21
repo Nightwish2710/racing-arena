@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
 
@@ -58,15 +59,23 @@ public class Main {
 
                 while (true) { // receiver data sent to Server from Client
                     String line = is.readLine();
-
                     if (line != null) {
+                        System.out.println("FROM CLIENT " + line);
                         // write to output stream of Socker at Server
-                        os.write(">> " + line);
+                        os.write("Replying to >> " + line);
                         os.newLine();
+
+                        try {
+                            TimeUnit.SECONDS.sleep(3);
+                        } 
+                        catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
                         os.flush(); // push data to Client
 
                         // end of conversation
-                        if (line.equals("QUIT")) {
+                        if (line.equals("q")) {
                             os.write(">> OK");
                             os.newLine();
                             os.flush();
