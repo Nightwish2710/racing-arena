@@ -1,5 +1,6 @@
 package clientGUI;
 
+import clientdatamodel.CDAccount;
 import clientnetwork.ClientNetwork;
 import clientnetwork.ClientNetworkConfig;
 
@@ -51,8 +52,14 @@ public class ClientGUI extends JFrame {
                 userNickname = enterNickname.getText();
                 userPassword = String.valueOf(enterPassword.getPassword());
 
+                System.out.println(userNickname + userPassword);
+
                 if (checkNicknameValidity(userNickname) == false) {
                     nicknameError.setText("Nickname is too long or not just contain [a-zA-Z0-9_].");
+                }
+                else {
+                    CDAccount cdLogin = new CDAccount(userNickname, userPassword);
+                    ClientNetwork.getInstance().send(ClientNetworkConfig.CMD.CMD_LOGIN, cdLogin);
                 }
             }
         });

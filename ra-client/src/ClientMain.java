@@ -31,10 +31,10 @@ public class ClientMain {
 //            }
 //        }
         // Sample login
-        String username = "Anh Thu";
-        String password = "AnhThu";
-        CDAccount cdLogin = new CDAccount(username, password);
-        network.send(ClientNetworkConfig.CMD.CMD_LOGIN, cdLogin);
+//        String username = "Anh Thu";
+//        String password = "AnhThu";
+//        CDAccount cdLogin = new CDAccount(username, password);
+//        network.send(ClientNetworkConfig.CMD.CMD_LOGIN, cdLogin);
     }
 
     private static void connectToServer() {

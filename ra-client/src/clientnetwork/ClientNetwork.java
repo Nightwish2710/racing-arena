@@ -12,6 +12,16 @@ public class ClientNetwork {
     private DataInputStream inStream;
     private ClientReceiverThread receiverThread;
 
+    // Singleton
+    private static ClientNetwork clientNetwork = null;
+    public static ClientNetwork getInstance() {
+        if (clientNetwork == null) {
+            clientNetwork = new ClientNetwork();
+            clientNetwork.connect();
+        }
+        return clientNetwork;
+    }
+
     public ClientNetwork() {
         clientSocket = null;
         outStream = null;
