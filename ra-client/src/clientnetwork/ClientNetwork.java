@@ -1,13 +1,15 @@
 package clientnetwork;
 
+import clientdatamodel.ClientDataModel;
+
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class ClientNetwork {
     private Socket clientSocket;
-    private BufferedWriter outStream;
-    private BufferedReader inStream;
+    private DataOutputStream outStream;
+    private DataInputStream inStream;
     private ClientReceiverThread receiverThread;
 
     public ClientNetwork() {
@@ -23,10 +25,10 @@ public class ClientNetwork {
             clientSocket = new Socket(ClientNetworkConfig.SERVER_HOST, ClientNetworkConfig.SERVER_PORT);
 
             // output stream at Client (send data to server)
-            outStream = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+            outStream = new DataOutputStream(clientSocket.getOutputStream());
 
             // input stream at Client (receive data from server)
-            inStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            inStream = new DataInputStream(clientSocket.getInputStream());
 
         } catch (UnknownHostException e) {
             System.err.println("Unknown host named " + ClientNetworkConfig.SERVER_HOST);
@@ -46,23 +48,28 @@ public class ClientNetwork {
         //}
     }
 
-    public void send(int cmd, String msg) {
+    public void send(int cmd, ClientDataModel clientDataModel) {
         try {
-            outStream.write(msg);
-            outStream.newLine();
-            outStream.flush();
+            System.out.println(this.getClass().getSimpleName() + ": sending username, password");
+            outStream.write(clientDataModel.pack(cmd));
 
             String responseLine = inStream.readLine();
             System.out.println(this.getClass().getSimpleName() + " server says: " + responseLine);
 
-            if (msg == "q") {
-                outStream.close();
-                clientSocket.close();
-            }
         } catch (UnknownHostException e) {
             System.err.println("Trying to connect to unknown host: " + e);
         } catch (IOException e) {
             System.err.println("I/O Exception: " + e);
+        }
+    }
+
+    public void disconnect() {
+        try {
+            outStream.writeInt(ClientNetworkConfig.CMD.DISCONNECT);
+            outStream.close();
+            clientSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

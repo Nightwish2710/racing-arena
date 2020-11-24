@@ -1,14 +1,18 @@
 package servernetwork;
 
+import org.h2.util.IOUtils;
+import serverdatamodel.SDAccount;
+
 import java.io.*;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 import java.util.concurrent.TimeUnit;
 
 public class ServerCSocketThread extends Thread{
     private int clientNumber;
     private Socket socketOfServer;
-    private BufferedReader inStream;
-    private BufferedWriter outStream;
+    private DataInputStream inStream;
+    private DataOutputStream outStream;
 
     public ServerCSocketThread(Socket socketOfServer, int clientNumber) {
         this.clientNumber = clientNumber;
@@ -21,36 +25,34 @@ public class ServerCSocketThread extends Thread{
     public void run() {
         try {
             // Server socket I/O
-            inStream = new BufferedReader(new InputStreamReader(socketOfServer.getInputStream()));
-            outStream = new BufferedWriter(new OutputStreamWriter(socketOfServer.getOutputStream()));
+            inStream = new DataInputStream(socketOfServer.getInputStream());
+            outStream = new DataOutputStream(socketOfServer.getOutputStream());
 
             while (true) {
-                // Đọc dữ liệu tới server (Do client gửi tới).
-                String line = inStream.readLine();
-                if (line != null) {
-                    System.out.println("FROM CLIENT " + line);
-                    // Ghi vào luồng đầu ra của Socket tại Server.
-                    // (Nghĩa là gửi tới Client).
-                    outStream.write("Replying to >> " + line);
-                    // Kết thúc dòng
-                    outStream.newLine();
+                int cmd = inStream.readInt();
+                if (cmd == ServerNetworkConfig.CMD.DISCONNECT) {
+                    break;
+                }
 
+                int lData = inStream.available();
+                byte[] bytes = new byte[lData];
+                inStream.read(bytes);
+
+                // <SWICTH CASE> create handler for each of these cases
+                if (cmd == ServerNetworkConfig.CMD.CMD_LOGIN) {
+                    SDAccount sdAccount = new SDAccount();
+                    sdAccount.unpack(bytes);
+                    System.out.println(this.getClass().getSimpleName()+": user login with username, password: "+ sdAccount.getUsername()+ ", " + sdAccount.getPassword());
+
+                    // check if sdAccount is valid
                     try {
                         TimeUnit.SECONDS.sleep(3);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
 
-                    // Đẩy dữ liệu đi
-                    outStream.flush();
-
-                    // Nếu người dùng gửi tới QUIT (Muốn kết thúc trò chuyện).
-                    if (line.equals("q")) {
-                        outStream.write(">> OK");
-                        outStream.newLine();
-                        outStream.flush();
-                        break;
-                    }
+                    // notify back
+                    outStream.writeChars("Created account with Username: " + sdAccount.getUsername() + ", Password: " + sdAccount.getPassword() + '\n');
                 }
             }
         } catch (IOException e) {

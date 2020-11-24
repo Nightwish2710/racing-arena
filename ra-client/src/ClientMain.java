@@ -2,9 +2,11 @@ import clientGUI.ClientGUI;
 import clientGUI.ClientGUIConfig;
 import clientnetwork.ClientNetwork;
 import clientnetwork.ClientNetworkConfig;
+import clientdatamodel.CDAccount;
 
 import javax.swing.*;
-import java.util.Scanner;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class ClientMain {
     private static ClientNetwork network;
@@ -28,6 +30,11 @@ public class ClientMain {
 //                break;
 //            }
 //        }
+        // Sample login
+        String username = "Anh Thu";
+        String password = "AnhThu";
+        CDAccount cdLogin = new CDAccount(username, password);
+        network.send(ClientNetworkConfig.CMD.CMD_LOGIN, cdLogin);
     }
 
     private static void connectToServer() {
@@ -38,5 +45,14 @@ public class ClientMain {
     private static void createClientGUI() {
         JFrame jFrame = new ClientGUI(ClientGUIConfig.GAME_NAME);
         jFrame.setVisible(true);
+        jFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                network.disconnect();
+                System.out.println(ClientMain.class.getSimpleName() + ": disconnect from server");
+
+                super.windowClosed(e);
+            }
+        });
     }
 }
