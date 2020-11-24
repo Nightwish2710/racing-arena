@@ -7,6 +7,7 @@ public class ClientReceiverThread extends Thread {
 
     private BufferedReader inStream;
     private String responseLine;
+
     public ClientReceiverThread(BufferedReader _inStream) {
         this.inStream = _inStream;
         responseLine = null;
@@ -17,7 +18,7 @@ public class ClientReceiverThread extends Thread {
         try {
             responseLine = inStream.readLine();
             if (responseLine != null) {
-                System.out.println(this.getClass().getSimpleName() + "server says: " + responseLine);
+                System.out.println(this.getClass().getSimpleName() + " server says: " + responseLine);
             }
         } catch (IOException e) {
             e.printStackTrace();

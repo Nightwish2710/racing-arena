@@ -5,6 +5,7 @@ import javax.swing.border.*;
 import java.awt.*;
 
 public class ClientGUIConfig {
+    public static final String GAME_NAME = "RACING ARENA";
     public static final Color DARK_ORANGE = new Color(0xD79B00);
     public static final Color LIGHT_ORANGE = new Color(0xFFE6CC);
 

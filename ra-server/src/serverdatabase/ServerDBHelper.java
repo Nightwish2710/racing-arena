@@ -40,9 +40,9 @@ public class ServerDBHelper {
             conn.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-        }  finally {
+        } finally {
             //finally block used to close resources
-            try{
+            try {
                 if(stmt!=null) stmt.close();
             } catch(SQLException se2) {
             } // nothing we can do

@@ -1,11 +1,17 @@
 package clientGUI;
 
+import clientnetwork.ClientNetwork;
+import clientnetwork.ClientNetworkConfig;
+
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.DataOutputStream;
 
 public class ClientGUI extends JFrame {
+    public static String userNickname, userPassword;
+
     private JPanel ClientPanel;
 
     private JLabel nicknameLabel;
@@ -31,6 +37,7 @@ public class ClientGUI extends JFrame {
     private JPanel serverResponsePanel;
 
     private JSeparator separator;
+    private JLabel nicknameError;
 
     public ClientGUI(String gameName) {
         super(gameName);
@@ -39,12 +46,28 @@ public class ClientGUI extends JFrame {
         this.setContentPane(ClientPanel);
         this.setClientGUI();
 
+        joinServerButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                userNickname = enterNickname.getText();
+                userPassword = String.valueOf(enterPassword.getPassword());
+
+                if (checkNicknameValidity(userNickname) == false) {
+                    nicknameError.setText("Nickname is too long or not just contain [a-zA-Z0-9_].");
+                }
+            }
+        });
+
         this.pack();
     }
 
     private void setClientGUI() {
         // set panel
         ClientPanel.setBackground(ClientGUIConfig.LIGHT_ORANGE);
+
+        // set error label
+        nicknameError.setText("");
+        nicknameError.setFont(new Font("Arial", Font.BOLD, 9));
+        nicknameError.setForeground(Color.RED);
 
         // set buttons
         joinServerButton.setBackground(ClientGUIConfig.DARK_ORANGE);
@@ -80,35 +103,50 @@ public class ClientGUI extends JFrame {
         enterNickname.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) { // if cursor is in the box
-                enterNickname.setText(null);
+                if (enterNickname.getText().equals("Enter your nickname")) {
+                    enterNickname.setText(null);
+                }
             }
             @Override
             public void focusLost(FocusEvent e) { // if cursor is not in the box
-                enterNickname.setText("Enter your nickname");
+                if (enterNickname.getText().equals("")) {
+                    enterNickname.setText("Enter your nickname");
+                }
             }
         });
 
         enterPassword.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) { // if cursor is in the box
-                enterPassword.setText(null);
+                if (String.valueOf(enterPassword.getPassword()).equals("Enter your password")) {
+                    enterPassword.setText(null);
+                }
             }
             @Override
             public void focusLost(FocusEvent e) { // if cursor is not in the box
-                enterPassword.setText("Enter your password");
+                if (String.valueOf(enterPassword.getPassword()).equals("")) {
+                    enterPassword.setText("Enter your password");
+                }
             }
         });
 
         enterAnswer.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) { // if cursor is in the box
-                enterAnswer.setText(null);
+                if (enterAnswer.getText().equals("Enter your answer")) {
+                    enterAnswer.setText(null);
+                }
             }
             @Override
             public void focusLost(FocusEvent e) { // if cursor is not in the box
-                enterAnswer.setText("Enter your answer");
+                if (enterAnswer.getText().equals("")) {
+                    enterAnswer.setText("Enter your answer");}
             }
         });
+    }
+
+    private static boolean checkNicknameValidity(String nickname) {
+        return nickname.matches("^[a-zA-Z0-9_]+$") && nickname.length() <= 10;
     }
 
     private void createCountDownTimer() {
@@ -122,6 +160,10 @@ public class ClientGUI extends JFrame {
         timerBar.setValue(1);
 
         timerBar.setString(Integer.toString(1));
+    }
+
+    public static String getUserName() {
+        return userNickname;
     }
 
 }

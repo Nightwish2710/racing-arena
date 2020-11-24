@@ -1,4 +1,5 @@
 import clientGUI.ClientGUI;
+import clientGUI.ClientGUIConfig;
 import clientnetwork.ClientNetwork;
 import clientnetwork.ClientNetworkConfig;
 
@@ -15,18 +16,18 @@ public class ClientMain {
         createClientGUI();
 
         // testing connection
-        while (true) {
-            Scanner sc = new Scanner(System.in);
-            String msg = sc.nextLine();
-
-            System.out.println(ClientMain.class.getSimpleName() + " says: "+ msg);
-            network.send(ClientNetworkConfig.CMD.CMD_TEST, msg);
-
-            if(msg.equalsIgnoreCase("q")) {
-                System.out.println(ClientMain.class.getSimpleName() + " QUIT with "+ msg);
-                break;
-            }
-        }
+//        while (true) {
+//            Scanner sc = new Scanner(System.in);
+//            String msg = sc.nextLine();
+//
+//            //System.out.println(ClientMain.class.getSimpleName() + " says: " + msg);
+//            network.send(ClientNetworkConfig.CMD.CMD_TEST, ClientGUI.getUserName());
+//
+//            if(msg.equalsIgnoreCase("q")) {
+//                System.out.println(ClientMain.class.getSimpleName() + " QUIT with " +  msg);
+//                break;
+//            }
+//        }
     }
 
     private static void connectToServer() {
@@ -35,7 +36,7 @@ public class ClientMain {
     }
 
     private static void createClientGUI() {
-        JFrame jFrame = new ClientGUI("Racing Arena");
+        JFrame jFrame = new ClientGUI(ClientGUIConfig.GAME_NAME);
         jFrame.setVisible(true);
     }
 }

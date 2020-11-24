@@ -19,8 +19,7 @@ public class ClientNetwork {
 
     public void connect() {
         try {
-            // Gửi yêu cầu kết nối tới Server đang lắng nghe
-            // trên máy 'localhost' cổng 7777.
+            // send connection request to Server
             clientSocket = new Socket(ClientNetworkConfig.SERVER_HOST, ClientNetworkConfig.SERVER_PORT);
 
             // output stream at Client (send data to server)
@@ -33,18 +32,12 @@ public class ClientNetwork {
             System.err.println("Unknown host named " + ClientNetworkConfig.SERVER_HOST);
             return;
         } catch (IOException e) {
-            System.err.println("I/O Error in connection to " + ClientNetworkConfig.SERVER_HOST);
+            System.err.println("I/O Exception in connection to " + ClientNetworkConfig.SERVER_HOST);
             return;
-        }
-        finally {
-            // notify of successful connection
-            System.out.println(this.getClass().getSimpleName() + ": notification of successful connection.");
         }
 
         // notify of successful connection
-        System.out.println(this.getClass().getSimpleName() + ": notify of successful connection");
-        // Update GUI
-
+        System.out.println(this.getClass().getSimpleName() + ": notification of successful connection");
 
         // Start receiver thread, in case we might need
         //while (true) {
@@ -60,7 +53,7 @@ public class ClientNetwork {
             outStream.flush();
 
             String responseLine = inStream.readLine();
-            System.out.println(this.getClass().getSimpleName() + "server says: " + responseLine);
+            System.out.println(this.getClass().getSimpleName() + " server says: " + responseLine);
 
             if (msg == "q") {
                 outStream.close();
@@ -69,7 +62,7 @@ public class ClientNetwork {
         } catch (UnknownHostException e) {
             System.err.println("Trying to connect to unknown host: " + e);
         } catch (IOException e) {
-            System.err.println("IOException:  " + e);
+            System.err.println("I/O Exception: " + e);
         }
     }
 }
