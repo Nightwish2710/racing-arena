@@ -23,10 +23,10 @@ public class ClientNetwork {
             // trên máy 'localhost' cổng 7777.
             clientSocket = new Socket(ClientNetworkConfig.SERVER_HOST, ClientNetworkConfig.SERVER_PORT);
 
-            // Tạo luồng đầu ra tại client (Gửi dữ liệu tới server)
+            // output stream at Client (send data to server)
             outStream = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
 
-            // Luồng đầu vào tại Client (Nhận dữ liệu từ server).
+            // input stream at Client (receive data from server)
             inStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
         } catch (UnknownHostException e) {
@@ -35,6 +35,10 @@ public class ClientNetwork {
         } catch (IOException e) {
             System.err.println("I/O Error in connection to " + ClientNetworkConfig.SERVER_HOST);
             return;
+        }
+        finally {
+            // notify of successful connection
+            System.out.println(this.getClass().getSimpleName() + ": notification of successful connection.");
         }
 
         // notify of successful connection
