@@ -1,8 +1,8 @@
-package network;
+package client_network;
 
-public class NetworkConfig {
-    public static final String SERVER_HOST = "localhost";
-    public static final int SERVER_PORT = 3628;
+public class ClientNetworkConfig {
+    public static String SERVER_HOST = "localhost";
+    public static int SERVER_PORT = 3628;
 
     public static class CMD {
         public static final int CMD_TEST = -1;
