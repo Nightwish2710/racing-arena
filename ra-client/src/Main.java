@@ -1,11 +1,7 @@
 import network.Network;
-import clientGUI.RacingArenaClient;
+import clientGUI.ClientGUI;
 import network.NetworkConfig;
 
-import java.io.*;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.Date;
 import javax.swing.*;
 import java.util.Scanner;
 
@@ -13,10 +9,7 @@ public class Main {
     private static Network network;
 
     public static void main(String[] args) {
-        // connect to server
         connectToServer();
-
-//        network.send("HELLO! Testing 1, 2, 3, ...");
 
         createClientGUI();
         
@@ -40,7 +33,9 @@ public class Main {
     }
 
     private static void createClientGUI() {
-        JFrame jFrame = new RacingArenaClient("Racing Arena");
+        JFrame jFrame = new ClientGUI("Racing Arena");
+
+        jFrame.setLocationRelativeTo(null);
         jFrame.setVisible(true);
     }
 }
