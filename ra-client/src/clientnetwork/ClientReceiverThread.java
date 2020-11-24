@@ -1,4 +1,4 @@
-package client_network;
+package clientnetwork;
 
 import java.io.BufferedReader;
 import java.io.IOException;

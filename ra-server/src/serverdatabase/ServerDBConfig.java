@@ -1,4 +1,4 @@
-package server_database;
+package serverdatabase;
 
 public class ServerDBConfig {
     // JDBC H2 driver name and database URL

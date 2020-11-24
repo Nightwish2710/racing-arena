@@ -1,6 +1,8 @@
-import client_network.ClientNetwork;
-import client_network.ClientNetworkConfig;
+import clientGUI.ClientGUI;
+import clientnetwork.ClientNetwork;
+import clientnetwork.ClientNetworkConfig;
 
+import javax.swing.*;
 import java.util.Scanner;
 
 public class ClientMain {
@@ -33,7 +35,7 @@ public class ClientMain {
     }
 
     private static void createClientGUI() {
-        JFrame jFrame = new RacingArenaClient("Racing Arena");
+        JFrame jFrame = new ClientGUI("Racing Arena");
         jFrame.setVisible(true);
     }
 }

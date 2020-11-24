@@ -1,4 +1,4 @@
-package server_network;
+package servernetwork;
 
 public class ServerNetworkConfig {
     public static final int SERVER_PORT = 3628;

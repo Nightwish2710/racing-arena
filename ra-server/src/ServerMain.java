@@ -1,6 +1,6 @@
-import server_database.ServerDBConfig;
-import server_database.ServerDBHelper;
-import server_network.ServerNetwork;
+import serverdatabase.ServerDBConfig;
+import serverdatabase.ServerDBHelper;
+import servernetwork.ServerNetwork;
 
 import java.io.*;
 
