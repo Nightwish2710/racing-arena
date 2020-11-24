@@ -1,13 +1,13 @@
-package network;
+package client_network;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 
-public class ReceiverThread extends Thread {
+public class ClientReceiverThread extends Thread {
 
     private BufferedReader inStream;
     private String responseLine;
-    public ReceiverThread(BufferedReader _inStream) {
+    public ClientReceiverThread(BufferedReader _inStream) {
         this.inStream = _inStream;
         responseLine = null;
     }

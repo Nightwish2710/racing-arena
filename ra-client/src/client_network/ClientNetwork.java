@@ -1,16 +1,16 @@
-package network;
+package client_network;
 
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class Network {
+public class ClientNetwork {
     private Socket clientSocket;
     private BufferedWriter outStream;
     private BufferedReader inStream;
-    private ReceiverThread receiverThread;
+    private ClientReceiverThread receiverThread;
 
-    public Network() {
+    public ClientNetwork() {
         clientSocket = null;
         outStream = null;
         inStream = null;
@@ -21,7 +21,7 @@ public class Network {
         try {
             // Gửi yêu cầu kết nối tới Server đang lắng nghe
             // trên máy 'localhost' cổng 7777.
-            clientSocket = new Socket(NetworkConfig.SERVER_HOST, NetworkConfig.SERVER_PORT);
+            clientSocket = new Socket(ClientNetworkConfig.SERVER_HOST, ClientNetworkConfig.SERVER_PORT);
 
             // Tạo luồng đầu ra tại client (Gửi dữ liệu tới server)
             outStream = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
@@ -30,10 +30,10 @@ public class Network {
             inStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
         } catch (UnknownHostException e) {
-            System.err.println("Unknown host named " + NetworkConfig.SERVER_HOST);
+            System.err.println("Unknown host named " + ClientNetworkConfig.SERVER_HOST);
             return;
         } catch (IOException e) {
-            System.err.println("I/O Error in connection to " + NetworkConfig.SERVER_HOST);
+            System.err.println("I/O Error in connection to " + ClientNetworkConfig.SERVER_HOST);
             return;
         }
 
