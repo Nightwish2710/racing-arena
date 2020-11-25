@@ -53,6 +53,7 @@ public class ClientGUI extends JFrame {
 
         this.setContentPane(ClientPanel);
         this.setClientGUI();
+        this.setEventWithColorButton();
 
         // click join server button
         joinServerButton.addActionListener(new ActionListener() {
@@ -218,6 +219,84 @@ public class ClientGUI extends JFrame {
             colorButtons.get(i).setForeground(ClientGUIConfig.COLOR_LIST.get(i));
             colorButtons.get(i).setBorder(new LineBorder(ClientGUIConfig.COLOR_LIST.get(i)));
         }
+    }
+
+    private void setEventWithColorButton() {
+        c1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(0);
+            }
+        });
+        c2.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(1);
+            }
+        });
+        c3.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(2);
+            }
+        });
+        c4.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(3);
+            }
+        });
+        c5.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(4);
+            }
+        });
+        c6.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(5);
+            }
+        });
+        c7.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(6);
+            }
+        });
+        c8.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(7);
+            }
+        });
+        c9.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(8);
+            }
+        });
+        c10.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(9);
+            }
+        });
+        c11.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(10);
+            }
+        });
+        c12.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(11);
+            }
+        });
+        c13.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(12);
+            }
+        });
+        c14.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(13);
+            }
+        });
+        c15.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(14);
+            }
+        });
     }
 
     private static boolean checkNicknameValidity(String nickname) {

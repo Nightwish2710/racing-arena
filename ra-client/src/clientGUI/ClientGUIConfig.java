@@ -8,12 +8,11 @@ import java.util.List;
 
 public class ClientGUIConfig {
     public static final String GAME_NAME = "RACING ARENA: Racer";
-//    public static final Color DARK_ORANGE = new Color(0xD79B00);
-//    public static final Color LIGHT_ORANGE = new Color(0xFFE6CC);
 
     public static final Color BACKGROUND_COLOR = new Color(0xF5F5F5);
     public static final Color BORDER_COLOR = new Color(0xE0E0E0);
-    public static final Color ACCENT_COLOR = Palette.BROWN;
+
+    public static Color ACCENT_COLOR = Palette.RED;
 
     public static final int TIMER_MAX = 10;
 
