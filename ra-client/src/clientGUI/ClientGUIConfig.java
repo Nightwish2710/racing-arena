@@ -12,19 +12,16 @@ public class ClientGUIConfig {
     public static final Color BACKGROUND_COLOR = new Color(0xF5F5F5);
     public static final Color BORDER_COLOR = new Color(0xE0E0E0);
 
-    public static Color ACCENT_COLOR = Palette.RED;
+    static Color ACCENT_COLOR = Palette.RED;
+    static void setAccentColor(Color c) {
+        ACCENT_COLOR = c;
+    }
 
     public static final int TIMER_MAX = 10;
 
     private static Border line = BorderFactory.createLineBorder(ClientGUIConfig.BORDER_COLOR, 2);
     private static Border empty = new EmptyBorder(5, 5, 5, 5);
     public static final CompoundBorder BORDER = new CompoundBorder(line, empty);
-
-    public static final List<Color> COLOR_LIST = Arrays.asList(
-            Palette.RED, Palette.PINK, Palette.PURPLE, Palette.DARK_PURPLE, Palette.INDIGO,
-            Palette.BLUE, Palette.CYAN, Palette.TEAL, Palette.GREEN, Palette.LIGHT_GREEN,
-            Palette.LIME, Palette.AMBER, Palette.ORANGE, Palette.DEEP_ORANGE, Palette.BROWN
-    );
 
     public static class ColorButtonConfig {
         public static final int COLOR_BUTTON_SIZE = 12;
@@ -33,7 +30,7 @@ public class ClientGUIConfig {
         public static final int NUMBER_OF_BUTTONS = 15;
     }
 
-    public static class Palette {
+    private static class Palette {
         public static final Color RED = new Color(0xEF5350);           //1
         public static final Color PINK = new Color(0xEC407A);          //2
         public static final Color PURPLE = new Color(0xAB47BC);        //3
@@ -50,6 +47,12 @@ public class ClientGUIConfig {
         public static final Color DEEP_ORANGE = new Color(0xFF7043);   //14
         public static final Color BROWN = new Color(0x8D6E63);         //15
     }
+
+    public static final List<Color> COLOR_LIST = Arrays.asList(
+            Palette.RED, Palette.PINK, Palette.PURPLE, Palette.DARK_PURPLE, Palette.INDIGO,
+            Palette.BLUE, Palette.CYAN, Palette.TEAL, Palette.GREEN, Palette.LIGHT_GREEN,
+            Palette.LIME, Palette.AMBER, Palette.ORANGE, Palette.DEEP_ORANGE, Palette.BROWN
+    );
 }
 
 

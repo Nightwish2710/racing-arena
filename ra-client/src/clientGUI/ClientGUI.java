@@ -42,6 +42,7 @@ public class ClientGUI extends JFrame {
     private JPanel serverResponsePanel;
 
     private JSeparator separator;
+    private JSeparator separator2;
     private JLabel nicknameError;
     private JLabel serverResponsePanelLabel;
 
@@ -52,7 +53,7 @@ public class ClientGUI extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         this.setContentPane(ClientPanel);
-        this.setClientGUI();
+        this.setClientGUI(ClientGUIConfig.ACCENT_COLOR);
         this.setEventWithColorButton();
 
         // click join server button
@@ -64,7 +65,7 @@ public class ClientGUI extends JFrame {
                 // verify if nickname is valid
                 // if not, do not send to server
                 if (checkNicknameValidity(userNickname) == false) {
-                    nicknameError.setText("=> Nickname is longer than 10 or not just contain [a-zA-Z0-9_].".toUpperCase());
+                    nicknameError.setText("Nickname is either longer than 10 or not just contain [a-zA-Z0-9_].".toUpperCase());
                     nicknameError.setHorizontalAlignment(SwingConstants.RIGHT);
                 }
                 else {
@@ -89,7 +90,7 @@ public class ClientGUI extends JFrame {
         this.pack();
     }
 
-    private void setClientGUI() {
+    private void setClientGUI(Color ACCENT_COLOR) {
         // set panel
         ClientPanel.setBackground(ClientGUIConfig.BACKGROUND_COLOR);
 
@@ -99,30 +100,35 @@ public class ClientGUI extends JFrame {
         // set error label
         nicknameError.setFont(new Font("Arial", Font.BOLD, 9));
         nicknameError.setForeground(Color.RED);
-        nicknameError.setText("".toUpperCase());
 
         // set label
-        nicknameLabel.setForeground(ClientGUIConfig.ACCENT_COLOR);
-        passwordLabel.setForeground(ClientGUIConfig.ACCENT_COLOR);
-        pointsLabel.setForeground(ClientGUIConfig.ACCENT_COLOR);
-        positionLabel.setForeground(ClientGUIConfig.ACCENT_COLOR);
-        timerLabel.setForeground(ClientGUIConfig.ACCENT_COLOR);
-        questionLabel.setForeground(ClientGUIConfig.ACCENT_COLOR);
-        serverResponsePanelLabel.setForeground(ClientGUIConfig.ACCENT_COLOR);
+        nicknameLabel.setForeground(ACCENT_COLOR);
+        passwordLabel.setForeground(ACCENT_COLOR);
+        pointsLabel.setForeground(ACCENT_COLOR);
+        positionLabel.setForeground(ACCENT_COLOR);
+        timerLabel.setForeground(ACCENT_COLOR);
+        questionLabel.setForeground(ACCENT_COLOR);
+
+        serverResponsePanelLabel.setForeground(ACCENT_COLOR);
+        serverResponsePanelLabel.setFont(new Font("Arial", Font.BOLD, 16));
 
         // set buttons
-        joinServerButton.setBackground(ClientGUIConfig.ACCENT_COLOR);
+        joinServerButton.setBackground(ACCENT_COLOR);
         joinServerButton.setForeground(ClientGUIConfig.BACKGROUND_COLOR);
-        joinServerButton.setBorder(new LineBorder(ClientGUIConfig.ACCENT_COLOR));
+        joinServerButton.setBorder(new LineBorder(ACCENT_COLOR));
 
-        sendAnswerButton.setBackground(ClientGUIConfig.ACCENT_COLOR);
+        sendAnswerButton.setBackground(ACCENT_COLOR);
         sendAnswerButton.setForeground(ClientGUIConfig.BACKGROUND_COLOR);
-        sendAnswerButton.setBorder(new LineBorder(ClientGUIConfig.ACCENT_COLOR));
+        sendAnswerButton.setBorder(new LineBorder(ACCENT_COLOR));
 
         // set separator
         separator.setBackground(ClientGUIConfig.BORDER_COLOR);
         separator.setForeground(ClientGUIConfig.BORDER_COLOR);
         separator.setBorder(BorderFactory.createMatteBorder(3, 0, 0, 0, ClientGUIConfig.BORDER_COLOR));
+
+        separator2.setBackground(ClientGUIConfig.BORDER_COLOR);
+        separator2.setForeground(ClientGUIConfig.BORDER_COLOR);
+        separator2.setBorder(BorderFactory.createMatteBorder(3, 0, 0, 0, ClientGUIConfig.BORDER_COLOR));
 
         // set text boxes
         enterNickname.setBorder(ClientGUIConfig.BORDER);
@@ -132,7 +138,7 @@ public class ClientGUI extends JFrame {
         setEventWithTextBox();
 
         // set timer
-        createCountDownTimer();
+        createCountDownTimer(ACCENT_COLOR);
 
         // set server panel
         serverResponsePanel.setOpaque(true);
@@ -185,11 +191,11 @@ public class ClientGUI extends JFrame {
         });
     }
 
-    private void createCountDownTimer() {
+    private void createCountDownTimer(Color ACCENT_COLOR) {
         timerBar.setStringPainted(true);
 
         timerBar.setBorder(new LineBorder(ClientGUIConfig.BORDER_COLOR, 2));
-        timerBar.setForeground(ClientGUIConfig.ACCENT_COLOR);
+        timerBar.setForeground(ACCENT_COLOR);
         timerBar.setBackground(ClientGUIConfig.BACKGROUND_COLOR);
         timerBar.setUI(new BasicProgressBarUI() {
             protected Color getSelectionBackground() {
@@ -224,77 +230,77 @@ public class ClientGUI extends JFrame {
     private void setEventWithColorButton() {
         c1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(0);
+                setClientGUI(ClientGUIConfig.COLOR_LIST.get(0));
             }
         });
         c2.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(1);
+                setClientGUI(ClientGUIConfig.COLOR_LIST.get(1));
             }
         });
         c3.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(2);
+                setClientGUI(ClientGUIConfig.COLOR_LIST.get(2));
             }
         });
         c4.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(3);
+                setClientGUI(ClientGUIConfig.COLOR_LIST.get(3));
             }
         });
         c5.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(4);
+                setClientGUI(ClientGUIConfig.COLOR_LIST.get(4));
             }
         });
         c6.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(5);
+                setClientGUI(ClientGUIConfig.COLOR_LIST.get(5));
             }
         });
         c7.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(6);
+                setClientGUI(ClientGUIConfig.COLOR_LIST.get(6));
             }
         });
         c8.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(7);
+                setClientGUI(ClientGUIConfig.COLOR_LIST.get(7));
             }
         });
         c9.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(8);
+                setClientGUI(ClientGUIConfig.COLOR_LIST.get(8));
             }
         });
         c10.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(9);
+                setClientGUI(ClientGUIConfig.COLOR_LIST.get(9));
             }
         });
         c11.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(10);
+                setClientGUI(ClientGUIConfig.COLOR_LIST.get(10));
             }
         });
         c12.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(11);
+                setClientGUI(ClientGUIConfig.COLOR_LIST.get(11));
             }
         });
         c13.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(12);
+                setClientGUI(ClientGUIConfig.COLOR_LIST.get(12));
             }
         });
         c14.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(13);
+                setClientGUI(ClientGUIConfig.COLOR_LIST.get(13));
             }
         });
         c15.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ClientGUIConfig.ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(14);
+                setClientGUI(ClientGUIConfig.COLOR_LIST.get(14));
             }
         });
     }
@@ -302,5 +308,4 @@ public class ClientGUI extends JFrame {
     private static boolean checkNicknameValidity(String nickname) {
         return nickname.matches("^[a-zA-Z0-9_]+$") && nickname.length() <= 10;
     }
-
 }
