@@ -41,8 +41,7 @@ public class ClientGUI extends JFrame {
 
     private JPanel serverResponsePanel;
 
-    private JSeparator separator;
-    private JSeparator separator2;
+    private JSeparator separator, separator2, separator3;
     private JLabel nicknameError;
     private JLabel serverResponsePanelLabel;
 
@@ -110,7 +109,7 @@ public class ClientGUI extends JFrame {
         questionLabel.setForeground(ACCENT_COLOR);
 
         serverResponsePanelLabel.setForeground(ACCENT_COLOR);
-        serverResponsePanelLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        serverResponsePanelLabel.setFont(new Font("Britannic Bold", Font.PLAIN, 20));
 
         // set buttons
         joinServerButton.setBackground(ACCENT_COLOR);
@@ -122,13 +121,7 @@ public class ClientGUI extends JFrame {
         sendAnswerButton.setBorder(new LineBorder(ACCENT_COLOR));
 
         // set separator
-        separator.setBackground(ClientGUIConfig.BORDER_COLOR);
-        separator.setForeground(ClientGUIConfig.BORDER_COLOR);
-        separator.setBorder(BorderFactory.createMatteBorder(3, 0, 0, 0, ClientGUIConfig.BORDER_COLOR));
-
-        separator2.setBackground(ClientGUIConfig.BORDER_COLOR);
-        separator2.setForeground(ClientGUIConfig.BORDER_COLOR);
-        separator2.setBorder(BorderFactory.createMatteBorder(3, 0, 0, 0, ClientGUIConfig.BORDER_COLOR));
+        setSeparatorUI();
 
         // set text boxes
         enterNickname.setBorder(ClientGUIConfig.BORDER);
@@ -143,6 +136,20 @@ public class ClientGUI extends JFrame {
         // set server panel
         serverResponsePanel.setOpaque(true);
         serverResponsePanel.setBackground(ClientGUIConfig.BORDER_COLOR);
+    }
+
+    private void setSeparatorUI() {
+        separator.setBackground(ClientGUIConfig.BORDER_COLOR);
+        separator.setForeground(ClientGUIConfig.BORDER_COLOR);
+        separator.setBorder(BorderFactory.createMatteBorder(3, 0, 0, 0, ClientGUIConfig.BORDER_COLOR));
+
+        separator2.setBackground(ClientGUIConfig.BORDER_COLOR);
+        separator2.setForeground(ClientGUIConfig.BORDER_COLOR);
+        separator2.setBorder(BorderFactory.createMatteBorder(3, 0, 0, 0, ClientGUIConfig.BORDER_COLOR));
+
+        separator3.setBackground(ClientGUIConfig.BORDER_COLOR);
+        separator3.setForeground(ClientGUIConfig.BORDER_COLOR);
+        separator3.setBorder(BorderFactory.createMatteBorder(3, 0, 0, 0, ClientGUIConfig.BORDER_COLOR));
     }
 
     private void setEventWithTextBox() {

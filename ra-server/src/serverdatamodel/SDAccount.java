@@ -29,10 +29,13 @@ public class SDAccount extends ServerDataModel{
         // actual data
         int lUsername = byteBuffer.getInt();
         int lPassword = byteBuffer.getInt();
+
         byte[] bUsername = new byte[lUsername];
         byte[] bPassword = new byte[lPassword];
+
         byteBuffer.get(bUsername);
         byteBuffer.get(bPassword);
+
         this.username = new String(bUsername);
         this.password = new String(bPassword);
     }

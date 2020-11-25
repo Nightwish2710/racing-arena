@@ -11,7 +11,6 @@ public class ClientGUIConfig {
 
     public static final Color BACKGROUND_COLOR = new Color(0xF5F5F5);
     public static final Color BORDER_COLOR = new Color(0xE0E0E0);
-
     public static Color ACCENT_COLOR = Palette.RED;
 
     public static final int TIMER_MAX = 10;

@@ -42,7 +42,7 @@ public class ServerCSocketThread extends Thread{
                 if (cmd == ServerNetworkConfig.CMD.CMD_LOGIN) {
                     SDAccount sdAccount = new SDAccount();
                     sdAccount.unpack(bytes);
-                    System.out.println(this.getClass().getSimpleName()+": user login with username, password: "+ sdAccount.getUsername()+ ", " + sdAccount.getPassword());
+                    System.out.println(this.getClass().getSimpleName()+": user login with username, password: " + sdAccount.getUsername() + ", " + sdAccount.getPassword());
 
                     // check if sdAccount is valid
                     try {
@@ -52,7 +52,7 @@ public class ServerCSocketThread extends Thread{
                     }
 
                     // notify back
-                    outStream.writeChars("Created account with Username: " + sdAccount.getUsername() + ", Password: " + sdAccount.getPassword() + '\n');
+                    outStream.writeChars("Created account with Username: " + sdAccount.getUsername() + " - Password: " + sdAccount.getPassword() + '\n');
                 }
             }
         } catch (IOException e) {
