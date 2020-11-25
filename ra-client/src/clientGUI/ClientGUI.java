@@ -6,9 +6,13 @@ import clientnetwork.ClientNetworkConfig;
 
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.plaf.basic.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.DataOutputStream;
+import java.util.*;
+import java.util.List;
+
+import static clientGUI.ClientGUIConfig.ColorButtonConfig.*;
 
 public class ClientGUI extends JFrame {
     public static String userNickname, userPassword;
@@ -39,6 +43,9 @@ public class ClientGUI extends JFrame {
 
     private JSeparator separator;
     private JLabel nicknameError;
+    private JLabel serverResponsePanelLabel;
+
+    private JButton c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15;
 
     public ClientGUI(String gameName) {
         super(gameName);
@@ -47,15 +54,17 @@ public class ClientGUI extends JFrame {
         this.setContentPane(ClientPanel);
         this.setClientGUI();
 
+        // click join server button
         joinServerButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 userNickname = enterNickname.getText();
                 userPassword = String.valueOf(enterPassword.getPassword());
 
-                System.out.println(userNickname + userPassword);
-
+                // verify if nickname is valid
+                // if not, do not send to server
                 if (checkNicknameValidity(userNickname) == false) {
-                    nicknameError.setText("Nickname is too long or not just contain [a-zA-Z0-9_].");
+                    nicknameError.setText("=> Nickname is longer than 10 or not just contain [a-zA-Z0-9_].".toUpperCase());
+                    nicknameError.setHorizontalAlignment(SwingConstants.RIGHT);
                 }
                 else {
                     CDAccount cdLogin = new CDAccount(userNickname, userPassword);
@@ -64,28 +73,52 @@ public class ClientGUI extends JFrame {
             }
         });
 
+        // click send answer button
+        sendAnswerButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        //        Font font = new Font("Arial", Font.BOLD, 9);
+//        Map attributes = font.getAttributes();
+//        attributes.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
+//        Font newFont = new Font(attributes);
+
         this.pack();
     }
 
     private void setClientGUI() {
         // set panel
-        ClientPanel.setBackground(ClientGUIConfig.LIGHT_ORANGE);
+        ClientPanel.setBackground(ClientGUIConfig.BACKGROUND_COLOR);
 
         // set error label
-        nicknameError.setText("");
         nicknameError.setFont(new Font("Arial", Font.BOLD, 9));
         nicknameError.setForeground(Color.RED);
+        nicknameError.setText("".toUpperCase());
+
+        // set label
+        nicknameLabel.setForeground(ClientGUIConfig.ACCENT_COLOR);
+        passwordLabel.setForeground(ClientGUIConfig.ACCENT_COLOR);
+        pointsLabel.setForeground(ClientGUIConfig.ACCENT_COLOR);
+        positionLabel.setForeground(ClientGUIConfig.ACCENT_COLOR);
+        timerLabel.setForeground(ClientGUIConfig.ACCENT_COLOR);
+        questionLabel.setForeground(ClientGUIConfig.ACCENT_COLOR);
+        serverResponsePanelLabel.setForeground(ClientGUIConfig.ACCENT_COLOR);
 
         // set buttons
-        joinServerButton.setBackground(ClientGUIConfig.DARK_ORANGE);
-        joinServerButton.setBorder(new LineBorder(ClientGUIConfig.DARK_ORANGE));
+        joinServerButton.setBackground(ClientGUIConfig.ACCENT_COLOR);
+        joinServerButton.setForeground(ClientGUIConfig.BACKGROUND_COLOR);
+        joinServerButton.setBorder(new LineBorder(ClientGUIConfig.ACCENT_COLOR));
 
-        sendAnswerButton.setBackground(ClientGUIConfig.DARK_ORANGE);
-        sendAnswerButton.setBorder(new LineBorder(ClientGUIConfig.DARK_ORANGE));
+        sendAnswerButton.setBackground(ClientGUIConfig.ACCENT_COLOR);
+        sendAnswerButton.setForeground(ClientGUIConfig.BACKGROUND_COLOR);
+        sendAnswerButton.setBorder(new LineBorder(ClientGUIConfig.ACCENT_COLOR));
 
         // set separator
-        separator.setBackground(ClientGUIConfig.DARK_ORANGE);
-        separator.setForeground(ClientGUIConfig.DARK_ORANGE);
+        separator.setBackground(ClientGUIConfig.BORDER_COLOR);
+        separator.setForeground(ClientGUIConfig.BORDER_COLOR);
+        separator.setBorder(BorderFactory.createMatteBorder(3, 0, 0, 0, ClientGUIConfig.BORDER_COLOR));
 
         // set text boxes
         enterNickname.setBorder(ClientGUIConfig.BORDER);
@@ -98,12 +131,8 @@ public class ClientGUI extends JFrame {
         createCountDownTimer();
 
         // set server panel
-        serverResponsePanel.setBorder(
-                BorderFactory.createTitledBorder(
-                        BorderFactory.createLineBorder(ClientGUIConfig.DARK_ORANGE, 2), " SERVER RESPONSES   "
-                )
-        );
-        serverResponsePanel.setOpaque(false);
+        serverResponsePanel.setOpaque(true);
+        serverResponsePanel.setBackground(ClientGUIConfig.BORDER_COLOR);
     }
 
     private void setEventWithTextBox() {
@@ -152,16 +181,20 @@ public class ClientGUI extends JFrame {
         });
     }
 
-    private static boolean checkNicknameValidity(String nickname) {
-        return nickname.matches("^[a-zA-Z0-9_]+$") && nickname.length() <= 10;
-    }
-
     private void createCountDownTimer() {
         timerBar.setStringPainted(true);
-        timerBar.setBorderPainted(false);
-        timerBar.setBorder(new LineBorder(ClientGUIConfig.DARK_ORANGE));
-        timerBar.setForeground(ClientGUIConfig.DARK_ORANGE);
-        timerBar.setBackground(ClientGUIConfig.LIGHT_ORANGE);
+
+        timerBar.setBorder(new LineBorder(ClientGUIConfig.BORDER_COLOR, 2));
+        timerBar.setForeground(ClientGUIConfig.ACCENT_COLOR);
+        timerBar.setBackground(ClientGUIConfig.BACKGROUND_COLOR);
+        timerBar.setUI(new BasicProgressBarUI() {
+            protected Color getSelectionBackground() {
+                return Color.BLACK;
+            }
+            protected Color getSelectionForeground() {
+                return ClientGUIConfig.BACKGROUND_COLOR;
+            }
+        });
 
         timerBar.setMaximum(ClientGUIConfig.TIMER_MAX);
         timerBar.setValue(1);
@@ -169,8 +202,17 @@ public class ClientGUI extends JFrame {
         timerBar.setString(Integer.toString(1));
     }
 
-    public static String getUserName() {
-        return userNickname;
+    private void setColorButton() {
+        List<JButton> colorButtons = Arrays.asList(c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15);
+
+        for (int i = 0; i < NUMBER_OF_BUTTONS; ++i) {
+            colorButtons.get(i).setMaximumSize(new Dimension(COLOR_BUTTON_SIZE, COLOR_BUTTON_SIZE));
+            colorButtons.get(i).setMargin(new Insets(COLOR_BUTTON_MARGIN, COLOR_BUTTON_MARGIN, COLOR_BUTTON_MARGIN, COLOR_BUTTON_MARGIN));
+        }
+    }
+
+    private static boolean checkNicknameValidity(String nickname) {
+        return nickname.matches("^[a-zA-Z0-9_]+$") && nickname.length() <= 10;
     }
 
 }

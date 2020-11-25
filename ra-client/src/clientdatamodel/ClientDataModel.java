@@ -14,6 +14,7 @@ public class ClientDataModel {
     public byte[] pack(int cmd) {
         return byteBuffer.array();
     };
+
     public void unpack(ByteBuffer byteBuffer) {
         return;
     };

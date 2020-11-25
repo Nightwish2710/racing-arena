@@ -16,25 +16,6 @@ public class ClientMain {
         connectToServer();
 
         createClientGUI();
-
-        // testing connection
-//        while (true) {
-//            Scanner sc = new Scanner(System.in);
-//            String msg = sc.nextLine();
-//
-//            //System.out.println(ClientMain.class.getSimpleName() + " says: " + msg);
-//            network.send(ClientNetworkConfig.CMD.CMD_TEST, ClientGUI.getUserName());
-//
-//            if(msg.equalsIgnoreCase("q")) {
-//                System.out.println(ClientMain.class.getSimpleName() + " QUIT with " +  msg);
-//                break;
-//            }
-//        }
-        // Sample login
-//        String username = "Anh Thu";
-//        String password = "AnhThu";
-//        CDAccount cdLogin = new CDAccount(username, password);
-//        network.send(ClientNetworkConfig.CMD.CMD_LOGIN, cdLogin);
     }
 
     private static void connectToServer() {
@@ -44,7 +25,7 @@ public class ClientMain {
 
     private static void createClientGUI() {
         JFrame jFrame = new ClientGUI(ClientGUIConfig.GAME_NAME);
-        jFrame.setVisible(true);
+
         jFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -54,5 +35,8 @@ public class ClientMain {
                 super.windowClosed(e);
             }
         });
+
+        jFrame.setLocationRelativeTo(null);
+        jFrame.setVisible(true);
     }
 }
