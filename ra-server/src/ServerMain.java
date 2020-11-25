@@ -1,7 +1,12 @@
+import serverGUI.ServerGUI;
+import serverGUI.ServerGUIConfig;
 import serverdatabase.ServerDBConfig;
 import serverdatabase.ServerDBHelper;
 import servernetwork.ServerNetwork;
 
+import javax.swing.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.*;
 
 public class ServerMain {
@@ -9,8 +14,9 @@ public class ServerMain {
     private static ServerNetwork serverNetwork;
 
     public static void main(String args[]) throws IOException {
-        initServerDB();
-        initServerNetwork();
+//        initServerDB();
+//        initServerNetwork();
+        createClientGUI();
     }
 
     private static void initServerNetwork() {
@@ -24,4 +30,10 @@ public class ServerMain {
         System.out.println(ServerMain.class.getSimpleName() + "DB create USER_ACCOUNT table");
     }
 
+    private static void createClientGUI() {
+        JFrame jFrame = new ServerGUI(ServerGUIConfig.GAME_NAME);
+
+        jFrame.setLocationRelativeTo(null);
+        jFrame.setVisible(true);
+    }
 }
