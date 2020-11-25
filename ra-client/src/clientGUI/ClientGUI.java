@@ -92,6 +92,9 @@ public class ClientGUI extends JFrame {
         // set panel
         ClientPanel.setBackground(ClientGUIConfig.BACKGROUND_COLOR);
 
+        // color palette
+        setColorButton();
+
         // set error label
         nicknameError.setFont(new Font("Arial", Font.BOLD, 9));
         nicknameError.setForeground(Color.RED);
@@ -207,7 +210,12 @@ public class ClientGUI extends JFrame {
 
         for (int i = 0; i < NUMBER_OF_BUTTONS; ++i) {
             colorButtons.get(i).setMaximumSize(new Dimension(COLOR_BUTTON_SIZE, COLOR_BUTTON_SIZE));
-            colorButtons.get(i).setMargin(new Insets(COLOR_BUTTON_MARGIN, COLOR_BUTTON_MARGIN, COLOR_BUTTON_MARGIN, COLOR_BUTTON_MARGIN));
+            //colorButtons.get(i).setMargin(new Insets(COLOR_BUTTON_MARGIN_TB, COLOR_BUTTON_MARGIN_LR, COLOR_BUTTON_MARGIN_TB, COLOR_BUTTON_MARGIN_LR));
+            colorButtons.get(i).setHorizontalAlignment(SwingConstants.LEFT);
+
+            colorButtons.get(i).setBackground(ClientGUIConfig.COLOR_LIST.get(i));
+            colorButtons.get(i).setForeground(ClientGUIConfig.COLOR_LIST.get(i));
+            colorButtons.get(i).setBorder(new LineBorder(ClientGUIConfig.COLOR_LIST.get(i)));
         }
     }
 

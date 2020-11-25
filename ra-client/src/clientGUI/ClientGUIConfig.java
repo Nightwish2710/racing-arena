@@ -3,6 +3,8 @@ package clientGUI;
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class ClientGUIConfig {
     public static final String GAME_NAME = "RACING ARENA: Racer";
@@ -19,9 +21,16 @@ public class ClientGUIConfig {
     private static Border empty = new EmptyBorder(5, 5, 5, 5);
     public static final CompoundBorder BORDER = new CompoundBorder(line, empty);
 
+    public static final List<Color> COLOR_LIST = Arrays.asList(
+            Palette.RED, Palette.PINK, Palette.PURPLE, Palette.DARK_PURPLE, Palette.INDIGO,
+            Palette.BLUE, Palette.CYAN, Palette.TEAL, Palette.GREEN, Palette.LIGHT_GREEN,
+            Palette.LIME, Palette.AMBER, Palette.ORANGE, Palette.DEEP_ORANGE, Palette.BROWN
+    );
+
     public static class ColorButtonConfig {
-        public static final int COLOR_BUTTON_SIZE = 10;
-        public static final int COLOR_BUTTON_MARGIN = -10;
+        public static final int COLOR_BUTTON_SIZE = 15;
+        public static final int COLOR_BUTTON_MARGIN_LR = 0;
+        public static final int COLOR_BUTTON_MARGIN_TB = 0;
         public static final int NUMBER_OF_BUTTONS = 15;
     }
 
