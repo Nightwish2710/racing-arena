@@ -132,10 +132,8 @@ public class ServerGUI extends JFrame {
             @Override
             public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
                 Component c = super.prepareRenderer(renderer, row, column);
-                if (!c.getBackground().equals(getSelectionBackground())){
-                    Color bgColor = (row % 2 == 0 ? Color.WHITE : ServerGUIConfig.BORDER_COLOR);
-                    c .setBackground(bgColor);
-                    bgColor = null;
+                if (!c.getBackground().equals(getSelectionBackground())) {
+                    c .setBackground(row % 2 == 0 ? Color.WHITE : ServerGUIConfig.BORDER_COLOR);
                 }
                 return c;
             }
