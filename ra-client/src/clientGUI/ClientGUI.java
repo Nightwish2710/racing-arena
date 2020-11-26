@@ -6,6 +6,7 @@ import clientnetwork.ClientNetworkConfig;
 
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.basic.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -27,11 +28,6 @@ public class ClientGUI extends JFrame {
     private JButton joinServerButton;
     private JButton sendAnswerButton;
 
-    private JLabel positionLabel;
-    private JLabel updatePosition;
-    private JLabel pointsLabel;
-    private JLabel updatePoint;
-
     private JLabel questionLabel;
     private JLabel updateQuestion;
     private JTextField enterAnswer;
@@ -39,7 +35,7 @@ public class ClientGUI extends JFrame {
     private JLabel timerLabel;
     private JProgressBar timerBar;
 
-    private JPanel serverResponsePanel;
+    private JScrollPane serverResponsePane;
 
     private JSeparator separator, separator2, separator3;
     private JLabel nicknameError;
@@ -52,7 +48,8 @@ public class ClientGUI extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         this.setContentPane(ClientPanel);
-        this.setClientGUI(ClientGUIConfig.ACCENT_COLOR);
+        this.setChangeClientGUI(ClientGUIConfig.ACCENT_COLOR);
+        this.setPermanentClientGUI();
         this.setEventWithColorButton();
 
         // click join server button
@@ -89,22 +86,11 @@ public class ClientGUI extends JFrame {
         this.pack();
     }
 
-    private void setClientGUI(Color ACCENT_COLOR) {
-        // set panel
-        ClientPanel.setBackground(ClientGUIConfig.BACKGROUND_COLOR);
-
-        // color palette
-        setColorButton();
-
-        // set error label
-        nicknameError.setFont(new Font("Arial", Font.BOLD, 9));
-        nicknameError.setForeground(Color.RED);
-
+    // set color for objects that change color after button click
+    private void setChangeClientGUI(Color ACCENT_COLOR) {
         // set label
         nicknameLabel.setForeground(ACCENT_COLOR);
         passwordLabel.setForeground(ACCENT_COLOR);
-        pointsLabel.setForeground(ACCENT_COLOR);
-        positionLabel.setForeground(ACCENT_COLOR);
         timerLabel.setForeground(ACCENT_COLOR);
         questionLabel.setForeground(ACCENT_COLOR);
 
@@ -120,6 +106,21 @@ public class ClientGUI extends JFrame {
         sendAnswerButton.setForeground(ClientGUIConfig.BACKGROUND_COLOR);
         sendAnswerButton.setBorder(new LineBorder(ACCENT_COLOR));
 
+        // set timer
+        createCountDownTimer(ACCENT_COLOR);
+    }
+
+    private void setPermanentClientGUI() {
+        // set panel
+        ClientPanel.setBackground(ClientGUIConfig.BACKGROUND_COLOR);
+
+        // color palette
+        setColorButton();
+
+        // set error label
+        nicknameError.setFont(new Font("Arial", Font.BOLD, 9));
+        nicknameError.setForeground(Color.RED);
+
         // set separator
         setSeparatorUI();
 
@@ -130,12 +131,8 @@ public class ClientGUI extends JFrame {
 
         setEventWithTextBox();
 
-        // set timer
-        createCountDownTimer(ACCENT_COLOR);
-
-        // set server panel
-        serverResponsePanel.setOpaque(true);
-        serverResponsePanel.setBackground(ClientGUIConfig.BORDER_COLOR);
+        // set server response scroll pane
+        setServerResponsePane();
     }
 
     private void setSeparatorUI() {
@@ -237,77 +234,100 @@ public class ClientGUI extends JFrame {
     private void setEventWithColorButton() {
         c1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                setClientGUI(ClientGUIConfig.COLOR_LIST.get(0));
+                setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(0));
             }
         });
         c2.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                setClientGUI(ClientGUIConfig.COLOR_LIST.get(1));
+                setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(1));
             }
         });
         c3.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                setClientGUI(ClientGUIConfig.COLOR_LIST.get(2));
+                setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(2));
             }
         });
         c4.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                setClientGUI(ClientGUIConfig.COLOR_LIST.get(3));
+                setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(3));
             }
         });
         c5.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                setClientGUI(ClientGUIConfig.COLOR_LIST.get(4));
+                setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(4));
             }
         });
         c6.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                setClientGUI(ClientGUIConfig.COLOR_LIST.get(5));
+                setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(5));
             }
         });
         c7.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                setClientGUI(ClientGUIConfig.COLOR_LIST.get(6));
+                setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(6));
             }
         });
         c8.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                setClientGUI(ClientGUIConfig.COLOR_LIST.get(7));
+                setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(7));
             }
         });
         c9.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                setClientGUI(ClientGUIConfig.COLOR_LIST.get(8));
+                setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(8));
             }
         });
         c10.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                setClientGUI(ClientGUIConfig.COLOR_LIST.get(9));
+                setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(9));
             }
         });
         c11.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                setClientGUI(ClientGUIConfig.COLOR_LIST.get(10));
+                setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(10));
             }
         });
         c12.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                setClientGUI(ClientGUIConfig.COLOR_LIST.get(11));
+                setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(11));
             }
         });
         c13.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                setClientGUI(ClientGUIConfig.COLOR_LIST.get(12));
+                setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(12));
             }
         });
         c14.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                setClientGUI(ClientGUIConfig.COLOR_LIST.get(13));
+                setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(13));
             }
         });
         c15.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                setClientGUI(ClientGUIConfig.COLOR_LIST.get(14));
+                setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(14));
+            }
+        });
+    }
+
+    private void setServerResponsePane() {
+        serverResponsePane.setBorder(BorderFactory.createLineBorder(ClientGUIConfig.BORDER_COLOR, 5));
+        serverResponsePane.getViewport().setBackground(ClientGUIConfig.BORDER_COLOR);
+        serverResponsePane.setOpaque(true);
+
+        serverResponsePane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+            @Override
+            protected JButton createDecreaseButton(int orientation) {
+                JButton button = super.createDecreaseButton(orientation);
+                button.setBackground(ClientGUIConfig.BACKGROUND_COLOR);
+                button.setBorder(BorderFactory.createLineBorder(ClientGUIConfig.BACKGROUND_COLOR, 1));
+                return button;
+            }
+            @Override
+            protected JButton createIncreaseButton(int orientation) {
+                JButton button = super.createIncreaseButton(orientation);
+                button.setBackground(ClientGUIConfig.BACKGROUND_COLOR);
+                button.setBorder(BorderFactory.createLineBorder(ClientGUIConfig.BACKGROUND_COLOR, 1));
+                return button;
             }
         });
     }

@@ -5,7 +5,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class ServerGUI extends JFrame {
-    private static String[] tableHeader = {"Order", "Racer", "Gain", "Status", "Points", "Position"};
+    private static String[] tableColumns = {"Order", "Racer", "Gain", "Status", "Position"};
 
     private JPanel ServerPanel;
 
@@ -17,9 +17,6 @@ public class ServerGUI extends JFrame {
     private JSpinner numOfRacersSpinner;
     private JLabel raceLengthLabel;
     private JTextField enterRaceLength;
-
-    private JButton resetButton;
-    private JButton setButton;
 
     private JLabel openConnectionWarning;
     private JButton openConnectionButton;
@@ -70,7 +67,7 @@ public class ServerGUI extends JFrame {
     }
 
     private void setTable() {
-        DefaultTableModel dtm = new DefaultTableModel(null, tableHeader) {
+        DefaultTableModel dtm = new DefaultTableModel(null, tableColumns) {
             @Override
             public Class<?> getColumnClass(int col) {
                 return getValueAt(0, col).getClass();
