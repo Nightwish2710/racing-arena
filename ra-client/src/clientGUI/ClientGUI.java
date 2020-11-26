@@ -6,10 +6,10 @@ import clientnetwork.ClientNetworkConfig;
 
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.basic.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.font.TextAttribute;
 import java.util.*;
 import java.util.List;
 
@@ -77,11 +77,6 @@ public class ClientGUI extends JFrame {
 
             }
         });
-
-        //        Font font = new Font("Arial", Font.BOLD, 9);
-//        Map attributes = font.getAttributes();
-//        attributes.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
-//        Font newFont = new Font(attributes);
 
         this.pack();
     }

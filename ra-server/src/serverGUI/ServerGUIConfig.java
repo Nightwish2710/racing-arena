@@ -1,10 +1,8 @@
 package serverGUI;
 
-import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.font.TextAttribute;
+import java.util.*;
 
 public class ServerGUIConfig {
     public static final String GAME_NAME = "RACING ARENA: Server";
@@ -26,8 +24,4 @@ public class ServerGUIConfig {
     public static final Color ELIMINATED_COLOR = new Color(0xEF5350);
     public static final Color WARNING_COLOR = new Color(0xFFA726);
     public static final Color CORRECT_COLOR = new Color(0x66BB6A);
-
-//    public static final Icon WINNING_ICON = new ImageIcon("../res/winning-cup.png");
-    public static final String WINNING_ICON = "winning-cup.png";
-    public static final Icon CUP = UIManager.getIcon("Cup.ico");
 }

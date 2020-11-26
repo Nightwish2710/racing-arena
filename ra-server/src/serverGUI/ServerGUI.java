@@ -4,6 +4,9 @@ import javax.swing.*;
 import javax.swing.table.*;
 import javax.swing.border.*;
 import java.awt.*;
+import java.awt.font.TextAttribute;
+import java.text.AttributedString;
+import java.util.Map;
 
 public class ServerGUI extends JFrame {
     private JPanel ServerPanel;
@@ -161,5 +164,12 @@ public class ServerGUI extends JFrame {
         dtm.addRow(new Object[]{8, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
         dtm.addRow(new Object[]{9, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
         dtm.addRow(new Object[]{10, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
+
+        String str = strikeThroughText((String)dtm.getValueAt(0, 3));
+        dtm.setValueAt(str, 0, 3);
+    }
+
+    private String strikeThroughText(String str) {
+        return "<HTML><STRIKE>"+ str +"</STRIKE></HTML>";
     }
 }
