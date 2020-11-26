@@ -76,15 +76,6 @@
           <text value="Race Length"/>
         </properties>
       </component>
-      <component id="89e8a" class="javax.swing.JTextField" binding="enterRaceLength">
-        <constraints>
-          <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="9" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="80" height="-1"/>
-            <maximum-size width="80" height="-1"/>
-          </grid>
-        </constraints>
-        <properties/>
-      </component>
       <component id="d1ec0" class="javax.swing.JButton" binding="openConnectionButton">
         <constraints>
           <grid row="6" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
@@ -229,6 +220,15 @@
         <properties>
           <text value="RACER STATISTIC"/>
         </properties>
+      </component>
+      <component id="bbd8b" class="javax.swing.JSpinner" binding="raceLengthSpinner">
+        <constraints>
+          <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="9" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="80" height="-1"/>
+            <maximum-size width="80" height="-1"/>
+          </grid>
+        </constraints>
+        <properties/>
       </component>
     </children>
   </grid>

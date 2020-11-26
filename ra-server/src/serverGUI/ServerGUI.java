@@ -4,9 +4,6 @@ import javax.swing.*;
 import javax.swing.table.*;
 import javax.swing.border.*;
 import java.awt.*;
-import java.awt.font.TextAttribute;
-import java.text.AttributedString;
-import java.util.Map;
 
 public class ServerGUI extends JFrame {
     private JPanel ServerPanel;
@@ -18,7 +15,7 @@ public class ServerGUI extends JFrame {
     private JLabel numOfRacersLabel;
     private JSpinner numOfRacersSpinner;
     private JLabel raceLengthLabel;
-    private JTextField enterRaceLength;
+    private JSpinner raceLengthSpinner;
 
     private JLabel openConnectionWarning;
     private JButton openConnectionButton;
