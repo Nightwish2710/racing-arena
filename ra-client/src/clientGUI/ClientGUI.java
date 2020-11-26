@@ -110,7 +110,7 @@ public class ClientGUI extends JFrame {
         ClientPanel.setBackground(ClientGUIConfig.BACKGROUND_COLOR);
 
         // color palette
-        setColorButton();
+        setColorButtonUI();
 
         // set error label
         nicknameError.setFont(new Font("Arial", Font.BOLD, 9));
@@ -127,7 +127,7 @@ public class ClientGUI extends JFrame {
         setEventWithTextBox();
 
         // set server response scroll pane
-        setServerResponsePane();
+        setServerResponsePaneUI();
     }
 
     private void setSeparatorUI() {
@@ -211,7 +211,7 @@ public class ClientGUI extends JFrame {
         timerBar.setString(Integer.toString(1));
     }
 
-    private void setColorButton() {
+    private void setColorButtonUI() {
         List<JButton> colorButtons = Arrays.asList(c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15);
 
         for (int i = 0; i < NUMBER_OF_BUTTONS; ++i) {
@@ -304,7 +304,7 @@ public class ClientGUI extends JFrame {
         });
     }
 
-    private void setServerResponsePane() {
+    private void setServerResponsePaneUI() {
         serverResponsePane.setBorder(BorderFactory.createLineBorder(ClientGUIConfig.BORDER_COLOR, 5));
         serverResponsePane.getViewport().setBackground(ClientGUIConfig.BORDER_COLOR);
         serverResponsePane.setOpaque(true);

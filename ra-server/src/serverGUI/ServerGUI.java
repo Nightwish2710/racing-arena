@@ -59,6 +59,9 @@ public class ServerGUI extends JFrame {
         openConnectionWarning.setFont(new Font("Arial", Font.ITALIC, 9));
         openConnectionWarning.setForeground(Color.RED);
 
+        // set spinner
+        setSpinnerUI();
+
         // set button
         openConnectionButton.setBackground(ServerGUIConfig.LIGHT_GREEN);
         openConnectionButton.setBorder(new LineBorder(ServerGUIConfig.LIGHT_GREEN));
@@ -76,14 +79,27 @@ public class ServerGUI extends JFrame {
         separator2.setBorder(BorderFactory.createMatteBorder(3, 0, 0, 0, ServerGUIConfig.BORDER_COLOR));
 
         // set table
-        setTable();
+        setTableUI();
 
         // set server panel
         serverLogsPanel.setOpaque(true);
         serverLogsPanel.setBackground(ServerGUIConfig.BORDER_COLOR);
     }
 
-    private void setTable() {
+    private void setSpinnerUI() {
+        numOfRacersSpinner.setModel(new SpinnerNumberModel(6, ServerGUIConfig.MIN_NUM_OF_RACER, ServerGUIConfig.MAX_NUM_OF_RACER, 1));
+        raceLengthSpinner.setModel(new SpinnerNumberModel(15, ServerGUIConfig.MIN_RACE_LENGTH, ServerGUIConfig.MAX_RACE_LENGTH, 1));
+
+        JFormattedTextField numOfRacersTextField = ((JSpinner.DefaultEditor)numOfRacersSpinner.getEditor()).getTextField();
+        numOfRacersTextField.setEditable(false);
+        numOfRacersTextField.setHorizontalAlignment(SwingConstants.CENTER);
+
+        JFormattedTextField raceLengthTextField = ((JSpinner.DefaultEditor)raceLengthSpinner.getEditor()).getTextField();
+        raceLengthTextField.setEditable(false);
+        raceLengthTextField.setHorizontalAlignment(SwingConstants.CENTER);
+    }
+
+    private void setTableUI() {
         // set scroll pane
         statTableScrollPane.setViewportBorder(null);
         statTableScrollPane.getVerticalScrollBar().setBorder(null);
