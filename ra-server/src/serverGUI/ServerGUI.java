@@ -1,9 +1,13 @@
 package serverGUI;
 
+import servernetwork.ServerNetwork;
+
 import javax.swing.*;
 import javax.swing.table.*;
 import javax.swing.border.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ServerGUI extends JFrame {
     private JPanel ServerPanel;
@@ -65,6 +69,7 @@ public class ServerGUI extends JFrame {
         // set button
         openConnectionButton.setBackground(ServerGUIConfig.LIGHT_GREEN);
         openConnectionButton.setBorder(new LineBorder(ServerGUIConfig.LIGHT_GREEN));
+        openConnectionButton.addActionListener(actionOpenConnection);
 
         startGameButton.setBackground(ServerGUIConfig.LIGHT_GREEN);
         startGameButton.setBorder(new LineBorder(ServerGUIConfig.LIGHT_GREEN));
@@ -185,4 +190,6 @@ public class ServerGUI extends JFrame {
     private String strikeThroughText(String str) {
         return "<HTML><STRIKE>"+ str +"</STRIKE></HTML>";
     }
+
+    private ActionListener actionOpenConnection = e -> ServerNetwork.getInstance().openServerSocket();
 }

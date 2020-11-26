@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 ra-client/ra-client.iml
-ra-client/out
+ra-client/out/**
 ra-server/ra-server.iml
-=======
-ra-client/out
->>>>>>> ee492eb1e1e93ea0336392946f4d45d34fe432cc
-ra-server/out
+ra-server/out/**

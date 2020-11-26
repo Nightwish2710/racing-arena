@@ -8,7 +8,7 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.util.concurrent.TimeUnit;
 
-public class ServerCSocketThread extends Thread{
+public class ServerCSocketThread implements Runnable{
     private int clientNumber;
     private Socket socketOfServer;
     private DataInputStream inStream;
