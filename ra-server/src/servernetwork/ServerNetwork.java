@@ -5,9 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ServerNetwork {
-    private ServerSocket serverSocket;
-    private int clientNumber;
-
+    // Singleton
     private static ServerNetwork serverNetwork = null;
     public static ServerNetwork getInstance() {
         if (serverNetwork == null) {
@@ -17,35 +15,48 @@ public class ServerNetwork {
     }
 
     public ServerNetwork() {
-        this.serverSocket = null;
-        this.clientNumber = 0;
     }
 
     public void openServerSocket() {
-        System.out.println("Server is waiting to accept user...");
+        new Thread(new ServerNetworkThread()).start();
+    }
 
-        try {
-            serverSocket = new ServerSocket(ServerNetworkConfig.SERVER_PORT);
-        } catch (IOException e) {
-            System.out.println(e);
-            System.exit(1);
+    private class ServerNetworkThread implements Runnable {
+        private ServerSocket serverSocket;
+        private int clientNumber;
+
+        public ServerNetworkThread() {
+            this.serverSocket = null;
+            this.clientNumber = 0;
         }
 
-        try {
-            while (true) {
-                Socket cSocket = null;
+        @Override
+        public void run() {
+            System.out.println("Server is waiting to accept user...");
+
+            try {
+                this.serverSocket = new ServerSocket(ServerNetworkConfig.SERVER_PORT);
+            } catch (IOException e) {
+                System.out.println(e);
+                System.exit(1);
+            }
+
+            try {
+                while (true) {
+                    Socket cSocket = null;
+                    try {
+                        cSocket = this.serverSocket.accept();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    new Thread(new ServerCSocketThread(cSocket, this.clientNumber++)).start();
+                }
+            } finally {
                 try {
-                    cSocket = serverSocket.accept();
+                    serverSocket.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                new ServerCSocketThread(cSocket, clientNumber++).start();
-            }
-        } finally {
-            try {
-                serverSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
     }

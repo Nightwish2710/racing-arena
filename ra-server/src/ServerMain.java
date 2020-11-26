@@ -14,14 +14,13 @@ public class ServerMain {
     private static ServerNetwork serverNetwork;
 
     public static void main(String args[]) throws IOException {
-//        initServerDB();
-//        initServerNetwork();
+        initServerDB();
         createClientGUI();
+        initServerNetwork();
     }
 
     private static void initServerNetwork() {
         serverNetwork = new ServerNetwork();
-        serverNetwork.openServerSocket();
     }
 
     private static void initServerDB() {
