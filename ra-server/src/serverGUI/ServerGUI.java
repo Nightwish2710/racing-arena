@@ -90,6 +90,9 @@ public class ServerGUI extends JFrame {
         numOfRacersSpinner.setModel(new SpinnerNumberModel(6, ServerGUIConfig.MIN_NUM_OF_RACER, ServerGUIConfig.MAX_NUM_OF_RACER, 1));
         raceLengthSpinner.setModel(new SpinnerNumberModel(15, ServerGUIConfig.MIN_RACE_LENGTH, ServerGUIConfig.MAX_RACE_LENGTH, 1));
 
+        numOfRacersSpinner.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        raceLengthSpinner.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+
         JFormattedTextField numOfRacersTextField = ((JSpinner.DefaultEditor)numOfRacersSpinner.getEditor()).getTextField();
         numOfRacersTextField.setEditable(false);
         numOfRacersTextField.setHorizontalAlignment(SwingConstants.CENTER);

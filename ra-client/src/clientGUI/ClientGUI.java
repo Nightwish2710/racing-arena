@@ -18,6 +18,8 @@ import static clientGUI.ClientGUIConfig.ColorButtonConfig.*;
 public class ClientGUI extends JFrame {
     public static String userNickname, userPassword;
 
+    private Color ACCENT_COLOR;
+
     private JPanel ClientPanel;
 
     private JLabel nicknameLabel;
@@ -41,6 +43,9 @@ public class ClientGUI extends JFrame {
     private JLabel nicknameError;
     private JLabel serverResponsePanelLabel;
 
+    private JLabel racerStatusLabel;
+    private JPanel racerStatusPanel;
+
     private JButton c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15;
 
     public ClientGUI(String gameName) {
@@ -52,31 +57,7 @@ public class ClientGUI extends JFrame {
         this.setPermanentClientGUI();
         this.setEventWithColorButton();
 
-        // click join server button
-        joinServerButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                userNickname = enterNickname.getText();
-                userPassword = String.valueOf(enterPassword.getPassword());
-
-                // verify if nickname is valid
-                // if not, do not send to server
-                if (checkNicknameValidity(userNickname) == false) {
-                    nicknameError.setText("Nickname is either longer than 10 or not just contain [a-zA-Z0-9_].".toUpperCase());
-                    nicknameError.setHorizontalAlignment(SwingConstants.RIGHT);
-                }
-                else {
-                    CDAccount cdLogin = new CDAccount(userNickname, userPassword);
-                    ClientNetwork.getInstance().send(ClientNetworkConfig.CMD.CMD_LOGIN, cdLogin);
-                }
-            }
-        });
-
-        // click send answer button
-        sendAnswerButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
+        this.setButtonAction();
 
         this.pack();
     }
@@ -103,6 +84,8 @@ public class ClientGUI extends JFrame {
 
         // set timer
         createCountDownTimer(ACCENT_COLOR);
+
+        setRacerStatusPanelUI();
     }
 
     private void setPermanentClientGUI() {
@@ -230,76 +213,91 @@ public class ClientGUI extends JFrame {
         c1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(0));
+                ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(0);
             }
         });
         c2.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(1));
+                ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(1);
             }
         });
         c3.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(2));
+                ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(2);
             }
         });
         c4.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(3));
+                ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(3);
             }
         });
         c5.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(4));
+                ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(4);
             }
         });
         c6.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(5));
+                ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(5);
             }
         });
         c7.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(6));
+                ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(6);
             }
         });
         c8.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(7));
+                ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(7);
             }
         });
         c9.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(8));
+                ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(8);
             }
         });
         c10.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(9));
+                ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(9);
             }
         });
         c11.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(10));
+                ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(10);
             }
         });
         c12.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(11));
+                ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(11);
             }
         });
         c13.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(12));
+                ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(12);
             }
         });
         c14.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(13));
+                ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(13);
             }
         });
         c15.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 setChangeClientGUI(ClientGUIConfig.COLOR_LIST.get(14));
+                ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(14);
             }
         });
     }
@@ -327,7 +325,67 @@ public class ClientGUI extends JFrame {
         });
     }
 
+    private void setButtonAction() {
+        // click join server button
+        joinServerButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                userNickname = enterNickname.getText();
+                userPassword = String.valueOf(enterPassword.getPassword());
+
+                // verify if nickname is valid
+                // if not, do not send to server
+                if (checkNicknameValidity(userNickname) == false) {
+                    nicknameError.setText("Nickname is either longer than 10 or not just contain [a-zA-Z0-9_].");
+                    nicknameError.setHorizontalAlignment(SwingConstants.RIGHT);
+                }
+                else {
+                    CDAccount cdLogin = new CDAccount(userNickname, userPassword);
+                    ClientNetwork.getInstance().send(ClientNetworkConfig.CMD.CMD_LOGIN, cdLogin);
+                }
+            }
+        });
+
+        // click send answer button
+        sendAnswerButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+    }
+
+    private void setRacerStatusPanelUI() {
+        createUIComponents();
+    }
+
     private static boolean checkNicknameValidity(String nickname) {
         return nickname.matches("^[a-zA-Z0-9_]+$") && nickname.length() <= 10;
+    }
+
+    private void createUIComponents() {
+        racerStatusPanel = new JPanel();
+        racerStatusPanel.setBackground(ClientGUIConfig.BACKGROUND_COLOR);
+        racerStatusPanel.setPreferredSize(new Dimension(250, -1));
+
+        JProgressBar youBar = new JProgressBar();
+        youBar.setStringPainted(true);
+
+        youBar.setBorder(new LineBorder(ClientGUIConfig.BORDER_COLOR, 2));
+        youBar.setForeground(ACCENT_COLOR);
+        youBar.setBackground(ClientGUIConfig.BACKGROUND_COLOR);
+        youBar.setUI(new BasicProgressBarUI() {
+            protected Color getSelectionBackground() {
+                return Color.BLACK;
+            }
+            protected Color getSelectionForeground() {
+                return ClientGUIConfig.BACKGROUND_COLOR;
+            }
+        });
+
+        youBar.setMaximum(ClientGUIConfig.TIMER_MAX);
+        youBar.setValue(1);
+
+        youBar.setString(Integer.toString(1));
+
+        racerStatusPanel.add(youBar);
     }
 }
