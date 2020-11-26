@@ -102,31 +102,18 @@ public class ServerGUI extends JFrame {
     // this is a default function, therefore, have to use this name for the function
     private void createUIComponents() {
         // create table
-        DefaultTableModel dtm = new DefaultTableModel(null, ServerGUIConfig.TABLE_COLS) {
-            @Override
-            public Class<?> getColumnClass(int column) {
-                switch (column) {
-                    case 0:
-                    case 1:
-                        return Integer.class;
-                    case 2:
-                        return ImageIcon.class;
-                    default:
-                        return Object.class;
-                }
-            }
-        };
+        DefaultTableModel dtm = new DefaultTableModel(null, ServerGUIConfig.TABLE_COLS);
         dtm.setColumnIdentifiers(ServerGUIConfig.TABLE_COLS);
         racerStatTable = new JTable(dtm) {
             // return column class
             @Override
             public Class getColumnClass(int column) {
-                return getValueAt(0, column).getClass();
+                return (column == 0) ? Icon.class : Object.class;
             }
             // turn off cell modification
             @Override
             public boolean isCellEditable(int row, int column) {
-                return true;
+                return false;
             }
             // interchange background color for each row
             @Override
@@ -168,17 +155,6 @@ public class ServerGUI extends JFrame {
         racerStatTable.getColumnModel().getColumn(3).setCellRenderer(center);
         racerStatTable.getColumnModel().getColumn(4).setCellRenderer(center);
 
-//        BufferedImage winningCupIcon = null;
-//        JLabel picLabel = null;
-//        try {
-//            winningCupIcon = ImageIO.read(this.getClass().getResource("/winner-cup.jpg"));
-//            winningCupIcon.getScaledInstance(15, 15, Image.SCALE_DEFAULT);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-//        JLabel winningCupIcon = new JLabel(new ImageIcon("winner-cup.jpg"));
-
         dtm.addRow(new Object[]{1,"HHHHHHHHHH", "+10", "ELIMINATED", 10});
         dtm.addRow(new Object[]{2, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
         dtm.addRow(new Object[]{3, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
@@ -189,7 +165,5 @@ public class ServerGUI extends JFrame {
         dtm.addRow(new Object[]{8, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
         dtm.addRow(new Object[]{9, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
         dtm.addRow(new Object[]{10, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
-
-//        dtm.setValueAt(winningCupIcon, 0, 0);
     }
 }

@@ -29,4 +29,5 @@ public class ServerGUIConfig {
 
 //    public static final Icon WINNING_ICON = new ImageIcon("../res/winning-cup.png");
     public static final String WINNING_ICON = "winning-cup.png";
+    public static final Icon CUP = UIManager.getIcon("Cup.ico");
 }
