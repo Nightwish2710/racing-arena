@@ -169,7 +169,9 @@ public class ServerGUI extends JFrame {
         statTableScrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
         int height = (ServerRefereeObject.getInstance().getNumberOfRacer() + 1) * ServerGUIConfig.ROW_HEIGHT;
-        statTableScrollPane.setPreferredSize(new Dimension(389, height));
+        int width = -1;
+        for (int i = 0; i < ServerGUIConfig.PREFERRED_WIDTH.length; ++i) { width += ServerGUIConfig.PREFERRED_WIDTH[i]; }
+        statTableScrollPane.setPreferredSize(new Dimension(width, height));
 
         // set table
         createUIComponents();
