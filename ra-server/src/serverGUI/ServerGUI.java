@@ -263,5 +263,11 @@ public class ServerGUI extends JFrame {
         return str;
     }
 
+    private void disableComponentAfterOpenConnection() {
+        numOfRacersSpinner.setEnabled(false);
+        raceLengthSpinner.setEnabled(false);
+        openConnectionButton.setEnabled(false);
+    }
+
     private ActionListener actionOpenConnection = e -> ServerNetwork.getInstance().openServerSocket();
 }

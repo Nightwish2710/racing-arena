@@ -1,5 +1,5 @@
 # racing-arena
-CS494- socket programming
+CS494: Socket Programming
 
 **NAME**:
 * Trần Thị Anh Thư - 1751036

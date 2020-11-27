@@ -443,4 +443,10 @@ public class ClientGUI extends JFrame {
     private static boolean checkNicknameValidity(String nickname) {
         return nickname.matches("^[a-zA-Z0-9_]+$") && nickname.length() <= 10;
     }
+
+    private void disableComponentAfterJoinServer() {
+        enterNickname.setEnabled(false);
+        enterPassword.setEnabled(false);
+        joinServerButton.setEnabled(false);
+    }
 }
