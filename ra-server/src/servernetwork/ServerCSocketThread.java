@@ -71,7 +71,7 @@ public class ServerCSocketThread implements Runnable{
         // check if there is available slots
         if (this.parentThread.getNumberOfClient() < ServerRefereeObject.getInstance().getNumberOfRacer()) {
             // if yes
-
+            String queryUser = "SELECT * FROM "
             //      check if username exists in database
             //      if it is, check if password match
             //          if password match, existing user, send individually (success login) and bulk (update number of racers to all)
