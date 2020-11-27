@@ -2,8 +2,11 @@ package serverGUI;
 
 import servernetwork.ServerNetwork;
 import serverobject.ServerGameConfig;
+import serverobject.ServerRefereeObject;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.*;
 import javax.swing.border.*;
 import java.awt.*;
@@ -42,6 +45,7 @@ public class ServerGUI extends JFrame {
 
     // Singleton
     private static ServerGUI serverGUI = null;
+
     public static ServerGUI getInstance() {
         if (serverGUI == null) {
             serverGUI = new ServerGUI(ServerGUIConfig.GAME_NAME);
@@ -116,6 +120,22 @@ public class ServerGUI extends JFrame {
         numOfRacersSpinner.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         raceLengthSpinner.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
+        // update number of racers in server
+        numOfRacersSpinner.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                ServerRefereeObject.getInstance().setNumberOfRacer((int)numOfRacersSpinner.getValue());
+            }
+        });
+
+        // update race length in server
+        raceLengthSpinner.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                ServerRefereeObject.getInstance().setRaceLength((int) raceLengthSpinner.getValue());
+            }
+        });
+
         JFormattedTextField numOfRacersTextField = ((JSpinner.DefaultEditor)numOfRacersSpinner.getEditor()).getTextField();
         numOfRacersTextField.setEditable(false);
         numOfRacersTextField.setHorizontalAlignment(SwingConstants.CENTER);
@@ -148,7 +168,7 @@ public class ServerGUI extends JFrame {
         statTableScrollPane.getHorizontalScrollBar().setBorder(null);
         statTableScrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
-        int height = (ServerGUIConfig.NUM_OF_RACERS + 1) * ServerGUIConfig.ROW_HEIGHT;
+        int height = (ServerRefereeObject.getInstance().getNumberOfRacer() + 1) * ServerGUIConfig.ROW_HEIGHT;
         statTableScrollPane.setPreferredSize(new Dimension(389, height));
 
         // set table
