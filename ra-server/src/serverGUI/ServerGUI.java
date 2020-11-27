@@ -1,6 +1,7 @@
 package serverGUI;
 
 import servernetwork.ServerNetwork;
+import serverobject.ServerGameConfig;
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -34,6 +35,17 @@ public class ServerGUI extends JFrame {
     public JTable racerStatTable;
     private JLabel racerStatLabel;
     private JScrollPane statTableScrollPane;
+
+    // Singleton
+    private static ServerGUI serverGUI = null;
+    public static ServerGUI getInstance() {
+        if (serverGUI == null) {
+            serverGUI = new ServerGUI(ServerGUIConfig.GAME_NAME);
+            serverGUI.setLocationRelativeTo(null);
+            serverGUI.setVisible(true);
+        }
+        return serverGUI;
+    }
 
     public ServerGUI(String gameName) {
         super(gameName);
@@ -92,8 +104,8 @@ public class ServerGUI extends JFrame {
     }
 
     private void setSpinnerUI() {
-        numOfRacersSpinner.setModel(new SpinnerNumberModel(6, ServerGUIConfig.MIN_NUM_OF_RACER, ServerGUIConfig.MAX_NUM_OF_RACER, 1));
-        raceLengthSpinner.setModel(new SpinnerNumberModel(15, ServerGUIConfig.MIN_RACE_LENGTH, ServerGUIConfig.MAX_RACE_LENGTH, 1));
+        numOfRacersSpinner.setModel(new SpinnerNumberModel(6, ServerGameConfig.MIN_NUM_OF_RACER, ServerGameConfig.MAX_NUM_OF_RACER, 1));
+        raceLengthSpinner.setModel(new SpinnerNumberModel(15, ServerGameConfig.MIN_RACE_LENGTH, ServerGameConfig.MAX_RACE_LENGTH, 1));
 
         JFormattedTextField numOfRacersTextField = ((JSpinner.DefaultEditor)numOfRacersSpinner.getEditor()).getTextField();
         numOfRacersTextField.setEditable(false);
@@ -192,4 +204,8 @@ public class ServerGUI extends JFrame {
     }
 
     private ActionListener actionOpenConnection = e -> ServerNetwork.getInstance().openServerSocket();
+
+    public JLabel getNumOfPplJoining() {
+        return numOfPplJoining;
+    }
 }

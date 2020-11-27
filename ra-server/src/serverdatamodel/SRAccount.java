@@ -2,16 +2,16 @@ package serverdatamodel;
 
 import java.nio.ByteBuffer;
 
-public class SDAccount extends ServerDataModel{
+public class SRAccount extends ServerRequestModel {
     private String username;
     private String password;
 
-    public SDAccount(String username, String password) {
+    public SRAccount(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    public SDAccount() {
+    public SRAccount() {
         this.username = null;
         this.password = null;
     }

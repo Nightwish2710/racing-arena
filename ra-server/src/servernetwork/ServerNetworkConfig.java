@@ -5,8 +5,8 @@ public class ServerNetworkConfig {
 
     public static class CMD {
         public static final int DISCONNECT = -100;
-        public static int CMD_TEST = -1;
-        public static int CMD_LOGIN = -2;
-        public static int CMD_ANSWER = 1;
+        public static final int CMD_TEST = -1;
+        public static final int CMD_LOGIN = -2;
+        public static final int CMD_ANSWER = 1;
     }
 }
