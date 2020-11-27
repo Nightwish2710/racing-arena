@@ -18,7 +18,7 @@ public class ServerMain {
     public static void main(String args[]) throws IOException {
         initServerDB();
         initServerReferee();
-        createClientGUI();
+        initServerGUI();
         initServerNetwork();
     }
 
@@ -36,7 +36,7 @@ public class ServerMain {
         System.out.println(ServerMain.class.getSimpleName() + "DB create USER_ACCOUNT table");
     }
 
-    private static void createClientGUI() {
+    private static void initServerGUI() {
         JFrame jFrame = new ServerGUI(ServerGUIConfig.GAME_NAME);
 
         jFrame.setLocationRelativeTo(null);

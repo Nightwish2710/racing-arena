@@ -7,8 +7,11 @@ import javax.swing.*;
 import javax.swing.table.*;
 import javax.swing.border.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.*;
 
 public class ServerGUI extends JFrame {
     private JPanel ServerPanel;
@@ -31,6 +34,7 @@ public class ServerGUI extends JFrame {
     private JLabel numOfPplJoining;
 
     private JSeparator separator1, separator2;
+    private List<JSeparator> hSep = Arrays.asList(separator1, separator2);
 
     public JTable racerStatTable;
     private JLabel racerStatLabel;
@@ -46,9 +50,17 @@ public class ServerGUI extends JFrame {
         }
         return serverGUI;
     }
+    private JLabel questionLabel;
+    private JLabel firstNumer, operant, secondNumber;
+    private JLabel correctAnsLabel;
+    private JLabel updateCorrectAns;
+
+    private JSeparator verticalSeparator1, verticalSeparator2, verticalSeparator3;
+    private List<JSeparator> vSep = Arrays.asList(verticalSeparator1, verticalSeparator2, verticalSeparator3);
 
     public ServerGUI(String gameName) {
         super(gameName);
+        serverGUI = this;
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         this.setContentPane(ServerPanel);
@@ -87,13 +99,7 @@ public class ServerGUI extends JFrame {
         startGameButton.setBorder(new LineBorder(ServerGUIConfig.LIGHT_GREEN));
 
         // set separator
-        separator1.setBackground(ServerGUIConfig.BORDER_COLOR);
-        separator1.setForeground(ServerGUIConfig.BORDER_COLOR);
-        separator1.setBorder(BorderFactory.createMatteBorder(3, 0, 0, 0, ServerGUIConfig.BORDER_COLOR));
-
-        separator2.setBackground(ServerGUIConfig.BORDER_COLOR);
-        separator2.setForeground(ServerGUIConfig.BORDER_COLOR);
-        separator2.setBorder(BorderFactory.createMatteBorder(3, 0, 0, 0, ServerGUIConfig.BORDER_COLOR));
+        setSeparatorUI();
 
         // set table
         setTableUI();
@@ -107,6 +113,9 @@ public class ServerGUI extends JFrame {
         numOfRacersSpinner.setModel(new SpinnerNumberModel(6, ServerGameConfig.MIN_NUM_OF_RACER, ServerGameConfig.MAX_NUM_OF_RACER, 1));
         raceLengthSpinner.setModel(new SpinnerNumberModel(15, ServerGameConfig.MIN_RACE_LENGTH, ServerGameConfig.MAX_RACE_LENGTH, 1));
 
+        numOfRacersSpinner.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        raceLengthSpinner.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+
         JFormattedTextField numOfRacersTextField = ((JSpinner.DefaultEditor)numOfRacersSpinner.getEditor()).getTextField();
         numOfRacersTextField.setEditable(false);
         numOfRacersTextField.setHorizontalAlignment(SwingConstants.CENTER);
@@ -116,12 +125,31 @@ public class ServerGUI extends JFrame {
         raceLengthTextField.setHorizontalAlignment(SwingConstants.CENTER);
     }
 
+    private void setSeparatorUI() {
+        for (int i = 0; i < hSep.size(); ++i) {
+            hSep.get(i).setBackground(ServerGUIConfig.BORDER_COLOR);
+            hSep.get(i).setForeground(ServerGUIConfig.BORDER_COLOR);
+            hSep.get(i).setBorder(BorderFactory.createMatteBorder(3, 0, 0, 0, ServerGUIConfig.BORDER_COLOR));
+        }
+
+        for (int i = 0; i < vSep.size(); ++i) {
+            vSep.get(i).setOrientation(SwingConstants.VERTICAL);
+            vSep.get(i).setPreferredSize(new Dimension(3, 40));
+            vSep.get(i).setBackground(ServerGUIConfig.BORDER_COLOR);
+            vSep.get(i).setForeground(ServerGUIConfig.BORDER_COLOR);
+            vSep.get(i).setBorder(BorderFactory.createMatteBorder(0, 1, 0, 2, ServerGUIConfig.BORDER_COLOR));
+        }
+    }
+
     private void setTableUI() {
         // set scroll pane
         statTableScrollPane.setViewportBorder(null);
         statTableScrollPane.getVerticalScrollBar().setBorder(null);
         statTableScrollPane.getHorizontalScrollBar().setBorder(null);
         statTableScrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+
+        int height = (ServerGUIConfig.NUM_OF_RACERS + 1) * ServerGUIConfig.ROW_HEIGHT;
+        statTableScrollPane.setPreferredSize(new Dimension(389, height));
 
         // set table
         createUIComponents();
@@ -167,22 +195,13 @@ public class ServerGUI extends JFrame {
         racerStatTable.getTableHeader().setForeground(Color.WHITE);
         racerStatTable.getTableHeader().setFont(new Font("Britannic Bold", Font.PLAIN, 12));
 
-        // set column width
-        racerStatTable.getColumnModel().getColumn(0).setMaxWidth(50);
-        racerStatTable.getColumnModel().getColumn(1).setMaxWidth(110);
-        racerStatTable.getColumnModel().getColumn(2).setMaxWidth(50);
-        racerStatTable.getColumnModel().getColumn(3).setMaxWidth(90);
-        racerStatTable.getColumnModel().getColumn(4).setMaxWidth(70);
-
-        // align center text in each cell
         DefaultTableCellRenderer center = new DefaultTableCellRenderer();
         center.setHorizontalAlignment(JLabel.CENTER);
 
-        racerStatTable.getColumnModel().getColumn(0).setCellRenderer(center);
-        racerStatTable.getColumnModel().getColumn(1).setCellRenderer(center);
-        racerStatTable.getColumnModel().getColumn(2).setCellRenderer(center);
-        racerStatTable.getColumnModel().getColumn(3).setCellRenderer(center);
-        racerStatTable.getColumnModel().getColumn(4).setCellRenderer(center);
+        for (int i = 0; i < ServerGUIConfig.TABLE_COLS.length; ++i) {
+            racerStatTable.getColumnModel().getColumn(i).setMaxWidth(ServerGUIConfig.PREFERRED_WIDTH[i]); // set column width
+            racerStatTable.getColumnModel().getColumn(i).setCellRenderer(center); // align center text in each cell
+        }
 
         dtm.addRow(new Object[]{1,"HHHHHHHHHH", "+10", "ELIMINATED", 10});
         dtm.addRow(new Object[]{2, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
@@ -190,17 +209,38 @@ public class ServerGUI extends JFrame {
         dtm.addRow(new Object[]{4, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
         dtm.addRow(new Object[]{5, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
         dtm.addRow(new Object[]{6, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
-        dtm.addRow(new Object[]{7, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
-        dtm.addRow(new Object[]{8, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
-        dtm.addRow(new Object[]{9, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
-        dtm.addRow(new Object[]{10, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
+//        dtm.addRow(new Object[]{7, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
+//        dtm.addRow(new Object[]{8, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
+//        dtm.addRow(new Object[]{9, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
+//        dtm.addRow(new Object[]{10, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
 
-        String str = strikeThroughText((String)dtm.getValueAt(0, 3));
-        dtm.setValueAt(str, 0, 3);
+//        dtm.setValueAt(strikeThroughText((String)dtm.getValueAt(0, 3)), 0, 3);
+        dtm.setValueAt(atStarToCurrentLeadingRacer((String)dtm.getValueAt(0, 1)), 0, 1);
+//        dtm.setValueAt(removeStarFromPreviouslyLeadingRacer((String)dtm.getValueAt(0, 1)), 0, 1);
+
     }
 
+    // strike through name of whom is eliminated from the race
     private String strikeThroughText(String str) {
-        return "<HTML><STRIKE>"+ str +"</STRIKE></HTML>";
+        return "<HTML><STRIKE>" + str + "</STRIKE></HTML>";
+    }
+
+    // add star to name of whom is currently leading the race
+    private String atStarToCurrentLeadingRacer(String str) {
+        return "<HTML><p style=\"color:red;\">&#9733;" + str + "&#9733;</p></HTML>";
+    }
+
+    // remove star from name of whom is not leading the race anymore
+    private String removeStarFromPreviouslyLeadingRacer(String str) {
+        Pattern pattern = Pattern.compile("<HTML><p style=\"color:red;\">&#9733;(\\S+)&#9733;</p></HTML>");
+        Matcher matcher = pattern.matcher(str);
+
+        if (matcher.find()) {
+            String result = matcher.group(1);
+            return result;
+        }
+
+        return str;
     }
 
     private ActionListener actionOpenConnection = e -> ServerNetwork.getInstance().openServerSocket();

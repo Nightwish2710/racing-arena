@@ -10,6 +10,7 @@ public class ServerGUIConfig {
     public static final int NUM_FIELD = 5;
     public static final int ROW_HEIGHT = 25;
     public static final String[] TABLE_COLS = {"ORDER", "RACER NAME", "GAIN", "STATUS", "POSITION"};
+    public static final int[] PREFERRED_WIDTH = {50, 120, 50, 100, 70};
 
     public static final Color BACKGROUND_COLOR = new Color(0xF5F5F5);
     public static final Color BORDER_COLOR = new Color(0xE0E0E0);
