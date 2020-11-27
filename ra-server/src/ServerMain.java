@@ -14,9 +14,9 @@ public class ServerMain {
     private static ServerNetwork serverNetwork;
 
     public static void main(String args[]) throws IOException {
-        initServerDB();
+//        initServerDB();
         createClientGUI();
-        initServerNetwork();
+//        initServerNetwork();
     }
 
     private static void initServerNetwork() {

@@ -6,8 +6,9 @@ import javax.swing.*;
 import javax.swing.table.*;
 import javax.swing.border.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import java.util.regex.*;
 
 public class ServerGUI extends JFrame {
     private JPanel ServerPanel;
@@ -114,6 +115,9 @@ public class ServerGUI extends JFrame {
         statTableScrollPane.getHorizontalScrollBar().setBorder(null);
         statTableScrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
+        int height = (ServerGUIConfig.NUM_OF_RACERS + 1) * ServerGUIConfig.ROW_HEIGHT;
+        statTableScrollPane.setPreferredSize(new Dimension(389, height));
+
         // set table
         createUIComponents();
     }
@@ -160,9 +164,9 @@ public class ServerGUI extends JFrame {
 
         // set column width
         racerStatTable.getColumnModel().getColumn(0).setMaxWidth(50);
-        racerStatTable.getColumnModel().getColumn(1).setMaxWidth(110);
+        racerStatTable.getColumnModel().getColumn(1).setMaxWidth(120);
         racerStatTable.getColumnModel().getColumn(2).setMaxWidth(50);
-        racerStatTable.getColumnModel().getColumn(3).setMaxWidth(90);
+        racerStatTable.getColumnModel().getColumn(3).setMaxWidth(100);
         racerStatTable.getColumnModel().getColumn(4).setMaxWidth(70);
 
         // align center text in each cell
@@ -181,17 +185,38 @@ public class ServerGUI extends JFrame {
         dtm.addRow(new Object[]{4, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
         dtm.addRow(new Object[]{5, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
         dtm.addRow(new Object[]{6, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
-        dtm.addRow(new Object[]{7, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
-        dtm.addRow(new Object[]{8, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
-        dtm.addRow(new Object[]{9, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
-        dtm.addRow(new Object[]{10, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
+//        dtm.addRow(new Object[]{7, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
+//        dtm.addRow(new Object[]{8, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
+//        dtm.addRow(new Object[]{9, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
+//        dtm.addRow(new Object[]{10, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
 
-        String str = strikeThroughText((String)dtm.getValueAt(0, 3));
-        dtm.setValueAt(str, 0, 3);
+//        dtm.setValueAt(strikeThroughText((String)dtm.getValueAt(0, 3)), 0, 3);
+        dtm.setValueAt(atStarToCurrentLeadingRacer((String)dtm.getValueAt(0, 1)), 0, 1);
+//        dtm.setValueAt(removeStarFromPreviouslyLeadingRacer((String)dtm.getValueAt(0, 1)), 0, 1);
+
     }
 
+    // strike through name of whom is eliminated from the race
     private String strikeThroughText(String str) {
-        return "<HTML><STRIKE>"+ str +"</STRIKE></HTML>";
+        return "<HTML><STRIKE>" + str + "</STRIKE></HTML>";
+    }
+
+    // add star to name of whom is currently leading the race
+    private String atStarToCurrentLeadingRacer(String str) {
+        return "<HTML><p style=\"color:red;\">&#9733;" + str + "&#9733;</p></HTML>";
+    }
+
+    // remove star from name of whom is not leading the race anymore
+    private String removeStarFromPreviouslyLeadingRacer(String str) {
+        Pattern pattern = Pattern.compile("<HTML><p style=\"color:red;\">&#9733;(\\S+)&#9733;</p></HTML>");
+        Matcher matcher = pattern.matcher(str);
+
+        if (matcher.find()) {
+            String result = matcher.group(1);
+            return result;
+        }
+
+        return str;
     }
 
     private ActionListener actionOpenConnection = e -> ServerNetwork.getInstance().openServerSocket();

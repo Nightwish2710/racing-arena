@@ -19,6 +19,12 @@ public class ClientGUIConfig {
     private static Border empty = new EmptyBorder(5, 5, 5, 5);
     public static final CompoundBorder BORDER = new CompoundBorder(line, empty);
 
+    public static final int RACER_STAT_PANEL_WIDTH = 180;
+    public static final int RACER_STAT_PANEL_LABEL_WIDTH = 10;
+
+    public static final int MIN_RACE_LENGTH = 3;
+    public static final int MAX_RACE_LENGTH = 26;
+
     public static class ColorButtonConfig {
         public static final int COLOR_BUTTON_SIZE = 12;
         public static final int COLOR_BUTTON_MARGIN_LR = -10;
