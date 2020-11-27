@@ -10,7 +10,7 @@ public class ServerDBConfig {
     public static final String DB_PASS_H2 = " ";
 
     // Database constant
-    public static final String TABLE_RACER = "RACER_ACCOUNT";
+    public static final String TABLE_RACER = "RACER_ACCOUNT_TEST";
     public static final String TABLE_RACER_id = "id";
     public static final String TABLE_RACER_username = "username";
     public static final String TABLE_RACER_password = "password";
@@ -21,8 +21,6 @@ public class ServerDBConfig {
             + " ("+TABLE_RACER_id + " INTEGER not NULL, "
             + TABLE_RACER_username + " VARCHAR(255), "
             + TABLE_RACER_password + " VARCHAR(255), "
-            + TABLE_RACER_victory + " INTEGER, "
-            + "PRIMARY KEY ( " + TABLE_RACER_id + " ))";
-
-    
+            + TABLE_RACER_victory + " INTEGER)";
+            //+ "PRIMARY KEY ( " + TABLE_RACER_id + " ))";
 }

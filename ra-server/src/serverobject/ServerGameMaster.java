@@ -6,10 +6,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ServerGameMaster {
-    private int numberOfRacer;
+    private int numOfRacers;
     private int raceLength;
     private HashMap<Integer, ServerRacerObject> sRacers;
 
+    // singleton
     private static ServerGameMaster serverGameMaster = null;
     public static ServerGameMaster getInstance() {
         if (serverGameMaster == null) {
@@ -19,22 +20,21 @@ public class ServerGameMaster {
     }
 
     public ServerGameMaster() {
-        sRacers = new HashMap<>();
+        this.sRacers = new HashMap<>();
+        this.numOfRacers = ServerGameConfig.INIT_NUM_OF_RACERS;
         serverGameMaster = this;
     }
 
-    public int getNumberOfRacer() {
-        return numberOfRacer;
+    public int getNumOfRacers() {
+        return this.numOfRacers;
     }
-
-    public void setNumberOfRacer(int numberOfRacer) {
-        this.numberOfRacer = numberOfRacer;
+    public void setNumOfRacers(int numOfRacers) {
+        this.numOfRacers = numOfRacers;
     }
 
     public int getRaceLength() {
-        return raceLength;
+        return this.raceLength;
     }
-
     public void setRaceLength(int raceLength) {
         this.raceLength = raceLength;
     }
@@ -51,6 +51,10 @@ public class ServerGameMaster {
         return sRacers;
     }
 
+    public int getCurrentNumOfRacers() {
+        return sRacers.size();
+    }
+
     public int getSizeInBytes(boolean ignore, int clientID) {
         int capacity = 0;
         if (ignore) {
@@ -61,10 +65,11 @@ public class ServerGameMaster {
                     capacity += Integer.BYTES;
 
                     String rUsername = racerObject.getUsername();
+                    capacity += Integer.BYTES; // hold rUsername length
                     capacity += rUsername.length();
 
-                    String rPassword = racerObject.getPassword();
-                    capacity += rPassword.length();
+                    // int position
+                    capacity += Integer.BYTES;
 
                     // int rStatus;
                     capacity += Integer.BYTES;
@@ -77,10 +82,11 @@ public class ServerGameMaster {
                 capacity += Integer.BYTES;
 
                 String rUsername = racerObject.getUsername();
+                capacity += Integer.BYTES; // hold rUsername length
                 capacity += rUsername.length();
 
-                String rPassword = racerObject.getPassword();
-                capacity += rPassword.length();
+                // int position
+                capacity += Integer.BYTES;
 
                 // int rStatus;
                 capacity += Integer.BYTES;
@@ -88,4 +94,34 @@ public class ServerGameMaster {
         }
         return capacity;
     }
+
+    public int getSizeInBytesOfRacer (int racerID) {
+        int capacity = 0;
+        for (Map.Entry<Integer, ServerRacerObject> entry : this.sRacers.entrySet()) {
+            if (entry.getKey() == racerID) {
+                ServerRacerObject racerObject = entry.getValue();
+                // int rID;
+                capacity += Integer.BYTES;
+
+                String rUsername = racerObject.getUsername();
+                capacity += Integer.BYTES; // hold rUsername length
+                capacity += rUsername.length();
+
+                // int position
+                capacity += Integer.BYTES;
+
+                // int rStatus;
+                capacity += Integer.BYTES;
+
+                break;
+            }
+        }
+        return capacity;
+    }
+
+    public ServerRacerObject getRacerInfo(int racerID) {
+        return sRacers.get(racerID);
+    }
+
+    public ServerQuestion getQuestion() { return new ServerQuestion(); }
 }

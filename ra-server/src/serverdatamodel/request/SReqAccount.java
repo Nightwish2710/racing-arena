@@ -8,11 +8,6 @@ public class SReqAccount extends ServerDataModel {
     private String username;
     private String password;
 
-    public SReqAccount(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
-
     public SReqAccount() {
         this.username = null;
         this.password = null;

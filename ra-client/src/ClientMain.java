@@ -1,8 +1,7 @@
 import clientGUI.ClientGUI;
 import clientGUI.ClientGUIConfig;
 import clientnetwork.ClientNetwork;
-import clientnetwork.ClientNetworkConfig;
-import clientdatamodel.CDAccount;
+import clientobject.ClientGameMaster;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -14,7 +13,7 @@ import java.io.IOException;
 
 public class ClientMain {
     private static ClientNetwork network;
-
+    private static ClientGameMaster clientGameMaster;
     public static void main(String[] args) {
 
 //        java.net.URL url = ClassLoader.getSystemResource("com/xyz/assets/dog-sharpei-icon.png");
@@ -23,6 +22,12 @@ public class ClientMain {
         connectToServer();
 
         initClientGUI();
+
+        initClientGameMaster();
+    }
+
+    private static void initClientGameMaster() {
+        clientGameMaster = new ClientGameMaster();
     }
 
     private static void connectToServer() {

@@ -1,21 +1,14 @@
 package clientdatamodel;
 
-import clientnetwork.ClientNetworkConfig;
-
 import java.nio.ByteBuffer;
 
 public class ClientDataModel {
     private ByteBuffer byteBuffer;
 
-    public ClientDataModel() {
-        this.byteBuffer = null;
-    }
+    public ClientDataModel() { this.byteBuffer = null; }
 
-    public byte[] pack(int cmd) {
+    public byte[] pack() {
         return byteBuffer.array();
     };
-
-    public void unpack(ByteBuffer byteBuffer) {
-        return;
-    };
+    public void unpack(byte[] bytes) {};
 }

@@ -33,7 +33,7 @@ public class ServerNetwork {
     }
 
     public boolean isNetworkOpenning() {
-        return serverNetworkThread.isOpenning();
+        return serverNetworkThread!=null && serverNetworkThread.isOpenning();
     }
 
     public void closeNetwork() {
@@ -54,7 +54,7 @@ public class ServerNetwork {
         public ServerNetworkThread() {
             this.serverSocket = null;
             this.cSocketThreads = new HashMap<>();
-            this.clientPool = Executors.newFixedThreadPool(ServerGameConfig.MAX_NUM_OF_RACER);
+            this.clientPool = Executors.newFixedThreadPool(ServerGameConfig.MAX_NUM_OF_RACERS);
         }
 
         @Override

@@ -27,7 +27,7 @@ public class ClientGUIConfig {
 
     public static class ColorButtonConfig {
         public static final int COLOR_BUTTON_SIZE = 12;
-        public static final int COLOR_BUTTON_MARGIN_LR = -10;
+        public static final int COLOR_BUTTON_MARGIN_LR = 0;
         public static final int COLOR_BUTTON_MARGIN_TB = 0;
         public static final int NUMBER_OF_BUTTONS = 15;
     }

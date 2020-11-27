@@ -44,17 +44,21 @@ public class SResLoginSuccess extends ServerDataModel {
         byteBuffer.putInt(this.eventFlag);
         byteBuffer.putInt(this.clientID);
         byteBuffer.putInt(this.racerVictory);
-        byteBuffer.putInt(this.sGameMaster.getNumberOfRacer());
+        byteBuffer.putInt(this.sGameMaster.getCurrentNumOfRacers());
 
         for (Map.Entry<Integer, ServerRacerObject> entry : this.sGameMaster.getsRacers().entrySet()) {
             if (entry.getKey() != this.clientID) {
                 ServerRacerObject racerObject = entry.getValue();
                 // int rID;
                 byteBuffer.putInt(racerObject.getRacerID());
+
                 // string username
+                byteBuffer.putInt(racerObject.getUsername().length());
                 byteBuffer.put(racerObject.getUsername().getBytes());
-                // string password
-                byteBuffer.put(racerObject.getPassword().getBytes());
+
+                // int position;
+                byteBuffer.putInt(racerObject.getPosition());
+
                 // int rStatus;
                 byteBuffer.putInt(racerObject.getStatus());
             }

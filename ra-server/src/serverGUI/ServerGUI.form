@@ -235,7 +235,7 @@
           <text value="Question"/>
         </properties>
       </component>
-      <component id="85894" class="javax.swing.JLabel" binding="firstNumer">
+      <component id="85894" class="javax.swing.JLabel" binding="firstNum">
         <constraints>
           <grid row="3" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -243,7 +243,7 @@
           <text value="10000"/>
         </properties>
       </component>
-      <component id="91e80" class="javax.swing.JLabel" binding="operant">
+      <component id="91e80" class="javax.swing.JLabel" binding="operator">
         <constraints>
           <grid row="3" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -251,7 +251,7 @@
           <text value="*"/>
         </properties>
       </component>
-      <component id="e67c2" class="javax.swing.JLabel" binding="secondNumber">
+      <component id="e67c2" class="javax.swing.JLabel" binding="secondNum">
         <constraints>
           <grid row="3" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>

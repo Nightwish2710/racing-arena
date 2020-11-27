@@ -43,6 +43,14 @@ public class ServerGUI extends JFrame {
     private JLabel racerStatLabel;
     private JScrollPane statTableScrollPane;
 
+    private JLabel questionLabel;
+    private JLabel firstNum, operator, secondNum;
+    private JLabel correctAnsLabel;
+    private JLabel updateCorrectAns;
+
+    private JSeparator verticalSeparator1, verticalSeparator2, verticalSeparator3;
+    private List<JSeparator> vSep = Arrays.asList(verticalSeparator1, verticalSeparator2, verticalSeparator3);
+
     // Singleton
     private static ServerGUI serverGUI = null;
 
@@ -54,16 +62,9 @@ public class ServerGUI extends JFrame {
         }
         return serverGUI;
     }
-    private JLabel questionLabel;
-    private JLabel firstNumer, operant, secondNumber;
-    private JLabel correctAnsLabel;
-    private JLabel updateCorrectAns;
 
-    private JSeparator verticalSeparator1, verticalSeparator2, verticalSeparator3;
-    private List<JSeparator> vSep = Arrays.asList(verticalSeparator1, verticalSeparator2, verticalSeparator3);
-
-    public ServerGUI(String gameName) {
-        super(gameName);
+    public ServerGUI(String _gameName) {
+        super(_gameName);
         serverGUI = this;
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -114,8 +115,8 @@ public class ServerGUI extends JFrame {
     }
 
     private void setSpinnerUI() {
-        numOfRacersSpinner.setModel(new SpinnerNumberModel(6, ServerGameConfig.MIN_NUM_OF_RACER, ServerGameConfig.MAX_NUM_OF_RACER, 1));
-        raceLengthSpinner.setModel(new SpinnerNumberModel(15, ServerGameConfig.MIN_RACE_LENGTH, ServerGameConfig.MAX_RACE_LENGTH, 1));
+        numOfRacersSpinner.setModel(new SpinnerNumberModel(ServerGameConfig.INIT_NUM_OF_RACERS, ServerGameConfig.MIN_NUM_OF_RACERS, ServerGameConfig.MAX_NUM_OF_RACERS, 1));
+        raceLengthSpinner.setModel(new SpinnerNumberModel(ServerGameConfig.INIT_RACE_LENGTH, ServerGameConfig.MIN_RACE_LENGTH, ServerGameConfig.MAX_RACE_LENGTH, 1));
 
         numOfRacersSpinner.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         raceLengthSpinner.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
@@ -124,7 +125,7 @@ public class ServerGUI extends JFrame {
         numOfRacersSpinner.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                ServerGameMaster.getInstance().setNumberOfRacer((int)numOfRacersSpinner.getValue());
+                ServerGameMaster.getInstance().setNumOfRacers((int)numOfRacersSpinner.getValue());
             }
         });
 
@@ -168,8 +169,8 @@ public class ServerGUI extends JFrame {
         statTableScrollPane.getHorizontalScrollBar().setBorder(null);
         statTableScrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
-        int height = (ServerGameMaster.getInstance().getNumberOfRacer() + 1) * ServerGUIConfig.ROW_HEIGHT;
-        int width = -1;
+        int height = 0, width = -1;
+        height = (ServerGameMaster.getInstance().getNumOfRacers() + 1) * ServerGUIConfig.ROW_HEIGHT;
         for (int i = 0; i < ServerGUIConfig.PREFERRED_WIDTH.length; ++i) { width += ServerGUIConfig.PREFERRED_WIDTH[i]; }
         statTableScrollPane.setPreferredSize(new Dimension(width, height));
 
@@ -225,19 +226,19 @@ public class ServerGUI extends JFrame {
             racerStatTable.getColumnModel().getColumn(i).setCellRenderer(center); // align center text in each cell
         }
 
-        dtm.addRow(new Object[]{1,"HHHHHHHHHH", "+10", "ELIMINATED", 10});
-        dtm.addRow(new Object[]{2, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
-        dtm.addRow(new Object[]{3, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
-        dtm.addRow(new Object[]{4, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
-        dtm.addRow(new Object[]{5, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
-        dtm.addRow(new Object[]{6, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
+//        dtm.addRow(new Object[]{1,"HHHHHHHHHH", "+10", "ELIMINATED", 10});
+//        dtm.addRow(new Object[]{2, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
+//        dtm.addRow(new Object[]{3, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
+//        dtm.addRow(new Object[]{4, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
+//        dtm.addRow(new Object[]{5, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
+//        dtm.addRow(new Object[]{6, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
 //        dtm.addRow(new Object[]{7, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
 //        dtm.addRow(new Object[]{8, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
 //        dtm.addRow(new Object[]{9, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
 //        dtm.addRow(new Object[]{10, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
 
 //        dtm.setValueAt(strikeThroughText((String)dtm.getValueAt(0, 3)), 0, 3);
-        dtm.setValueAt(atStarToCurrentLeadingRacer((String)dtm.getValueAt(0, 1)), 0, 1);
+//        dtm.setValueAt(atStarToCurrentLeadingRacer((String)dtm.getValueAt(0, 1)), 0, 1);
 //        dtm.setValueAt(removeStarFromPreviouslyLeadingRacer((String)dtm.getValueAt(0, 1)), 0, 1);
 
     }
@@ -257,17 +258,16 @@ public class ServerGUI extends JFrame {
         Pattern pattern = Pattern.compile("<HTML><p style=\"color:red;\">&#9733;(\\S+)&#9733;</p></HTML>");
         Matcher matcher = pattern.matcher(str);
 
-        if (matcher.find()) {
-            String result = matcher.group(1);
-            return result;
-        }
+        if (matcher.find()) { return matcher.group(1); }
 
         return str;
     }
 
-    private ActionListener actionOpenConnection = e -> ServerNetwork.getInstance().openServerSocket();
-
-    public JLabel getNumOfPplJoining() {
-        return numOfPplJoining;
+    private void disableComponentAfterOpenConnection() {
+        numOfRacersSpinner.setEnabled(false);
+        raceLengthSpinner.setEnabled(false);
+        openConnectionButton.setEnabled(false);
     }
+
+    private ActionListener actionOpenConnection = e -> ServerNetwork.getInstance().openServerSocket();
 }

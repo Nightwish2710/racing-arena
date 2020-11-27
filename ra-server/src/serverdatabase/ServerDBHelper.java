@@ -3,8 +3,8 @@ package serverdatabase;
 import java.sql.*;
 
 public class ServerDBHelper {
-    private Connection conn = null;
-
+    private Connection conn;
+    private Statement statement;
     // Creating singleton
     private static ServerDBHelper serverDBHelper = null;
     public static ServerDBHelper getInstance() {
@@ -46,25 +46,32 @@ public class ServerDBHelper {
     }
 
     public void exec (String query) {
-        Statement stmt = null;
         try {
-            stmt = conn.createStatement();
-            stmt.execute(query);
+            if (statement != null && !statement.isClosed()) {
+                statement.close();
+            }
+            statement = conn.createStatement();
+            statement.execute(query);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-        } finally {
-            //finally block used to close resources
-            try {
-                if(stmt!=null) stmt.close();
-            } catch(SQLException se2) {}
         }
+//        finally {
+//            //finally block used to close resources
+//            try {
+//                // if(stmt!=null) stmt.close();
+//            } catch(SQLException se2) {}
+//        }
     }
 
     public ResultSet execForResult (String query) {
-        try (Statement stmt = conn.createStatement()) {
-            ResultSet rs = stmt.executeQuery(query);
-            return rs;
+        ResultSet rs = null;
+        try {
+            if (!statement.isClosed()) {
+                statement.close();
+            }
+            statement = conn.createStatement();
+            rs = statement.executeQuery(query);
         } catch (SQLException e) {}
-        return null;
+        return rs;
     }
 }

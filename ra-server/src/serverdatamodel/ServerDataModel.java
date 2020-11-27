@@ -12,7 +12,5 @@ public class ServerDataModel {
     public byte[] pack() {
         return byteBuffer.array();
     };
-    public void unpack(byte[] bytes) {
-        System.out.println("HERE");
-    };
+    public void unpack(byte[] bytes) {};
 }

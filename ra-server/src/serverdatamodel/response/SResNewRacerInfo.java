@@ -7,14 +7,16 @@ import serverobject.ServerRacerObject;
 import java.nio.ByteBuffer;
 import java.util.Map;
 
-public class SResAllRacersInfo extends ServerDataModel {
+public class SResNewRacerInfo extends ServerDataModel {
     private int cmd;
     private int eventFlag;
+    private int newRacerID;
     private ServerGameMaster sGameMaster;
 
-    public SResAllRacersInfo(int _cmd, int _eventFlag, ServerGameMaster _sGameMaster) {
+    public SResNewRacerInfo(int _cmd, int _eventFlag, int _newRacerID, ServerGameMaster _sGameMaster) {
         this.cmd = _cmd;
         this.eventFlag = _eventFlag;
+        this.newRacerID = _newRacerID;
         this.sGameMaster = _sGameMaster;
     }
 
@@ -24,7 +26,7 @@ public class SResAllRacersInfo extends ServerDataModel {
                 + Integer.BYTES // storing eventFlag
                 + Integer.BYTES // storing numOfRacers
 
-                + this.sGameMaster.getSizeInBytes(false, -1);
+                + this.sGameMaster.getSizeInBytesOfRacer(this.newRacerID);
         ByteBuffer byteBuffer = ByteBuffer.allocate(capacity);
 
         // Pour in data
@@ -34,18 +36,16 @@ public class SResAllRacersInfo extends ServerDataModel {
         byteBuffer.putInt(this.eventFlag);
         byteBuffer.putInt(this.sGameMaster.getCurrentNumOfRacers());
 
-        for (Map.Entry<Integer, ServerRacerObject> entry : this.sGameMaster.getsRacers().entrySet()) {
-            ServerRacerObject racerObject = entry.getValue();
-            // int rID;
-            byteBuffer.putInt(racerObject.getRacerID());
-            // string username
-            byteBuffer.putInt(racerObject.getUsername().length());
-            byteBuffer.put(racerObject.getUsername().getBytes());
-            // int position;
-            byteBuffer.putInt(racerObject.getPosition());
-            // int rStatus;
-            byteBuffer.putInt(racerObject.getStatus());
-        }
+        ServerRacerObject newRacer = this.sGameMaster.getRacerInfo(this.newRacerID);
+        // int rID;
+        byteBuffer.putInt(newRacer.getRacerID());
+        // string username
+        byteBuffer.putInt(newRacer.getUsername().length());
+        byteBuffer.put(newRacer.getUsername().getBytes());
+        // int position;
+        byteBuffer.putInt(newRacer.getPosition());
+        // int rStatus;
+        byteBuffer.putInt(newRacer.getStatus());
 
         // Return a byte[] array
         return byteBuffer.array();

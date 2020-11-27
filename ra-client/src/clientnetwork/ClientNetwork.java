@@ -1,6 +1,11 @@
 package clientnetwork;
 
+import clientGUI.ClientGUI;
 import clientdatamodel.ClientDataModel;
+import clientdatamodel.receive.CReceiveLogin;
+import clientobject.ClientGameConfig;
+import clientobject.ClientGameMaster;
+import clientobject.Racer;
 
 import java.io.*;
 import java.net.Socket;
@@ -28,11 +33,11 @@ public class ClientNetwork {
     }
 
     public ClientNetwork() {
-        clientSocket = null;
-        outStream = null;
-        inStream = null;
-        receiverThread = null;
-        clientNetwork = this;
+        this.clientSocket = null;
+        this.outStream = null;
+        this.inStream = null;
+        this.receiverThread = null;
+        this.clientNetwork = this;
     }
 
     public void connect() {
@@ -67,10 +72,10 @@ public class ClientNetwork {
         return clientSocket.isConnected();
     }
 
-    public void send(int cmd, ClientDataModel clientDataModel) {
+    public void send(ClientDataModel clientDataModel) {
         try {
             System.out.println(this.getClass().getSimpleName() + ": sending username, password");
-            outStream.write(clientDataModel.pack(cmd));
+            outStream.write(clientDataModel.pack());
         } catch (UnknownHostException e) {
             System.err.println("Trying to connect to unknown host: " + e);
         } catch (IOException e) {
@@ -101,21 +106,59 @@ public class ClientNetwork {
         public void run() {
             while (true) {
                 if (ClientNetwork.getInstance().getClientSocket().isClosed()) {
-                    System.out.println(this.getClass().getSimpleName() + " CLOSED ");
                     return;
                 }
-                String responseLine = null;
+
                 try {
-                    responseLine = inStream.readLine();
-                    if (responseLine.contains("quit")) {
-                        break;
+                    int cmd = inStream.readInt();
+
+                    int lData = inStream.available();
+                    byte[] bytes = new byte[lData];
+                    inStream.read(bytes);
+
+                    // Switch on command id
+                    switch (cmd) {
+                        case ClientNetworkConfig.CMD.CMD_LOGIN:
+                            receiveLogin(bytes);
+                            break;
                     }
-                    System.out.println(this.getClass().getSimpleName() + " server says: " + responseLine);
                 } catch (IOException e) {
                     e.printStackTrace();
+                    break;
                 }
             }
         }
+
+        private void receiveLogin(byte[] bytes) {
+            CReceiveLogin cReceiveLogin = new CReceiveLogin();
+            cReceiveLogin.unpack(bytes);
+
+            switch (cReceiveLogin.getEventFlag()) {
+                case ClientNetworkConfig.LOGIN_FLAG.NO_MORE_SLOTS:
+                    // update UI
+                    break;
+                case ClientNetworkConfig.LOGIN_FLAG.USERNAME_TAKEN:
+                    // update UI
+                    break;
+                case ClientNetworkConfig.LOGIN_FLAG.ERROR:
+                    // update UI
+                    break;
+                case ClientNetworkConfig.LOGIN_FLAG.SUCCESS:
+                    // confirm this racer, record his opponent array
+                    ClientGameMaster.getInstance().getcRacer().setId(cReceiveLogin.getClientID());
+                    ClientGameMaster.getInstance().getcRacer().setNumOfVictory(cReceiveLogin.getRacerVictory());
+                    ClientGameMaster.getInstance().setNumOfRacers(cReceiveLogin.getNumOfRacers());
+                    ClientGameMaster.getInstance().setcOpponents(cReceiveLogin.getcOpponents());
+
+                    // update UI
+                    ClientGUI.getInstance().disableComponentAfterJoinServer();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
     }
 }
 

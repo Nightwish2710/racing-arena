@@ -4,6 +4,7 @@ import serverdatabase.ServerDBConfig;
 import serverdatabase.ServerDBHelper;
 import servernetwork.ServerNetwork;
 import serverobject.ServerGameMaster;
+import serverobject.ServerQuestion;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
