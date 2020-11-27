@@ -3,7 +3,7 @@ import serverGUI.ServerGUIConfig;
 import serverdatabase.ServerDBConfig;
 import serverdatabase.ServerDBHelper;
 import servernetwork.ServerNetwork;
-import serverobject.ServerRefereeObject;
+import serverobject.ServerGameMaster;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -12,7 +12,7 @@ import java.io.*;
 public class ServerMain {
     private static ServerDBHelper serverDBHelper;
     private static ServerNetwork serverNetwork;
-    private static ServerRefereeObject serverReferee;
+    private static ServerGameMaster serverReferee;
 
     public static void main(String args[]) throws IOException {
         initServerDB();
@@ -22,7 +22,7 @@ public class ServerMain {
     }
 
     private static void initServerReferee() {
-        serverReferee = new ServerRefereeObject();
+        serverReferee = new ServerGameMaster();
     }
 
     private static void initServerNetwork() {

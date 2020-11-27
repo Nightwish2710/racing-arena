@@ -1,18 +1,18 @@
 package serverobject;
 
-public class ServerRefereeObject {
+public class ServerGameMaster {
     private int numberOfRacer;
     private int raceLength;
 
-    private static ServerRefereeObject serverRefereeObject = null;
-    public static ServerRefereeObject getInstance() {
+    private static ServerGameMaster serverRefereeObject = null;
+    public static ServerGameMaster getInstance() {
         if (serverRefereeObject == null) {
-            serverRefereeObject = new ServerRefereeObject();
+            serverRefereeObject = new ServerGameMaster();
         }
         return  serverRefereeObject;
     }
 
-    public ServerRefereeObject() {
+    public ServerGameMaster() {
         serverRefereeObject = this;
     }
 

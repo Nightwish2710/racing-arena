@@ -2,7 +2,7 @@ package serverGUI;
 
 import servernetwork.ServerNetwork;
 import serverobject.ServerGameConfig;
-import serverobject.ServerRefereeObject;
+import serverobject.ServerGameMaster;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -124,7 +124,7 @@ public class ServerGUI extends JFrame {
         numOfRacersSpinner.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                ServerRefereeObject.getInstance().setNumberOfRacer((int)numOfRacersSpinner.getValue());
+                ServerGameMaster.getInstance().setNumberOfRacer((int)numOfRacersSpinner.getValue());
             }
         });
 
@@ -132,7 +132,7 @@ public class ServerGUI extends JFrame {
         raceLengthSpinner.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                ServerRefereeObject.getInstance().setRaceLength((int) raceLengthSpinner.getValue());
+                ServerGameMaster.getInstance().setRaceLength((int) raceLengthSpinner.getValue());
             }
         });
 
@@ -168,7 +168,7 @@ public class ServerGUI extends JFrame {
         statTableScrollPane.getHorizontalScrollBar().setBorder(null);
         statTableScrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
-        int height = (ServerRefereeObject.getInstance().getNumberOfRacer() + 1) * ServerGUIConfig.ROW_HEIGHT;
+        int height = (ServerGameMaster.getInstance().getNumberOfRacer() + 1) * ServerGUIConfig.ROW_HEIGHT;
         int width = -1;
         for (int i = 0; i < ServerGUIConfig.PREFERRED_WIDTH.length; ++i) { width += ServerGUIConfig.PREFERRED_WIDTH[i]; }
         statTableScrollPane.setPreferredSize(new Dimension(width, height));

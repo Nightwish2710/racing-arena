@@ -1,8 +1,7 @@
 package servernetwork;
 
 import serverdatamodel.SRAccount;
-import serverobject.ServerGameConfig;
-import serverobject.ServerRefereeObject;
+import serverobject.ServerGameMaster;
 
 import java.io.*;
 import java.net.Socket;
@@ -69,9 +68,9 @@ public class ServerCSocketThread implements Runnable{
         System.out.println(this.getClass().getSimpleName()+": request login: " + srAccount.getUsername() + ", " + srAccount.getPassword());
 
         // check if there is available slots
-        if (this.parentThread.getNumberOfClient() < ServerRefereeObject.getInstance().getNumberOfRacer()) {
+        if (this.parentThread.getNumberOfClient() < ServerGameMaster.getInstance().getNumberOfRacer()) {
             // if yes
-            String queryUser = "SELECT * FROM "
+            String queryUser = "SELECT * FROM ";
             //      check if username exists in database
             //      if it is, check if password match
             //          if password match, existing user, send individually (success login) and bulk (update number of racers to all)
