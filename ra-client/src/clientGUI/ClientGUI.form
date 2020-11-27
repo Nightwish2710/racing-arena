@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="ClientPanel" layout-manager="GridLayoutManager" row-count="20" column-count="21" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="2077" height="619"/>
+      <xy x="20" y="20" width="2218" height="619"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -103,7 +103,7 @@
           <text value="JOIN SERVER"/>
         </properties>
       </component>
-      <component id="45d5e" class="javax.swing.JSeparator" binding="separator">
+      <component id="45d5e" class="javax.swing.JSeparator" binding="separator1">
         <constraints>
           <grid row="9" column="0" row-span="1" col-span="16" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="1" use-parent-layout="false">
             <preferred-size width="-1" height="15"/>

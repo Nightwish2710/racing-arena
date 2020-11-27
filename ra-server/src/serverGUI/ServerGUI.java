@@ -8,6 +8,8 @@ import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.*;
 
 public class ServerGUI extends JFrame {
@@ -31,10 +33,19 @@ public class ServerGUI extends JFrame {
     private JLabel numOfPplJoining;
 
     private JSeparator separator1, separator2;
+    private List<JSeparator> hSep = Arrays.asList(separator1, separator2);
 
     public JTable racerStatTable;
     private JLabel racerStatLabel;
     private JScrollPane statTableScrollPane;
+
+    private JLabel questionLabel;
+    private JLabel firstNumer, operant, secondNumber;
+    private JLabel correctAnsLabel;
+    private JLabel updateCorrectAns;
+
+    private JSeparator verticalSeparator1, verticalSeparator2, verticalSeparator3;
+    private List<JSeparator> vSep = Arrays.asList(verticalSeparator1, verticalSeparator2, verticalSeparator3);
 
     public ServerGUI(String gameName) {
         super(gameName);
@@ -76,13 +87,7 @@ public class ServerGUI extends JFrame {
         startGameButton.setBorder(new LineBorder(ServerGUIConfig.LIGHT_GREEN));
 
         // set separator
-        separator1.setBackground(ServerGUIConfig.BORDER_COLOR);
-        separator1.setForeground(ServerGUIConfig.BORDER_COLOR);
-        separator1.setBorder(BorderFactory.createMatteBorder(3, 0, 0, 0, ServerGUIConfig.BORDER_COLOR));
-
-        separator2.setBackground(ServerGUIConfig.BORDER_COLOR);
-        separator2.setForeground(ServerGUIConfig.BORDER_COLOR);
-        separator2.setBorder(BorderFactory.createMatteBorder(3, 0, 0, 0, ServerGUIConfig.BORDER_COLOR));
+        setSeparatorUI();
 
         // set table
         setTableUI();
@@ -106,6 +111,22 @@ public class ServerGUI extends JFrame {
         JFormattedTextField raceLengthTextField = ((JSpinner.DefaultEditor)raceLengthSpinner.getEditor()).getTextField();
         raceLengthTextField.setEditable(false);
         raceLengthTextField.setHorizontalAlignment(SwingConstants.CENTER);
+    }
+
+    private void setSeparatorUI() {
+        for (int i = 0; i < hSep.size(); ++i) {
+            hSep.get(i).setBackground(ServerGUIConfig.BORDER_COLOR);
+            hSep.get(i).setForeground(ServerGUIConfig.BORDER_COLOR);
+            hSep.get(i).setBorder(BorderFactory.createMatteBorder(3, 0, 0, 0, ServerGUIConfig.BORDER_COLOR));
+        }
+
+        for (int i = 0; i < vSep.size(); ++i) {
+            vSep.get(i).setOrientation(SwingConstants.VERTICAL);
+            vSep.get(i).setPreferredSize(new Dimension(3, 40));
+            vSep.get(i).setBackground(ServerGUIConfig.BORDER_COLOR);
+            vSep.get(i).setForeground(ServerGUIConfig.BORDER_COLOR);
+            vSep.get(i).setBorder(BorderFactory.createMatteBorder(0, 1, 0, 2, ServerGUIConfig.BORDER_COLOR));
+        }
     }
 
     private void setTableUI() {

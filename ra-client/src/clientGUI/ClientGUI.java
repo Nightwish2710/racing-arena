@@ -9,7 +9,6 @@ import javax.swing.border.*;
 import javax.swing.plaf.basic.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.font.TextAttribute;
 import java.util.*;
 import java.util.List;
 
@@ -40,7 +39,9 @@ public class ClientGUI extends JFrame {
 
     private JScrollPane serverResponsePane;
 
-    private JSeparator separator, separator2, separator3;
+    private JSeparator separator1, separator2, separator3;
+    private List<JSeparator> sep = Arrays.asList(separator1, separator2, separator3);
+
     private JLabel nicknameError;
     private JLabel serverResponsePanelLabel;
 
@@ -48,6 +49,7 @@ public class ClientGUI extends JFrame {
     private JPanel racerStatusPanel;
 
     private JButton c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15;
+    private List<JButton> colorButtons = Arrays.asList(c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15);
 
     public ClientGUI(String gameName) {
         super(gameName);
@@ -119,17 +121,11 @@ public class ClientGUI extends JFrame {
     }
 
     private void setSeparatorUI() {
-        separator.setBackground(ClientGUIConfig.BORDER_COLOR);
-        separator.setForeground(ClientGUIConfig.BORDER_COLOR);
-        separator.setBorder(BorderFactory.createMatteBorder(3, 0, 0, 0, ClientGUIConfig.BORDER_COLOR));
-
-        separator2.setBackground(ClientGUIConfig.BORDER_COLOR);
-        separator2.setForeground(ClientGUIConfig.BORDER_COLOR);
-        separator2.setBorder(BorderFactory.createMatteBorder(3, 0, 0, 0, ClientGUIConfig.BORDER_COLOR));
-
-        separator3.setBackground(ClientGUIConfig.BORDER_COLOR);
-        separator3.setForeground(ClientGUIConfig.BORDER_COLOR);
-        separator3.setBorder(BorderFactory.createMatteBorder(3, 0, 0, 0, ClientGUIConfig.BORDER_COLOR));
+        for (int i = 0; i < sep.size(); ++i) {
+            sep.get(i).setBackground(ClientGUIConfig.BORDER_COLOR);
+            sep.get(i).setForeground(ClientGUIConfig.BORDER_COLOR);
+            sep.get(i).setBorder(BorderFactory.createMatteBorder(3, 0, 0, 0, ClientGUIConfig.BORDER_COLOR));
+        }
     }
 
     private void setEventWithTextBox() {
@@ -202,8 +198,6 @@ public class ClientGUI extends JFrame {
     }
 
     private void setColorButtonUI() {
-        List<JButton> colorButtons = Arrays.asList(c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15);
-
         for (int i = 0; i < NUMBER_OF_BUTTONS; ++i) {
             colorButtons.get(i).setMaximumSize(new Dimension(COLOR_BUTTON_SIZE, COLOR_BUTTON_SIZE));
             colorButtons.get(i).setPreferredSize(new Dimension(COLOR_BUTTON_SIZE, COLOR_BUTTON_SIZE));
