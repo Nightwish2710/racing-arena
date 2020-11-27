@@ -12,17 +12,17 @@ import java.io.*;
 public class ServerMain {
     private static ServerDBHelper serverDBHelper;
     private static ServerNetwork serverNetwork;
-    private static ServerGameMaster serverReferee;
+    private static ServerGameMaster serverGameMaster;
 
     public static void main(String args[]) throws IOException {
         initServerDB();
-        initServerReferee();
+        initServerGameMaster();
         initServerGUI();
         initServerNetwork();
     }
 
-    private static void initServerReferee() {
-        serverReferee = new ServerGameMaster();
+    private static void initServerGameMaster() {
+        serverGameMaster = new ServerGameMaster();
     }
 
     private static void initServerNetwork() {
