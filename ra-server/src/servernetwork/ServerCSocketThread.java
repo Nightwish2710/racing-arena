@@ -68,7 +68,7 @@ public class ServerCSocketThread implements Runnable{
         System.out.println(this.getClass().getSimpleName()+": request login: " + srAccount.getUsername() + ", " + srAccount.getPassword());
 
         // check if there is available slots
-        if (this.parentThread.getNumberOfClient() < ServerGameMaster.getInstance().getNumberOfRacer()) {
+        if (this.parentThread.getNumberOfClient() < ServerGameMaster.getInstance().getNumOfRacers()) {
             // if yes
             String queryUser = "SELECT * FROM ";
             //      check if username exists in database

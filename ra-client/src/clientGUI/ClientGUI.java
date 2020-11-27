@@ -27,12 +27,19 @@ public class ClientGUI extends JFrame {
     private JLabel passwordLabel;
     private JPasswordField enterPassword;
 
+    private JLabel victoryLabel;
+    private JLabel updateNumOfVictory;
+
     private JButton joinServerButton;
+    private JLabel joinServerNoti;
     private JButton sendAnswerButton;
 
     private JLabel questionLabel;
-    private JLabel updateQuestion;
+    private JLabel firstNum, operator, secondNum;
     private JTextField enterAnswer;
+
+    private JLabel updateStatus;
+    private JLabel updateExtraStatus;
 
     private JLabel timerLabel;
     private JProgressBar timerBar;
@@ -42,7 +49,8 @@ public class ClientGUI extends JFrame {
     private JSeparator separator1, separator2, separator3;
     private List<JSeparator> sep = Arrays.asList(separator1, separator2, separator3);
 
-    private JLabel nicknameError;
+    private JSeparator verticalSeparator;
+
     private JLabel serverResponsePanelLabel;
 
     private JLabel racerStatusLabel;
@@ -79,6 +87,8 @@ public class ClientGUI extends JFrame {
         racerStatusLabel.setForeground(ACCENT_COLOR);
         racerStatusLabel.setFont(new Font("Britannic Bold", Font.PLAIN, 20));
 
+        updateNumOfVictory.setForeground(ACCENT_COLOR);
+
         // set buttons
         joinServerButton.setBackground(ACCENT_COLOR);
         joinServerButton.setForeground(ClientGUIConfig.BACKGROUND_COLOR);
@@ -99,17 +109,32 @@ public class ClientGUI extends JFrame {
         // color palette
         setColorButtonUI();
 
-        // set error label
-        nicknameError.setFont(new Font("Arial", Font.BOLD, 9));
-        nicknameError.setForeground(Color.RED);
+        // set label
+        victoryLabel.setFont(new Font("Britannic Bold", Font.PLAIN, 20));
+        updateNumOfVictory.setFont(new Font("Britannic Bold", Font.PLAIN, 35));
+        joinServerNoti.setFont(new Font("Arial", Font.ITALIC, 9));
 
         // set separator
         setSeparatorUI();
 
         // set text boxes
         enterNickname.setBorder(ClientGUIConfig.BORDER);
+        enterNickname.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                enterNickname.setToolTipText("Nickname cannot be longer than 10 and only contains [a-zA-Z0-9_].");
+                enterNickname.setForeground(Color.BLACK);
+            }
+            @Override
+            public void focusLost(FocusEvent e) {
+                enterNickname.setToolTipText("Nickname cannot be longer than 10 and only contains [a-zA-Z0-9_].");
+            }
+        });
         enterPassword.setBorder(ClientGUIConfig.BORDER);
         enterAnswer.setBorder(ClientGUIConfig.BORDER);
+
+        updateStatus.setFont(new Font("Arial", Font.BOLD, 9));
+        updateExtraStatus.setFont(new Font("Arial", Font.BOLD, 9));
 
         setEventWithTextBox();
 
@@ -126,6 +151,12 @@ public class ClientGUI extends JFrame {
             sep.get(i).setForeground(ClientGUIConfig.BORDER_COLOR);
             sep.get(i).setBorder(BorderFactory.createMatteBorder(3, 0, 0, 0, ClientGUIConfig.BORDER_COLOR));
         }
+
+        verticalSeparator.setOrientation(SwingConstants.VERTICAL);
+        verticalSeparator.setPreferredSize(new Dimension(3, 67));
+        verticalSeparator.setBackground(ClientGUIConfig.BORDER_COLOR);
+        verticalSeparator.setForeground(ClientGUIConfig.BORDER_COLOR);
+        verticalSeparator.setBorder(BorderFactory.createMatteBorder(0, 3, 0, 0, ClientGUIConfig.BORDER_COLOR));
     }
 
     private void setEventWithTextBox() {
@@ -201,7 +232,7 @@ public class ClientGUI extends JFrame {
         for (int i = 0; i < NUMBER_OF_BUTTONS; ++i) {
             colorButtons.get(i).setMaximumSize(new Dimension(COLOR_BUTTON_SIZE, COLOR_BUTTON_SIZE));
             colorButtons.get(i).setPreferredSize(new Dimension(COLOR_BUTTON_SIZE, COLOR_BUTTON_SIZE));
-            colorButtons.get(i).setMargin(new Insets(COLOR_BUTTON_MARGIN_TB, COLOR_BUTTON_MARGIN_LR, COLOR_BUTTON_MARGIN_TB, COLOR_BUTTON_MARGIN_LR));
+//            colorButtons.get(i).setMargin(new Insets(COLOR_BUTTON_MARGIN_TB, COLOR_BUTTON_MARGIN_LR, COLOR_BUTTON_MARGIN_TB, COLOR_BUTTON_MARGIN_LR));
             colorButtons.get(i).setHorizontalAlignment(SwingConstants.CENTER);
 
             colorButtons.get(i).setBackground(ClientGUIConfig.COLOR_LIST.get(i));
@@ -254,8 +285,7 @@ public class ClientGUI extends JFrame {
                 // verify if nickname is valid
                 // if not, do not send to server
                 if (checkNicknameValidity(userNickname) == false) {
-                    nicknameError.setText("Nickname is either longer than 10 or not just contain [a-zA-Z0-9_].");
-                    nicknameError.setHorizontalAlignment(SwingConstants.RIGHT);
+                    enterNickname.setForeground(Color.RED);
                 }
                 else {
                     CDAccount cdLogin = new CDAccount(userNickname, userPassword);

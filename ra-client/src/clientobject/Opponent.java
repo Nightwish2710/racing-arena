@@ -1,6 +1,6 @@
 package clientobject;
 
-public class opponent {
+public class Opponent {
     private int id, position;
     private String nickname, gain, status;
 

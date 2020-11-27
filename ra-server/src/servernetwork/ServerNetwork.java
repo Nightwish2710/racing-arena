@@ -40,7 +40,7 @@ public class ServerNetwork {
             this.serverSocket = null;
             this.clientNumber = 0;
             this.cSocketThreads = new HashMap<>();
-            this.clientPool = Executors.newFixedThreadPool(ServerGameConfig.MAX_NUM_OF_RACER);
+            this.clientPool = Executors.newFixedThreadPool(ServerGameConfig.MAX_NUM_OF_RACERS);
         }
 
         @Override

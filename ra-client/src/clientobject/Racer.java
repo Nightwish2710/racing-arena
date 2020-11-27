@@ -1,7 +1,7 @@
 package clientobject;
 
-public class racer {
-    private int id, position;
+public class Racer {
+    private int id, position, numOfIncorrect;
     private String nickname, gain, status;
 
     public int getId() { return this.id; }

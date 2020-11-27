@@ -1,7 +1,7 @@
 package serverobject;
 
 public class ServerGameMaster {
-    private int numberOfRacer;
+    private int numOfRacers;
     private int raceLength;
 
     private static ServerGameMaster serverGameMaster = null;
@@ -12,23 +12,21 @@ public class ServerGameMaster {
         return serverGameMaster;
     }
 
-    public ServerGameMaster() {
-        serverGameMaster = this;
-    }
+    public ServerGameMaster() { serverGameMaster = this; }
 
-    public int getNumberOfRacer() {
-        return numberOfRacer;
+    public int getNumOfRacers() {
+        return this.numOfRacers;
     }
-
-    public void setNumberOfRacer(int numberOfRacer) {
-        this.numberOfRacer = numberOfRacer;
+    public void setNumOfRacers(int numOfRacers) {
+        this.numOfRacers = numOfRacers;
     }
 
     public int getRaceLength() {
-        return raceLength;
+        return this.raceLength;
     }
-
     public void setRaceLength(int raceLength) {
         this.raceLength = raceLength;
     }
+
+    public ServerQuestion getQuestion() { return new ServerQuestion(); }
 }
