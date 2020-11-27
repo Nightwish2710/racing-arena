@@ -7,7 +7,6 @@ import java.util.*;
 public class ServerGUIConfig {
     public static final String GAME_NAME = "RACING ARENA: Server";
 
-    public static final int NUM_FIELD = 5;
     public static final int ROW_HEIGHT = 25;
     public static final String[] TABLE_COLS = {"ORDER", "RACER NAME", "GAIN", "STATUS", "POSITION"};
     public static final int[] PREFERRED_WIDTH = {50, 120, 50, 100, 70};
