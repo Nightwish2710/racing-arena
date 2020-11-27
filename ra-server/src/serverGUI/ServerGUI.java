@@ -183,22 +183,13 @@ public class ServerGUI extends JFrame {
         racerStatTable.getTableHeader().setForeground(Color.WHITE);
         racerStatTable.getTableHeader().setFont(new Font("Britannic Bold", Font.PLAIN, 12));
 
-        // set column width
-        racerStatTable.getColumnModel().getColumn(0).setMaxWidth(50);
-        racerStatTable.getColumnModel().getColumn(1).setMaxWidth(120);
-        racerStatTable.getColumnModel().getColumn(2).setMaxWidth(50);
-        racerStatTable.getColumnModel().getColumn(3).setMaxWidth(100);
-        racerStatTable.getColumnModel().getColumn(4).setMaxWidth(70);
-
-        // align center text in each cell
         DefaultTableCellRenderer center = new DefaultTableCellRenderer();
         center.setHorizontalAlignment(JLabel.CENTER);
 
-        racerStatTable.getColumnModel().getColumn(0).setCellRenderer(center);
-        racerStatTable.getColumnModel().getColumn(1).setCellRenderer(center);
-        racerStatTable.getColumnModel().getColumn(2).setCellRenderer(center);
-        racerStatTable.getColumnModel().getColumn(3).setCellRenderer(center);
-        racerStatTable.getColumnModel().getColumn(4).setCellRenderer(center);
+        for (int i = 0; i < ServerGUIConfig.TABLE_COLS.length; ++i) {
+            racerStatTable.getColumnModel().getColumn(i).setMaxWidth(ServerGUIConfig.PREFERRED_WIDTH[i]); // set column width
+            racerStatTable.getColumnModel().getColumn(i).setCellRenderer(center); // align center text in each cell
+        }
 
         dtm.addRow(new Object[]{1,"HHHHHHHHHH", "+10", "ELIMINATED", 10});
         dtm.addRow(new Object[]{2, "HHHHHHHHHH", "+10", "ELIMINATED", 10});

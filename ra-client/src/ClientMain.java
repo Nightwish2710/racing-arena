@@ -16,7 +16,7 @@ public class ClientMain {
         // connect to server
         connectToServer();
 
-        createClientGUI();
+        initClientGUI();
     }
 
     private static void connectToServer() {
@@ -24,9 +24,7 @@ public class ClientMain {
         network.connect();
     }
 
-    private static void createClientGUI() {
-//        JFrame jFrame = new ClientGUI(ClientGUIConfig.GAME_NAME);
-
+    private static void initClientGUI() {
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -48,21 +46,5 @@ public class ClientMain {
                 });
             }
         });
-
-//        jFrame.addWindowListener(new WindowAdapter() {
-//            @Override
-//            public void windowClosing(WindowEvent e) {
-//                network.disconnect();
-//                System.out.println(ClientMain.class.getSimpleName() + ": disconnect from server");
-//
-//                super.windowClosed(e);
-//            }
-//        });
-
-//        jFrame.pack();
-//
-//        jFrame.setLocationRelativeTo(null);
-//        jFrame.setVisible(true);
-
     }
 }
