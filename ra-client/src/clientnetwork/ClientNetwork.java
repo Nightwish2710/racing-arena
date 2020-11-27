@@ -7,9 +7,14 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class ClientNetwork {
+    public Socket getClientSocket() {
+        return clientSocket;
+    }
+
     private Socket clientSocket;
     private DataOutputStream outStream;
     private DataInputStream inStream;
+    private Thread executor;
     private ClientReceiverThread receiverThread;
 
     // Singleton
@@ -27,6 +32,7 @@ public class ClientNetwork {
         outStream = null;
         inStream = null;
         receiverThread = null;
+        clientNetwork = this;
     }
 
     public void connect() {
@@ -52,20 +58,15 @@ public class ClientNetwork {
         System.out.println(this.getClass().getSimpleName() + ": notification of successful connection");
 
         // Start receiver thread, in case we might need
-        //while (true) {
-        //    receiverThread = new ReceiverThread(inStream);
-        //    receiverThread.start();
-        //}
+        receiverThread = new ClientReceiverThread(inStream);
+        executor = new Thread(receiverThread);
+        executor.start();
     }
 
     public void send(int cmd, ClientDataModel clientDataModel) {
         try {
             System.out.println(this.getClass().getSimpleName() + ": sending username, password");
             outStream.write(clientDataModel.pack(cmd));
-
-            String responseLine = inStream.readLine();
-            System.out.println(this.getClass().getSimpleName() + " server says: " + responseLine);
-
         } catch (UnknownHostException e) {
             System.err.println("Trying to connect to unknown host: " + e);
         } catch (IOException e) {
@@ -77,9 +78,41 @@ public class ClientNetwork {
         try {
             outStream.writeInt(ClientNetworkConfig.CMD.DISCONNECT);
             outStream.close();
+            inStream.close();
+            executor.interrupt();
             clientSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    public class ClientReceiverThread implements Runnable {
+        private DataInputStream inStream;
+
+        public ClientReceiverThread(DataInputStream _inStream) {
+            this.inStream = _inStream;
+        }
+
+        @Override
+        public void run() {
+            while (true) {
+                if (ClientNetwork.getInstance().getClientSocket().isClosed()) {
+                    System.out.println(this.getClass().getSimpleName() + " CLOSED ");
+                    return;
+                }
+                String responseLine = null;
+                try {
+                    responseLine = inStream.readLine();
+                    if (responseLine.contains("quit")) {
+                        break;
+                    }
+                    System.out.println(this.getClass().getSimpleName() + " server says: " + responseLine);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }
+
+

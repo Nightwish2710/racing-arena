@@ -1,6 +1,7 @@
 package serverGUI;
 
 import servernetwork.ServerNetwork;
+import serverobject.ServerGameConfig;
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -39,6 +40,16 @@ public class ServerGUI extends JFrame {
     private JLabel racerStatLabel;
     private JScrollPane statTableScrollPane;
 
+    // Singleton
+    private static ServerGUI serverGUI = null;
+    public static ServerGUI getInstance() {
+        if (serverGUI == null) {
+            serverGUI = new ServerGUI(ServerGUIConfig.GAME_NAME);
+            serverGUI.setLocationRelativeTo(null);
+            serverGUI.setVisible(true);
+        }
+        return serverGUI;
+    }
     private JLabel questionLabel;
     private JLabel firstNumer, operant, secondNumber;
     private JLabel correctAnsLabel;
@@ -49,6 +60,7 @@ public class ServerGUI extends JFrame {
 
     public ServerGUI(String gameName) {
         super(gameName);
+        serverGUI = this;
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         this.setContentPane(ServerPanel);
@@ -98,8 +110,8 @@ public class ServerGUI extends JFrame {
     }
 
     private void setSpinnerUI() {
-        numOfRacersSpinner.setModel(new SpinnerNumberModel(6, ServerGUIConfig.MIN_NUM_OF_RACER, ServerGUIConfig.MAX_NUM_OF_RACER, 1));
-        raceLengthSpinner.setModel(new SpinnerNumberModel(15, ServerGUIConfig.MIN_RACE_LENGTH, ServerGUIConfig.MAX_RACE_LENGTH, 1));
+        numOfRacersSpinner.setModel(new SpinnerNumberModel(6, ServerGameConfig.MIN_NUM_OF_RACER, ServerGameConfig.MAX_NUM_OF_RACER, 1));
+        raceLengthSpinner.setModel(new SpinnerNumberModel(15, ServerGameConfig.MIN_RACE_LENGTH, ServerGameConfig.MAX_RACE_LENGTH, 1));
 
         numOfRacersSpinner.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         raceLengthSpinner.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
@@ -232,4 +244,8 @@ public class ServerGUI extends JFrame {
     }
 
     private ActionListener actionOpenConnection = e -> ServerNetwork.getInstance().openServerSocket();
+
+    public JLabel getNumOfPplJoining() {
+        return numOfPplJoining;
+    }
 }

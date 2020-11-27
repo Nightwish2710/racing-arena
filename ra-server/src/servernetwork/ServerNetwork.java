@@ -1,8 +1,17 @@
 package servernetwork;
 
+import serverGUI.ServerGUIConfig;
+import serverobject.ServerGameConfig;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ServerNetwork {
     // Singleton
@@ -21,13 +30,17 @@ public class ServerNetwork {
         new Thread(new ServerNetworkThread()).start();
     }
 
-    private class ServerNetworkThread implements Runnable {
+    public static class ServerNetworkThread implements Runnable {
         private ServerSocket serverSocket;
         private int clientNumber;
+        private ExecutorService clientPool;
+        private HashMap<Integer, ServerCSocketThread> cSocketThreads;
 
         public ServerNetworkThread() {
             this.serverSocket = null;
             this.clientNumber = 0;
+            this.cSocketThreads = new HashMap<>();
+            this.clientPool = Executors.newFixedThreadPool(ServerGameConfig.MAX_NUM_OF_RACER);
         }
 
         @Override
@@ -49,7 +62,9 @@ public class ServerNetwork {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    new Thread(new ServerCSocketThread(cSocket, this.clientNumber++)).start();
+                    ServerCSocketThread clientThread = new ServerCSocketThread(cSocket, this.clientNumber++, this);
+                    this.cSocketThreads.put(this.clientNumber, clientThread);
+                    this.clientPool.execute(clientThread);
                 }
             } finally {
                 try {
@@ -57,7 +72,18 @@ public class ServerNetwork {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                this.clientPool.shutdown();
             }
+        }
+
+        public void signalAllClients(String data) {
+            for (Map.Entry<Integer, ServerCSocketThread> entry : this.cSocketThreads.entrySet()) {
+                entry.getValue().reply("Hit all client with case "+ data + '\n');
+            }
+        }
+
+        public int getNumberOfClient() {
+            return cSocketThreads.size();
         }
     }
 }

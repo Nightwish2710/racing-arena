@@ -11,14 +11,6 @@ public class ServerGUIConfig {
     public static final String[] TABLE_COLS = {"ORDER", "RACER NAME", "GAIN", "STATUS", "POSITION"};
     public static final int[] PREFERRED_WIDTH = {50, 120, 50, 100, 70};
 
-    public static final int MIN_NUM_OF_RACER = 2;
-    public static final int MAX_NUM_OF_RACER = 10;
-
-    public static final int MIN_RACE_LENGTH = 3;
-    public static final int MAX_RACE_LENGTH = 26;
-
-    public static final int NUM_OF_RACERS = 6;
-
     public static final Color BACKGROUND_COLOR = new Color(0xF5F5F5);
     public static final Color BORDER_COLOR = new Color(0xE0E0E0);
     public static final Color LIGHT_GREEN = new Color(0x9CCC65);

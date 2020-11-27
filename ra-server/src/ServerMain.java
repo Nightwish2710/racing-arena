@@ -3,6 +3,7 @@ import serverGUI.ServerGUIConfig;
 import serverdatabase.ServerDBConfig;
 import serverdatabase.ServerDBHelper;
 import servernetwork.ServerNetwork;
+import serverobject.ServerRefereeObject;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
@@ -12,11 +13,17 @@ import java.io.*;
 public class ServerMain {
     private static ServerDBHelper serverDBHelper;
     private static ServerNetwork serverNetwork;
+    private static ServerRefereeObject serverReferee;
 
     public static void main(String args[]) throws IOException {
-//        initServerDB();
+        initServerDB();
+        initServerReferee();
         initServerGUI();
-//        initServerNetwork();
+        initServerNetwork();
+    }
+
+    private static void initServerReferee() {
+        serverReferee = new ServerRefereeObject();
     }
 
     private static void initServerNetwork() {

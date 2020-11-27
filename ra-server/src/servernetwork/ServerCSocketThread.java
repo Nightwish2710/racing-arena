@@ -1,23 +1,23 @@
 package servernetwork;
 
-import org.h2.util.IOUtils;
-import serverdatamodel.SDAccount;
+import serverdatamodel.SRAccount;
+import serverobject.ServerGameConfig;
+import serverobject.ServerRefereeObject;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.ByteBuffer;
-import java.util.concurrent.TimeUnit;
 
 public class ServerCSocketThread implements Runnable{
     private int clientNumber;
     private Socket socketOfServer;
     private DataInputStream inStream;
     private DataOutputStream outStream;
+    private ServerNetwork.ServerNetworkThread parentThread;
 
-    public ServerCSocketThread(Socket socketOfServer, int clientNumber) {
-        this.clientNumber = clientNumber;
-        this.socketOfServer = socketOfServer;
-
+    public ServerCSocketThread(Socket _socketOfServer, int _clientNumber, ServerNetwork.ServerNetworkThread _parentThread) {
+        this.clientNumber = _clientNumber;
+        this.socketOfServer = _socketOfServer;
+        this.parentThread = _parentThread;
         System.out.println(this.getClass().getSimpleName() + " new connection with client# " + this.clientNumber + " at " + socketOfServer);
     }
 
@@ -38,25 +38,55 @@ public class ServerCSocketThread implements Runnable{
                 byte[] bytes = new byte[lData];
                 inStream.read(bytes);
 
+                // Switch on command id
+                switch (cmd) {
+                    case ServerNetworkConfig.CMD.CMD_LOGIN:
+                        handleLogin(bytes, this.outStream, this.parentThread);
+                        break;
+                }
+
                 // <SWICTH CASE> create handler for each of these cases
                 if (cmd == ServerNetworkConfig.CMD.CMD_LOGIN) {
-                    SDAccount sdAccount = new SDAccount();
-                    sdAccount.unpack(bytes);
-                    System.out.println(this.getClass().getSimpleName()+": user login with username, password: " + sdAccount.getUsername() + ", " + sdAccount.getPassword());
 
                     // check if sdAccount is valid
-                    try {
-                        TimeUnit.SECONDS.sleep(3);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
 
                     // notify back
-                    outStream.writeChars("Created account with Username: " + sdAccount.getUsername() + " - Password: " + sdAccount.getPassword() + '\n');
+                    // outStream.writeChars("Individually, created account with Username: " + sdAccount.getUsername() + " - Password: " + sdAccount.getPassword() + '\n');
+
+                    // bulk notify back
+                    //this.parentThread.signalAllClients("New user added: " + srAccount.getUsername());
                 }
             }
         } catch (IOException e) {
             System.out.println(e);
+            e.printStackTrace();
+        }
+    }
+
+    private void handleLogin(byte[] bytes, DataOutputStream outStream, ServerNetwork.ServerNetworkThread parentThread) {
+        SRAccount srAccount = new SRAccount();
+        srAccount.unpack(bytes);
+        System.out.println(this.getClass().getSimpleName()+": request login: " + srAccount.getUsername() + ", " + srAccount.getPassword());
+
+        // check if there is available slots
+        if (this.parentThread.getNumberOfClient() < ServerRefereeObject.getInstance().getNumberOfRacer()) {
+            // if yes
+
+            //      check if username exists in database
+            //      if it is, check if password match
+            //          if password match, existing user, send individually (success login) and bulk (update number of racers to all)
+            //          if password not match, username duplicate error, send individually (username has been taken)
+            //      if it is not, new user, send individually (success login) and bulk (update number of racers to all)
+        }
+        // if no, not record login, send individually (no more slots)
+    }
+
+    public void reply (String msg) {
+        try {
+            outStream.writeChars(msg);
+            System.out.println(this.getClass().getSimpleName()+": send down "+ msg);
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
