@@ -1,13 +1,9 @@
 package serverdatabase;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class ServerDBHelper {
     private Connection conn = null;
-    private Statement stmt = null;
 
     // Creating singleton
     private static ServerDBHelper serverDBHelper = null;
@@ -26,32 +22,49 @@ public class ServerDBHelper {
             // Open a connection
             System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(ServerDBConfig.DB_URL_H2,ServerDBConfig.DB_USER_H2,ServerDBConfig.DB_PASS_H2);
+            serverDBHelper = this;
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
     }
 
+    public void closeDB() {
+        try {
+            conn.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    public boolean isDBOpenning() {
+        try {
+            return conn!=null && !conn.isClosed();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return true;
+    }
+
     public void exec (String query) {
+        Statement stmt = null;
         try {
             stmt = conn.createStatement();
             stmt.execute(query);
-
-            stmt.close();
-            conn.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
             //finally block used to close resources
             try {
                 if(stmt!=null) stmt.close();
-            } catch(SQLException se2) {
-            } // nothing we can do
-
-            try {
-                if(conn!=null) conn.close();
-            } catch(SQLException se){
-                se.printStackTrace();
-            }
+            } catch(SQLException se2) {}
         }
+    }
+
+    public ResultSet execForResult (String query) {
+        try (Statement stmt = conn.createStatement()) {
+            ResultSet rs = stmt.executeQuery(query);
+            return rs;
+        } catch (SQLException e) {}
+        return null;
     }
 }

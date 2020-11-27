@@ -7,6 +7,8 @@ import serverobject.ServerGameMaster;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.*;
 
 public class ServerMain {
@@ -47,5 +49,17 @@ public class ServerMain {
 
         jFrame.setLocationRelativeTo(null);
         jFrame.setVisible(true);
+        jFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if (serverDBHelper.isDBOpenning()) {
+                    serverDBHelper.closeDB();
+                }
+                if (serverNetwork.isNetworkOpenning()) {
+                    serverNetwork.closeNetwork();
+                }
+                super.windowClosing(e);
+            }
+        });
     }
 }

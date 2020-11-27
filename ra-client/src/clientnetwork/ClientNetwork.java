@@ -63,6 +63,10 @@ public class ClientNetwork {
         executor.start();
     }
 
+    public boolean isConnected() {
+        return clientSocket.isConnected();
+    }
+
     public void send(int cmd, ClientDataModel clientDataModel) {
         try {
             System.out.println(this.getClass().getSimpleName() + ": sending username, password");

@@ -2,10 +2,10 @@ package serverdatamodel;
 
 import java.nio.ByteBuffer;
 
-public class ServerRequestModel {
+public class ServerDataModel {
     private ByteBuffer byteBuffer;
 
-    public ServerRequestModel() {
+    public ServerDataModel() {
         this.byteBuffer = null;
     }
 

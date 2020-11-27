@@ -1,17 +1,19 @@
-package serverdatamodel;
+package serverdatamodel.request;
+
+import serverdatamodel.ServerDataModel;
 
 import java.nio.ByteBuffer;
 
-public class SRAccount extends ServerRequestModel {
+public class SReqAccount extends ServerDataModel {
     private String username;
     private String password;
 
-    public SRAccount(String username, String password) {
+    public SReqAccount(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    public SRAccount() {
+    public SReqAccount() {
         this.username = null;
         this.password = null;
     }

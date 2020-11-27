@@ -1,7 +1,9 @@
 package servernetwork;
 
 import serverGUI.ServerGUIConfig;
+import serverdatamodel.ServerDataModel;
 import serverobject.ServerGameConfig;
+import serverobject.ServerGameMaster;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -14,6 +16,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ServerNetwork {
+    private ServerNetworkThread serverNetworkThread;
+    private ExecutorService networkPool;
     // Singleton
     private static ServerNetwork serverNetwork = null;
     public static ServerNetwork getInstance() {
@@ -24,21 +28,31 @@ public class ServerNetwork {
     }
 
     public ServerNetwork() {
+        serverNetworkThread = null;
+        networkPool = Executors.newFixedThreadPool(1);
+    }
+
+    public boolean isNetworkOpenning() {
+        return serverNetworkThread.isOpenning();
+    }
+
+    public void closeNetwork() {
+        serverNetworkThread.close();
+        networkPool.shutdown();
     }
 
     public void openServerSocket() {
-        new Thread(new ServerNetworkThread()).start();
+        serverNetworkThread = new ServerNetworkThread();
+        networkPool.execute(serverNetworkThread);
     }
 
     public static class ServerNetworkThread implements Runnable {
         private ServerSocket serverSocket;
-        private int clientNumber;
         private ExecutorService clientPool;
         private HashMap<Integer, ServerCSocketThread> cSocketThreads;
 
         public ServerNetworkThread() {
             this.serverSocket = null;
-            this.clientNumber = 0;
             this.cSocketThreads = new HashMap<>();
             this.clientPool = Executors.newFixedThreadPool(ServerGameConfig.MAX_NUM_OF_RACER);
         }
@@ -62,8 +76,9 @@ public class ServerNetwork {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    ServerCSocketThread clientThread = new ServerCSocketThread(cSocket, this.clientNumber++, this);
-                    this.cSocketThreads.put(this.clientNumber, clientThread);
+                    int nextClientID = ServerGameMaster.getInstance().getNextRacerID();
+                    ServerCSocketThread clientThread = new ServerCSocketThread(cSocket, nextClientID, this);
+                    this.cSocketThreads.put(nextClientID, clientThread);
                     this.clientPool.execute(clientThread);
                 }
             } finally {
@@ -76,9 +91,30 @@ public class ServerNetwork {
             }
         }
 
-        public void signalAllClients(String data) {
-            for (Map.Entry<Integer, ServerCSocketThread> entry : this.cSocketThreads.entrySet()) {
-                entry.getValue().reply("Hit all client with case "+ data + '\n');
+        public boolean isOpenning() {
+            return !this.serverSocket.isClosed();
+        }
+
+        public void close() {
+            try {
+                this.serverSocket.close();
+                this.clientPool.shutdown();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public void signalAllClients(ServerDataModel data, int callerID, boolean ignoreCaller) {
+            if (ignoreCaller) {
+                for (Map.Entry<Integer, ServerCSocketThread> entry : this.cSocketThreads.entrySet()) {
+                    if (entry.getKey() != callerID) {
+                        entry.getValue().reply(data);
+                    }
+                }
+            } else {
+                for (Map.Entry<Integer, ServerCSocketThread> entry : this.cSocketThreads.entrySet()) {
+                    entry.getValue().reply(data);
+                }
             }
         }
 

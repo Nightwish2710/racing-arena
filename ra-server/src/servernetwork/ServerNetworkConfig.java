@@ -5,8 +5,19 @@ public class ServerNetworkConfig {
 
     public static class CMD {
         public static final int DISCONNECT = -100;
-        public static final int CMD_TEST = -1;
-        public static final int CMD_LOGIN = -2;
-        public static final int CMD_ANSWER = 1;
+        public static final int CMD_LOGIN = 0;
+        public static final int CMD_INFO = 1;
+        public static final int CMD_ANSWER = 2;
+    }
+
+    public static class LOGIN_FLAG {
+        public static final int SUCCESS = 0;
+        public static final int USERNAME_TAKEN = 1;
+        public static final int NO_MORE_SLOTS = 2;
+        public static final int ERROR = 3;
+    }
+
+    public static class INFO_TYPE_FLAG {
+        public static final int TYPE_NOTICE_NUM_OF_RACER = 0;
     }
 }

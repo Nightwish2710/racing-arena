@@ -50,9 +50,10 @@ public class ClientMain {
                 jFrame.addWindowListener(new WindowAdapter() {
                     @Override
                     public void windowClosing(WindowEvent e) {
-                        network.disconnect();
-                        System.out.println(ClientMain.class.getSimpleName() + ": disconnect from server");
-
+                        if (network.isConnected()) {
+                            network.disconnect();
+                            System.out.println(ClientMain.class.getSimpleName() + ": disconnect from server");
+                        }
                         super.windowClosed(e);
                     }
                 });
