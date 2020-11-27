@@ -4,16 +4,16 @@ public class ServerGameMaster {
     private int numberOfRacer;
     private int raceLength;
 
-    private static ServerGameMaster serverRefereeObject = null;
+    private static ServerGameMaster serverGameMaster = null;
     public static ServerGameMaster getInstance() {
-        if (serverRefereeObject == null) {
-            serverRefereeObject = new ServerGameMaster();
+        if (serverGameMaster == null) {
+            serverGameMaster = new ServerGameMaster();
         }
-        return  serverRefereeObject;
+        return serverGameMaster;
     }
 
     public ServerGameMaster() {
-        serverRefereeObject = this;
+        serverGameMaster = this;
     }
 
     public int getNumberOfRacer() {
