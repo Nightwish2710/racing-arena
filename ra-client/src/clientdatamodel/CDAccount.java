@@ -8,9 +8,9 @@ public class CDAccount extends ClientDataModel{
     private String username;
     private String password;
 
-    public CDAccount(String username, String password) {
-        this.username = username;
-        this.password = password;
+    public CDAccount(String _username, String _password) {
+        this.username = _username;
+        this.password = _password;
     }
 
     @Override

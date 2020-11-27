@@ -4,6 +4,7 @@ public class ServerGameMaster {
     private int numOfRacers;
     private int raceLength;
 
+    // singleton
     private static ServerGameMaster serverGameMaster = null;
     public static ServerGameMaster getInstance() {
         if (serverGameMaster == null) {

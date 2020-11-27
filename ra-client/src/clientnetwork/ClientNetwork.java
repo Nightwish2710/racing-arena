@@ -28,11 +28,11 @@ public class ClientNetwork {
     }
 
     public ClientNetwork() {
-        clientSocket = null;
-        outStream = null;
-        inStream = null;
-        receiverThread = null;
-        clientNetwork = this;
+        this.clientSocket = null;
+        this.outStream = null;
+        this.inStream = null;
+        this.receiverThread = null;
+        this.clientNetwork = this;
     }
 
     public void connect() {

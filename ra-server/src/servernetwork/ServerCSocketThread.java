@@ -6,7 +6,7 @@ import serverobject.ServerGameMaster;
 import java.io.*;
 import java.net.Socket;
 
-public class ServerCSocketThread implements Runnable{
+public class ServerCSocketThread implements Runnable {
     private int clientNumber;
     private Socket socketOfServer;
     private DataInputStream inStream;
@@ -17,6 +17,7 @@ public class ServerCSocketThread implements Runnable{
         this.clientNumber = _clientNumber;
         this.socketOfServer = _socketOfServer;
         this.parentThread = _parentThread;
+
         System.out.println(this.getClass().getSimpleName() + " new connection with client# " + this.clientNumber + " at " + socketOfServer);
     }
 

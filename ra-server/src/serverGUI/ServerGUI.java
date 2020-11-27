@@ -43,6 +43,14 @@ public class ServerGUI extends JFrame {
     private JLabel racerStatLabel;
     private JScrollPane statTableScrollPane;
 
+    private JLabel questionLabel;
+    private JLabel firstNum, operator, secondNum;
+    private JLabel correctAnsLabel;
+    private JLabel updateCorrectAns;
+
+    private JSeparator verticalSeparator1, verticalSeparator2, verticalSeparator3;
+    private List<JSeparator> vSep = Arrays.asList(verticalSeparator1, verticalSeparator2, verticalSeparator3);
+
     // Singleton
     private static ServerGUI serverGUI = null;
 
@@ -54,16 +62,9 @@ public class ServerGUI extends JFrame {
         }
         return serverGUI;
     }
-    private JLabel questionLabel;
-    private JLabel firstNum, operator, secondNum;
-    private JLabel correctAnsLabel;
-    private JLabel updateCorrectAns;
 
-    private JSeparator verticalSeparator1, verticalSeparator2, verticalSeparator3;
-    private List<JSeparator> vSep = Arrays.asList(verticalSeparator1, verticalSeparator2, verticalSeparator3);
-
-    public ServerGUI(String gameName) {
-        super(gameName);
+    public ServerGUI(String _gameName) {
+        super(_gameName);
         serverGUI = this;
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

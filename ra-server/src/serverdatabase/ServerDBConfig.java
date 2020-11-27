@@ -23,6 +23,4 @@ public class ServerDBConfig {
             + TABLE_RACER_password + " VARCHAR(255), "
             + TABLE_RACER_victory + " INTEGER, "
             + "PRIMARY KEY ( " + TABLE_RACER_id + " ))";
-
-    
 }
