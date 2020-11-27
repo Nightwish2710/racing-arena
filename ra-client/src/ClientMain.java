@@ -4,15 +4,21 @@ import clientnetwork.ClientNetwork;
 import clientnetwork.ClientNetworkConfig;
 import clientdatamodel.CDAccount;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
 
 public class ClientMain {
     private static ClientNetwork network;
 
     public static void main(String[] args) {
+
+//        java.net.URL url = ClassLoader.getSystemResource("com/xyz/assets/dog-sharpei-icon.png");
+
         // connect to server
         connectToServer();
 
@@ -31,6 +37,12 @@ public class ClientMain {
                 JFrame jFrame = new ClientGUI(ClientGUIConfig.GAME_NAME);
                 jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 jFrame.pack();
+
+                try {
+                    jFrame.setIconImage(ImageIO.read(new File("assets/dog-sharpei-icon.png")));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
                 jFrame.setLocationRelativeTo(null);
                 jFrame.setVisible(true);

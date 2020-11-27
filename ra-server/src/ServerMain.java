@@ -5,6 +5,7 @@ import serverdatabase.ServerDBHelper;
 import servernetwork.ServerNetwork;
 import serverobject.ServerRefereeObject;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -38,6 +39,14 @@ public class ServerMain {
 
     private static void initServerGUI() {
         JFrame jFrame = new ServerGUI(ServerGUIConfig.GAME_NAME);
+        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jFrame.pack();
+
+        try {
+            jFrame.setIconImage(ImageIO.read(new File("assets/dog-russel-grin-icon.png")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         jFrame.setLocationRelativeTo(null);
         jFrame.setVisible(true);
