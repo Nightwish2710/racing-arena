@@ -52,7 +52,7 @@ public class ClientGUI extends JFrame {
     private JScrollPane serverResponsePane;
 
     private JSeparator separator1, separator2, separator3;
-    private List<JSeparator> sep = Arrays.asList(separator1, separator2, separator3);
+    final private List<JSeparator> sep = Arrays.asList(separator1, separator2, separator3);
 
     private JSeparator verticalSeparator;
 
@@ -62,10 +62,9 @@ public class ClientGUI extends JFrame {
     private JPanel racerStatusPanel;
 
     private JButton c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15;
-    private List<JButton> colorButtons = Arrays.asList(c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15);
+    private final List<JButton> colorButtons = Arrays.asList(c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15);
 
     // error pane components
-    private JOptionPane noOpenConnectionPane;
     JButton retryButton, cancelButton;
     JLabel errorMessage;
 
@@ -117,7 +116,7 @@ public class ClientGUI extends JFrame {
     public void noOpenConnection() {
         setErrorPaneUIComponent();
 
-        noOpenConnectionPane = new JOptionPane(errorMessage, JOptionPane.PLAIN_MESSAGE, JOptionPane.YES_NO_OPTION);
+        JOptionPane noOpenConnectionPane = new JOptionPane(errorMessage, JOptionPane.PLAIN_MESSAGE, JOptionPane.YES_NO_OPTION);
 
         noOpenConnectionPane.setOptions(new Object[]{retryButton, cancelButton});
         noOpenConnectionPane.setInitialValue(null);
@@ -156,10 +155,10 @@ public class ClientGUI extends JFrame {
         // click button
         String value = (String)noOpenConnectionPane.getValue();
         System.out.println((JButton)noOpenConnectionPane.getValue());
-        if (value == "Retry") {
+        if (value.equals("Retry")) {
             // try to connect again
         }
-        else if (value == "Cancel") {
+        else if (value.equals("Cancel")) {
             // close GUI
             ClientGUI.getInstance().addWindowListener(new WindowAdapter() {
                 @Override
@@ -246,33 +245,43 @@ public class ClientGUI extends JFrame {
     }
 
     private void setTextBoxUI() {
+        UIManager.put("ToolTip.background", Color.YELLOW);
+        UIManager.put("ToolTip.foreground", Color.BLACK);
+        UIManager.put("ToolTip.font", new Font("Calibri", Font.PLAIN, 10));
+
         enterNickname.setBorder(ClientGUIConfig.BORDER);
-        enterNickname.setToolTipText("Nickname cannot be longer than 10 and only contains [a-zA-Z0-9_].");
-        enterNickname.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                enterNickname.setForeground(Color.BLACK);
-            }
-            @Override
-            public void focusLost(FocusEvent e) {
-            }
-        });
+        enterNickname.setToolTipText("CASE-SENSITIVE, LENGTH <= 10, and ONLY CONTAINS [a-zA-Z0-9_]   ");
         enterNickname.addKeyListener(new KeyAdapter() {
             @Override
-            public void keyTyped(KeyEvent e) {
-                if (enterNickname.getText().length() >= ClientGUIConfig.MAX_NICKNAME_LENGTH)
+            public void keyReleased(KeyEvent e) { // check nickname validity
+                if (!checkNicknameValidity(enterNickname.getText())) {
+                    enterNickname.setForeground((Color.RED));
+                    joinServerButton.setEnabled(false);
+                }
+                else {
+                    enterNickname.setForeground((Color.BLACK));
+                    joinServerButton.setEnabled(true);
+                }
+            }
+            @Override
+            public void keyTyped(KeyEvent e) { // check nickname length
+                if (enterNickname.getText().length() >= ClientGUIConfig.MAX_NICKNAME_LENGTH) {
                     e.consume();
+                    joinServerButton.setEnabled(false);
+                }
             }
         });
 
         enterPassword.setBorder(ClientGUIConfig.BORDER);
-        enterPassword.setToolTipText("Password cannot be longer than 16.");
+        enterPassword.setToolTipText("CASE-SENSITIVE and LENGTH <= 16  ");
         enterPassword.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
                 String password = String.valueOf(enterPassword.getPassword());
-                if (password.length() >= ClientGUIConfig.MAX_PASSWORD_LENGTH)
+                if (password.length() >= ClientGUIConfig.MAX_PASSWORD_LENGTH) {
                     e.consume();
+                    joinServerButton.setEnabled(false);
+                }
             }
         });
 
@@ -285,12 +294,14 @@ public class ClientGUI extends JFrame {
             public void focusGained(FocusEvent e) { // if cursor is in the box
                 if (enterNickname.getText().equals("Enter your nickname")) {
                     enterNickname.setText(null);
+                    joinServerButton.setEnabled(true);
                 }
             }
             @Override
             public void focusLost(FocusEvent e) { // if cursor is not in the box
                 if (enterNickname.getText().equals("")) {
                     enterNickname.setText("Enter your nickname");
+                    joinServerButton.setEnabled(false);
                 }
             }
         });
@@ -300,12 +311,14 @@ public class ClientGUI extends JFrame {
             public void focusGained(FocusEvent e) { // if cursor is in the box
                 if (String.valueOf(enterPassword.getPassword()).equals("Enter your password")) {
                     enterPassword.setText(null);
+                    joinServerButton.setEnabled(true);
                 }
             }
             @Override
             public void focusLost(FocusEvent e) { // if cursor is not in the box
                 if (String.valueOf(enterPassword.getPassword()).equals("")) {
                     enterPassword.setText("Enter your password");
+                    joinServerButton.setEnabled(false);
                 }
             }
         });
@@ -361,13 +374,11 @@ public class ClientGUI extends JFrame {
 
             // assign event to each button, i.e., change color theme when clicked
             int index = i;
-            colorButtons.get(i).addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    colorIndex = index;
-                    changeTheme = true;
-                    setChangeClientGUI();
-                    createUIComponents();
-                }
+            colorButtons.get(i).addActionListener(e -> {
+                colorIndex = index;
+                changeTheme = true;
+                setChangeClientGUI();
+                createUIComponents();
             });
         }
     }
@@ -397,30 +408,19 @@ public class ClientGUI extends JFrame {
 
     private void setButtonAction() {
         // click join server button
-        joinServerButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                userNickname = enterNickname.getText();
-                userPassword = String.valueOf(enterPassword.getPassword());
+        joinServerButton.addActionListener(e -> {
+            userNickname = enterNickname.getText();
+            userPassword = String.valueOf(enterPassword.getPassword());
 
-                // verify if nickname is valid
-                // if not, do not send to server
-                if (checkNicknameValidity(userNickname) == false) {
-                    enterNickname.setForeground(Color.RED);
-                }
-                else {
-                    ClientGameMaster.getInstance().getcRacer().setNickname(userNickname);
-                    ClientGameMaster.getInstance().getcRacer().setPassword(userPassword);
-                    CSendLogin cdLogin = new CSendLogin(ClientNetworkConfig.CMD.CMD_LOGIN, userNickname, userPassword);
-                    ClientNetwork.getInstance().send(cdLogin);
-                }
-            }
+            ClientGameMaster.getInstance().getcRacer().setNickname(userNickname);
+            ClientGameMaster.getInstance().getcRacer().setPassword(userPassword);
+            CSendLogin cdLogin = new CSendLogin(ClientNetworkConfig.CMD.CMD_LOGIN, userNickname, userPassword);
+            ClientNetwork.getInstance().send(cdLogin);
         });
 
         // click send answer button
-        sendAnswerButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        sendAnswerButton.addActionListener(e -> {
 
-            }
         });
     }
 
@@ -540,11 +540,11 @@ public class ClientGUI extends JFrame {
             List<Component> racerStatusList = Arrays.asList(racerStatusPanel.getComponents());
 
             // change current racer's progress bar
-            ((JProgressBar)racerStatusList.get(1)).setForeground(ClientGUIConfig.COLOR_LIST.get(colorIndex));
+            racerStatusList.get(1).setForeground(ClientGUIConfig.COLOR_LIST.get(colorIndex));
 
             // change other racers' progress bar
             for (int i = 2; i < (racerStatusList.size()+1) / 2; ++i) {
-                ((JProgressBar)racerStatusList.get(i*2)).setForeground(ClientGUIConfig.COLOR_LIST.get(colorIndex));
+                racerStatusList.get(i*2).setForeground(ClientGUIConfig.COLOR_LIST.get(colorIndex));
             }
 
             changeTheme = false;
