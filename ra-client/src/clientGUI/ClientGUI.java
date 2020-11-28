@@ -130,15 +130,14 @@ public class ClientGUI extends JFrame {
 
         // set text boxes
         enterNickname.setBorder(ClientGUIConfig.BORDER);
+        enterNickname.setToolTipText("Nickname cannot be longer than 10 and only contains [a-zA-Z0-9_].");
         enterNickname.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                enterNickname.setToolTipText("Nickname cannot be longer than 10 and only contains [a-zA-Z0-9_].");
                 enterNickname.setForeground(Color.BLACK);
             }
             @Override
             public void focusLost(FocusEvent e) {
-                enterNickname.setToolTipText("Nickname cannot be longer than 10 and only contains [a-zA-Z0-9_].");
             }
         });
         enterPassword.setBorder(ClientGUIConfig.BORDER);

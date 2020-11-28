@@ -337,7 +337,7 @@
         <properties>
           <editable value="true"/>
           <text value="Enter your nickname"/>
-          <toolTipText value="Nickname cannot be longer than 10 and only contains [a-zA-Z0-9_]."/>
+          <toolTipText value=""/>
         </properties>
       </component>
       <hspacer id="be5a5">
