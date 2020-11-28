@@ -26,7 +26,6 @@ public class ClientGameMaster {
     public Racer getcRacer() {
         return cRacer;
     }
-
     public void setcRacer(Racer cRacer) {
         this.cRacer = cRacer;
     }

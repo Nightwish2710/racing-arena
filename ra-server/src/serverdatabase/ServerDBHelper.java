@@ -5,7 +5,8 @@ import java.sql.*;
 public class ServerDBHelper {
     private Connection conn;
     private Statement statement;
-    // Creating singleton
+
+    // Singleton
     private static ServerDBHelper serverDBHelper = null;
     public static ServerDBHelper getInstance() {
         if (serverDBHelper == null) {
@@ -71,6 +72,7 @@ public class ServerDBHelper {
             }
             statement = conn.createStatement();
             rs = statement.executeQuery(query);
+
         } catch (SQLException e) {}
         return rs;
     }

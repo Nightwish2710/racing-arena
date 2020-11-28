@@ -65,7 +65,7 @@ public class ServerCSocketThread implements Runnable{
     private void handleLogin(int cmd, byte[] bytes, DataOutputStream outStream, ServerNetwork.ServerNetworkThread parentThread) throws SQLException, IOException {
         SReqAccount sReqAccount = new SReqAccount();
         sReqAccount.unpack(bytes);
-        System.out.println(this.getClass().getSimpleName()+": request login: " + sReqAccount.getUsername() + ", " + sReqAccount.getPassword());
+        System.out.println(this.getClass().getSimpleName() + ": request login: " + sReqAccount.getUsername() + ", " + sReqAccount.getPassword());
 
         // check if there is available slots
         if (this.parentThread.getNumberOfClient() < ServerGameMaster.getInstance().getNumOfRacers()) {
@@ -73,15 +73,17 @@ public class ServerCSocketThread implements Runnable{
             String queryUser = "SELECT * FROM " + ServerDBConfig.TABLE_RACER
                     + " WHERE " + ServerDBConfig.TABLE_RACER_username + " = " + sReqAccount.getUsername() + ";";
             ResultSet user = ServerDBHelper.getInstance().execForResult(queryUser);
+
             if (user != null && !user.isClosed()) {
                 if (user.next()) {
                     user.beforeFirst();
                     // if it is, check if password match, expected one result
                     while (!user.isClosed() && user.next()) {
                         String uPassword = user.getString(ServerDBConfig.TABLE_RACER_password);
+
                         if (uPassword.equals(sReqAccount.getPassword())) {
                             // if password match, create existing user, send individually (success login) and bulk (update number of racers to all)
-                            System.out.println(this.getClass().getSimpleName()+": exist user");
+                            System.out.println(this.getClass().getSimpleName() + ": exist user");
 
                             int victory = user.getInt(ServerDBConfig.TABLE_RACER_victory);
                             ServerRacerObject sRacer = new ServerRacerObject(clientID, sReqAccount.getUsername(), sReqAccount.getPassword(), victory);
@@ -92,17 +94,19 @@ public class ServerCSocketThread implements Runnable{
 
                             SResNewRacerInfo sResNewRacerInfo = new SResNewRacerInfo(ServerNetworkConfig.CMD.CMD_INFO, ServerNetworkConfig.INFO_TYPE_FLAG.TYPE_NOTICE_NEW_RACER, clientID, ServerGameMaster.getInstance());
                             this.parentThread.signalAllClients(sResNewRacerInfo, clientID, true);
-                        } else {
+                        }
+                        else {
                             // if password not match, username duplicate error, not record login, send individually (username has been taken)
-                            System.out.println(this.getClass().getSimpleName()+": name taken");
+                            System.out.println(this.getClass().getSimpleName() + ": name taken");
 
                             SResLoginError sResLoginError = new SResLoginError(cmd, ServerNetworkConfig.LOGIN_FLAG.USERNAME_TAKEN);
                             outStream.write(sResLoginError.pack());
                         }
                     }
-                } else {
+                }
+                else {
                     // if it is not, create new user, record database, send individually (success login) and bulk (update number of racers to all)
-                    System.out.println(this.getClass().getSimpleName()+": new user");
+                    System.out.println(this.getClass().getSimpleName() + ": new user");
 
                     int victory = 0;
                     ServerRacerObject sRacer = new ServerRacerObject(clientID, sReqAccount.getUsername(), sReqAccount.getPassword(), victory);
@@ -122,7 +126,8 @@ public class ServerCSocketThread implements Runnable{
                     this.parentThread.signalAllClients(sResNewRacerInfo, clientID, true);
                 }
             }
-        } else {
+        }
+        else {
             // if no, not record login, send individually (no more slots)
             SResLoginError sResLoginError = new SResLoginError(cmd, ServerNetworkConfig.LOGIN_FLAG.NO_MORE_SLOTS);
             outStream.write(sResLoginError.pack());

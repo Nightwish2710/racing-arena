@@ -35,7 +35,9 @@ public class CReceiveLogin extends ClientDataModel {
             this.clientID = byteBuffer.getInt();
             this.racerVictory = byteBuffer.getInt();
             this.numOfRacers = byteBuffer.getInt();
-            System.out.println("RECEIVE no Of racers" + this.numOfRacers);
+
+            System.out.println("RECEIVE no Of racers " + this.numOfRacers);
+
             cOpponents = new HashMap<>();
             for (int i = 0; i < this.numOfRacers - 1; ++i) { // exclude this racer
                 System.out.println("LOOP " + i);
@@ -59,7 +61,6 @@ public class CReceiveLogin extends ClientDataModel {
     public int getEventFlag() {
         return eventFlag;
     }
-
     public void setEventFlag(int eventFlag) {
         this.eventFlag = eventFlag;
     }
@@ -67,7 +68,6 @@ public class CReceiveLogin extends ClientDataModel {
     public int getClientID() {
         return clientID;
     }
-
     public void setClientID(int clientID) {
         this.clientID = clientID;
     }
@@ -75,7 +75,6 @@ public class CReceiveLogin extends ClientDataModel {
     public int getRacerVictory() {
         return racerVictory;
     }
-
     public void setRacerVictory(int racerVictory) {
         this.racerVictory = racerVictory;
     }
@@ -83,7 +82,6 @@ public class CReceiveLogin extends ClientDataModel {
     public int getNumOfRacers() {
         return numOfRacers;
     }
-
     public void setNumOfRacers(int numOfRacers) {
         this.numOfRacers = numOfRacers;
     }

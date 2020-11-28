@@ -10,7 +10,7 @@ public class ServerGameMaster {
     private int raceLength;
     private HashMap<Integer, ServerRacerObject> sRacers;
 
-    // singleton
+    // Singleton
     private static ServerGameMaster serverGameMaster = null;
     public static ServerGameMaster getInstance() {
         if (serverGameMaster == null) {
@@ -57,6 +57,7 @@ public class ServerGameMaster {
 
     public int getSizeInBytes(boolean ignore, int clientID) {
         int capacity = 0;
+
         if (ignore) {
             for (Map.Entry<Integer, ServerRacerObject> entry : this.sRacers.entrySet()) {
                 if (entry.getKey() != clientID) {
@@ -75,9 +76,11 @@ public class ServerGameMaster {
                     capacity += Integer.BYTES;
                 }
             }
-        } else {
+        }
+        else {
             for (Map.Entry<Integer, ServerRacerObject> entry : this.sRacers.entrySet()) {
                 ServerRacerObject racerObject = entry.getValue();
+
                 // int rID;
                 capacity += Integer.BYTES;
 
@@ -100,6 +103,7 @@ public class ServerGameMaster {
         for (Map.Entry<Integer, ServerRacerObject> entry : this.sRacers.entrySet()) {
             if (entry.getKey() == racerID) {
                 ServerRacerObject racerObject = entry.getValue();
+                
                 // int rID;
                 capacity += Integer.BYTES;
 

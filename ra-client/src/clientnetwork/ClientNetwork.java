@@ -86,10 +86,12 @@ public class ClientNetwork {
     public void disconnect() {
         try {
             outStream.writeInt(ClientNetworkConfig.CMD.DISCONNECT);
+
             outStream.close();
             inStream.close();
             executor.interrupt();
             clientSocket.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

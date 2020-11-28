@@ -7,9 +7,9 @@ public class SResLoginError extends ServerDataModel {
     private int cmd;
     private int eventFlag;
 
-    public SResLoginError(int cmd, int eventFlag) {
-        this.cmd = cmd;
-        this.eventFlag = eventFlag;
+    public SResLoginError(int _cmd, int _eventFlag) {
+        this.cmd = _cmd;
+        this.eventFlag = _eventFlag;
     }
 
     @Override

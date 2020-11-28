@@ -16,17 +16,15 @@ public class Racer extends Player {
     public void setNumOfIncorrect(int numOfIncorrect) { this.numOfIncorrect = numOfIncorrect; }
 
     public String getPassword() {
-        return password;
+        return this.password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
 
     public int getNumOfVictory() {
-        return numOfVictory;
+        return this.numOfVictory;
     }
-
     public void setNumOfVictory(int numOfVictory) {
         this.numOfVictory = numOfVictory;
     }

@@ -8,6 +8,7 @@ import serverobject.ServerGameMaster;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +19,7 @@ import java.util.concurrent.Executors;
 public class ServerNetwork {
     private ServerNetworkThread serverNetworkThread;
     private ExecutorService networkPool;
+
     // Singleton
     private static ServerNetwork serverNetwork = null;
     public static ServerNetwork getInstance() {
@@ -63,6 +65,7 @@ public class ServerNetwork {
 
             try {
                 this.serverSocket = new ServerSocket(ServerNetworkConfig.SERVER_PORT);
+
             } catch (IOException e) {
                 System.out.println(e);
                 System.exit(1);
@@ -76,8 +79,10 @@ public class ServerNetwork {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+
                     int nextClientID = ServerGameMaster.getInstance().getNextRacerID();
                     ServerCSocketThread clientThread = new ServerCSocketThread(cSocket, nextClientID, this);
+
                     this.cSocketThreads.put(nextClientID, clientThread);
                     this.clientPool.execute(clientThread);
                 }
@@ -111,7 +116,8 @@ public class ServerNetwork {
                         entry.getValue().reply(data);
                     }
                 }
-            } else {
+            }
+            else {
                 for (Map.Entry<Integer, ServerCSocketThread> entry : this.cSocketThreads.entrySet()) {
                     entry.getValue().reply(data);
                 }
