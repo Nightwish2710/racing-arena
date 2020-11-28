@@ -4,10 +4,12 @@ import clientGUI.ClientGUI;
 import clientdatamodel.ClientDataModel;
 import clientdatamodel.receive.CReceiveLogin;
 import clientobject.ClientGameMaster;
+import clientobject.ClientOpponent;
 
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Map;
 
 public class ClientNetwork {
     public Socket getClientSocket() {
@@ -142,6 +144,10 @@ public class ClientNetwork {
                     // update UI
                     System.out.println(getClass().getSimpleName() + ": USERNAME_TAKEN");
                     break;
+                case ClientNetworkConfig.LOGIN_FLAG.DUPLICATED_LOGIN:
+                    // update UI
+                    System.out.println(getClass().getSimpleName() + ": DUPLICATED_LOGIN");
+                    break;
                 case ClientNetworkConfig.LOGIN_FLAG.ERROR:
                     // update UI
                     System.out.println(getClass().getSimpleName() + ": ERROR");
@@ -155,6 +161,9 @@ public class ClientNetwork {
                     // update UI
                     ClientGUI.getInstance().disableComponentAfterJoinServer();
                     System.out.println(getClass().getSimpleName() + ": SUCCESS");
+                    for (Map.Entry<String, ClientOpponent> opps : cReceiveLogin.getcOpponents().entrySet()) {
+                        System.out.println(getClass().getSimpleName() + " got: " + opps.getKey() + " - " + opps.getValue().getStatusFlag());
+                    }
                     break;
                 default:
                     break;

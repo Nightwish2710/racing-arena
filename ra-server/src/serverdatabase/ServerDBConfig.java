@@ -13,6 +13,7 @@ public class ServerDBConfig {
     public static final String TABLE_RACER = "RACER_ACCOUNT_TEST";
     public static final String TABLE_RACER_username = "username";
     public static final String TABLE_RACER_password = "password";
+    public static final String TABLE_RACER_isonline = "isonline";
     public static final String TABLE_RACER_victory = "victory";
 
     // Query
@@ -20,5 +21,6 @@ public class ServerDBConfig {
             + " ("+ TABLE_RACER_username + " VARCHAR(11), "
             + TABLE_RACER_password + " VARCHAR(17), "
             + TABLE_RACER_victory + " INTEGER, "
+            + TABLE_RACER_isonline + " INTEGER, "
             + "PRIMARY KEY ( " + TABLE_RACER_username + " ))";
 }
