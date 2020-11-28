@@ -1,12 +1,12 @@
 package clientobject;
 
-public class Racer extends Player {
+public class ClientRacer extends ClientPlayer {
     private int numOfIncorrect;
     private int numOfVictory;
     private String password;
 
-    public Racer(int _id, String _nickname, int _position, int _gain, int _statusFlag, String _statusStr) {
-        super(_id, _nickname, _position, _gain, _statusFlag, _statusStr);
+    public ClientRacer(String _nickname, int _position, int _gain, int _statusFlag, String _statusStr) {
+        super(_nickname, _position, _gain, _statusFlag, _statusStr);
         this.numOfIncorrect = 0;
         this.numOfVictory = 0;
         this.password = "";

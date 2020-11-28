@@ -10,13 +10,13 @@ import java.util.Map;
 public class SResNewRacerInfo extends ServerDataModel {
     private int cmd;
     private int eventFlag;
-    private int newRacerID;
+    private String newRacerUsername;
     private ServerGameMaster sGameMaster;
 
-    public SResNewRacerInfo(int _cmd, int _eventFlag, int _newRacerID, ServerGameMaster _sGameMaster) {
+    public SResNewRacerInfo(int _cmd, int _eventFlag, String _newRacerUsername, ServerGameMaster _sGameMaster) {
         this.cmd = _cmd;
         this.eventFlag = _eventFlag;
-        this.newRacerID = _newRacerID;
+        this.newRacerUsername = _newRacerUsername;
         this.sGameMaster = _sGameMaster;
     }
 
@@ -26,7 +26,7 @@ public class SResNewRacerInfo extends ServerDataModel {
                 + Integer.BYTES // storing eventFlag
                 + Integer.BYTES // storing numOfRacers
 
-                + this.sGameMaster.getSizeInBytesOfRacer(this.newRacerID);
+                + this.sGameMaster.getSizeInBytesOfRacer(this.newRacerUsername);
         ByteBuffer byteBuffer = ByteBuffer.allocate(capacity);
 
         // Pour in data
@@ -36,9 +36,8 @@ public class SResNewRacerInfo extends ServerDataModel {
         byteBuffer.putInt(this.eventFlag);
         byteBuffer.putInt(this.sGameMaster.getCurrentNumOfRacers());
 
-        ServerRacerObject newRacer = this.sGameMaster.getRacerInfo(this.newRacerID);
-        // int rID;
-        byteBuffer.putInt(newRacer.getRacerID());
+        ServerRacerObject newRacer = this.sGameMaster.getRacerInfo(this.newRacerUsername);
+
         // string username
         byteBuffer.putInt(newRacer.getUsername().length());
         byteBuffer.put(newRacer.getUsername().getBytes());
