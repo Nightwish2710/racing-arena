@@ -2,6 +2,7 @@ package clientdatamodel.receive;
 
 import clientdatamodel.ClientDataModel;
 import clientnetwork.ClientNetworkConfig;
+
 import clientobject.ClientGameConfig;
 import clientobject.ClientOpponent;
 
@@ -17,7 +18,7 @@ public class CReceiveLogin extends ClientDataModel {
     public CReceiveLogin() {
         this.eventFlag = -1;
         this.racerVictory = -1;
-        cOpponents = null;
+        this.cOpponents = null;
     }
 
     @Override
@@ -31,15 +32,17 @@ public class CReceiveLogin extends ClientDataModel {
             this.racerVictory = byteBuffer.getInt();
             this.numOfRacers = byteBuffer.getInt();
 
-            System.out.println("RECEIVE no Of racers " + this.numOfRacers);
+            System.out.println("RECEIVE no Of racers: " + this.numOfRacers);
 
             cOpponents = new HashMap<>();
             for (int i = 0; i < this.numOfRacers - 1; ++i) { // exclude this racer
-                System.out.println("LOOP " + i);
+                System.out.println("LOOP: " + i);
 
                 int lUsername = byteBuffer.getInt();
+
                 byte[] bUsername = new byte[lUsername];
                 byteBuffer.get(bUsername);
+
                 String rUsername = new String(bUsername);
 
                 int rPosition = byteBuffer.getInt();

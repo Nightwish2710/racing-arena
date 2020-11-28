@@ -17,11 +17,8 @@ public class ClientMain {
     private static JFrame clientGUI;
 
     public static void main(String[] args) {
-        // connect to server
         initClientGUI();
-
         connectToServer();
-
         initClientGameMaster();
     }
 

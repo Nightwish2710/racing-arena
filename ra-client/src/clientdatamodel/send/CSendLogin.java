@@ -5,7 +5,6 @@ import java.nio.ByteBuffer;
 
 public class CSendLogin extends ClientDataModel {
     private int cmd;
-
     private String username;
     private String password;
 

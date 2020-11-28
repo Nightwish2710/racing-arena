@@ -7,6 +7,7 @@ public class ClientGameMaster {
     private int numOfRacers;
     private HashMap<String, ClientOpponent> cOpponents;
 
+    // Singleton
     private static ClientGameMaster clientGameMaster = null;
     public static ClientGameMaster getInstance() {
         if (clientGameMaster == null) {
@@ -22,26 +23,13 @@ public class ClientGameMaster {
         clientGameMaster = this;
     }
 
-    public ClientRacer getcRacer() {
-        return cRacer;
-    }
-    public void setcRacer(ClientRacer cClientRacer) {
-        this.cRacer = cClientRacer;
-    }
+    public ClientRacer getcRacer() { return this.cRacer; }
+    public void setcRacer(ClientRacer cClientRacer) { this.cRacer = cClientRacer; }
 
-    public HashMap<String, ClientOpponent> getcOpponents() {
-        return cOpponents;
-    }
+    public HashMap<String, ClientOpponent> getcOpponents() { return this.cOpponents; }
 
-    public void setcOpponents(HashMap<String, ClientOpponent> cOpponents) {
-        this.cOpponents = cOpponents;
-    }
+    public void setcOpponents(HashMap<String, ClientOpponent> cOpponents) { this.cOpponents = cOpponents; }
 
-    public int getNumOfRacers() {
-        return numOfRacers;
-    }
-
-    public void setNumOfRacers(int numOfRacers) {
-        this.numOfRacers = numOfRacers;
-    }
+    public int getNumOfRacers() { return this.numOfRacers; }
+    public void setNumOfRacers(int numOfRacers) { this.numOfRacers = numOfRacers; }
 }

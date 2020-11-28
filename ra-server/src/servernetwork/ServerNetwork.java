@@ -82,6 +82,7 @@ public class ServerNetwork {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+
                     this.cSocketID += 1;
                     ServerCSocketThread clientThread = new ServerCSocketThread(cSocket, this.cSocketID, this);
 

@@ -2,12 +2,14 @@ package servernetwork;
 
 import serverdatabase.ServerDBConfig;
 import serverdatabase.ServerDBHelper;
+
 import serverdatamodel.ServerDataModel;
 import serverdatamodel.request.SReqAccount;
 import serverdatamodel.response.SResAllRacersInfo;
 import serverdatamodel.response.SResLoginError;
 import serverdatamodel.response.SResLoginSuccess;
 import serverdatamodel.response.SResNewRacerInfo;
+
 import serverobject.ServerGameMaster;
 import serverobject.ServerRacerObject;
 
@@ -39,9 +41,7 @@ public class ServerCSocketThread implements Runnable{
 
             while (true) {
                 int cmd = inStream.readInt();
-                if (cmd == ServerNetworkConfig.CMD.DISCONNECT) {
-                    break;
-                }
+                if (cmd == ServerNetworkConfig.CMD.DISCONNECT) { break; }
 
                 int lData = inStream.available();
                 byte[] bytes = new byte[lData];
@@ -65,6 +65,7 @@ public class ServerCSocketThread implements Runnable{
     private void handleLogin(int cmd, byte[] bytes, DataOutputStream outStream, ServerNetwork.ServerNetworkThread parentThread) throws SQLException, IOException {
         SReqAccount sReqAccount = new SReqAccount();
         sReqAccount.unpack(bytes);
+
         System.out.println(this.getClass().getSimpleName() + ": request login: " + sReqAccount.getUsername() + ", " + sReqAccount.getPassword());
 
         // check if there is available slots
@@ -85,12 +86,14 @@ public class ServerCSocketThread implements Runnable{
                             // if password match, check if duplicated login by isOnline
                             int isOnline = user.getInt(ServerDBConfig.TABLE_RACER_isonline);
                             System.out.println(this.getClass().getSimpleName() + ": online status " + isOnline);
+
                             if (isOnline == 1) {
                                 System.out.println(this.getClass().getSimpleName() + ": duplicated login");
 
                                 SResLoginError sResLoginError = new SResLoginError(cmd, ServerNetworkConfig.LOGIN_FLAG.DUPLICATED_LOGIN);
                                 outStream.write(sResLoginError.pack());
-                            } else {
+                            }
+                            else {
                                 // create existing user, set isonline, send individually (success login) and bulk (update number of racers to all)
                                 System.out.println(this.getClass().getSimpleName() + ": exist user");
 

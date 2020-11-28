@@ -11,10 +11,8 @@ import java.util.Map;
 public class SResLoginSuccess extends ServerDataModel {
     private int cmd;
     private int eventFlag;
-
     private String cUsername;
     private int racerVictory;
-
     private ServerGameMaster sGameMaster;
 
     public SResLoginSuccess(int _cmd, int _eventFlag, String _cUsername, int _racerVictory, ServerGameMaster _sGameMaster) {

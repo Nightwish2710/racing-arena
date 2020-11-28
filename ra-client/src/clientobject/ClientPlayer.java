@@ -22,10 +22,9 @@ public class ClientPlayer {
     public int getGain() { return this.gain; }
     public void setGain(int gain) { this.gain = gain; }
 
-
-    public int getStatusFlag() { return statusFlag; }
+    public int getStatusFlag() { return this.statusFlag; }
     public void setStatusFlag(int statusFlag) { this.statusFlag = statusFlag; }
 
-    public String getStatusStr() { return statusStr; }
+    public String getStatusStr() { return this.statusStr; }
     public void setStatusStr(String statusStr) { this.statusStr = statusStr; }
 }

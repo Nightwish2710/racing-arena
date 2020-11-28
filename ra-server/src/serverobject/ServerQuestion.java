@@ -18,6 +18,6 @@ public class ServerQuestion {
     }
 
     public int getFirstNum() { return this.firstNum; }
-    public int getSecondNum() { return secondNum; }
-    public String getOperator() { return operator; }
+    public int getSecondNum() { return this.secondNum; }
+    public String getOperator() { return this.operator; }
 }

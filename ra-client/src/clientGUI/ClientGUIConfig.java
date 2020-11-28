@@ -7,24 +7,30 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ClientGUIConfig {
+    // client game name
     public static final String GAME_NAME = "RACING ARENA: ClientRacer";
 
+    // color
     public static final Color BACKGROUND_COLOR = new Color(0xF5F5F5);
     public static final Color BORDER_COLOR = new Color(0xE0E0E0);
     public static Color ACCENT_COLOR = Palette.RED;
 
-    public static final int TIMER_MAX = 10;
-
+    // button border
     private static Border line = BorderFactory.createLineBorder(ClientGUIConfig.BORDER_COLOR, 2);
     private static Border empty = new EmptyBorder(5, 5, 5, 5);
     public static final CompoundBorder BORDER = new CompoundBorder(line, empty);
 
+    // timer configuration
+    public static final int TIMER_MAX = 10;
+
+    // panel size
     public static final int RACER_STAT_PANEL_WIDTH = 180;
     public static final int RACER_STAT_PANEL_LABEL_WIDTH = 10;
 
     public static final int MIN_RACE_LENGTH = 3;
     public static final int MAX_RACE_LENGTH = 26;
 
+    // color theme button configuration
     public static class ColorButtonConfig {
         public static final int COLOR_BUTTON_SIZE = 12;
         public static final int COLOR_BUTTON_MARGIN_LR = 0;

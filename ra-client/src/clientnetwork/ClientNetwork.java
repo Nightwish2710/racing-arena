@@ -1,8 +1,10 @@
 package clientnetwork;
 
 import clientGUI.ClientGUI;
+
 import clientdatamodel.ClientDataModel;
 import clientdatamodel.receive.CReceiveLogin;
+
 import clientobject.ClientGameMaster;
 import clientobject.ClientOpponent;
 
@@ -12,10 +14,6 @@ import java.net.UnknownHostException;
 import java.util.Map;
 
 public class ClientNetwork {
-    public Socket getClientSocket() {
-        return clientSocket;
-    }
-
     private Socket clientSocket;
     private DataOutputStream outStream;
     private DataInputStream inStream;
@@ -38,6 +36,10 @@ public class ClientNetwork {
         this.inStream = null;
         this.receiverThread = null;
         this.clientNetwork = this;
+    }
+
+    public Socket getClientSocket() {
+        return clientSocket;
     }
 
     public void connect() {
@@ -174,8 +176,6 @@ public class ClientNetwork {
                     break;
             }
         }
-
-
     }
 }
 

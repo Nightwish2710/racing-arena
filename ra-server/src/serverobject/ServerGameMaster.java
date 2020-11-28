@@ -86,11 +86,13 @@ public class ServerGameMaster {
                 capacity += Integer.BYTES;
             }
         }
+
         return capacity;
     }
 
     public int getSizeInBytesOfRacer (String cUsername) {
         int capacity = 0;
+
         for (Map.Entry<String, ServerRacerObject> entry : this.sRacers.entrySet()) {
             if (entry.getKey().equals(cUsername)) {
                 ServerRacerObject racerObject = entry.getValue();
@@ -109,6 +111,7 @@ public class ServerGameMaster {
                 break;
             }
         }
+
         return capacity;
     }
 

@@ -18,7 +18,7 @@ import java.util.List;
 import static clientGUI.ClientGUIConfig.ColorButtonConfig.*;
 
 public class ClientGUI extends JFrame {
-    public static String userNickname, userPassword;
+    private static String userNickname, userPassword;
 
     private int colorIndex = 0;
     private boolean create = true, changeTheme = false, updatePoint = false;
