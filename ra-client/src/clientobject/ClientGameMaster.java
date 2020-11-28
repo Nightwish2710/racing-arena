@@ -1,12 +1,11 @@
 package clientobject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ClientGameMaster {
-    private Racer cRacer;
+    private ClientRacer cRacer;
     private int numOfRacers;
-    private HashMap<Integer, Opponent> cOpponents;
+    private HashMap<String, ClientOpponent> cOpponents;
 
     private static ClientGameMaster clientGameMaster = null;
     public static ClientGameMaster getInstance() {
@@ -17,24 +16,24 @@ public class ClientGameMaster {
     }
 
     public ClientGameMaster() {
-        this.cRacer = new Racer(0, "", 0, 0, -1, "");
+        this.cRacer = new ClientRacer("", 0, 0, -1, "");
         this.numOfRacers = 0;
         this.cOpponents = null;
         clientGameMaster = this;
     }
 
-    public Racer getcRacer() {
+    public ClientRacer getcRacer() {
         return cRacer;
     }
-    public void setcRacer(Racer cRacer) {
-        this.cRacer = cRacer;
+    public void setcRacer(ClientRacer cClientRacer) {
+        this.cRacer = cClientRacer;
     }
 
-    public HashMap<Integer, Opponent> getcOpponents() {
+    public HashMap<String, ClientOpponent> getcOpponents() {
         return cOpponents;
     }
 
-    public void setcOpponents(HashMap<Integer, Opponent> cOpponents) {
+    public void setcOpponents(HashMap<String, ClientOpponent> cOpponents) {
         this.cOpponents = cOpponents;
     }
 

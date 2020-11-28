@@ -3,23 +3,19 @@ package clientdatamodel.receive;
 import clientdatamodel.ClientDataModel;
 import clientnetwork.ClientNetworkConfig;
 import clientobject.ClientGameConfig;
-import clientobject.Opponent;
-import clientobject.Player;
-import clientobject.Racer;
+import clientobject.ClientOpponent;
 
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 
 public class CReceiveLogin extends ClientDataModel {
     private int eventFlag;
-    private int clientID;
     private int racerVictory;
     private int numOfRacers;
-    private HashMap<Integer, Opponent> cOpponents;
+    private HashMap<String, ClientOpponent> cOpponents;
 
     public CReceiveLogin() {
         this.eventFlag = -1;
-        this.clientID = -1;
         this.racerVictory = -1;
         cOpponents = null;
     }
@@ -32,7 +28,6 @@ public class CReceiveLogin extends ClientDataModel {
         this.eventFlag = byteBuffer.getInt();
 
         if (this.eventFlag == ClientNetworkConfig.LOGIN_FLAG.SUCCESS) {
-            this.clientID = byteBuffer.getInt();
             this.racerVictory = byteBuffer.getInt();
             this.numOfRacers = byteBuffer.getInt();
 
@@ -41,7 +36,6 @@ public class CReceiveLogin extends ClientDataModel {
             cOpponents = new HashMap<>();
             for (int i = 0; i < this.numOfRacers - 1; ++i) { // exclude this racer
                 System.out.println("LOOP " + i);
-                int rID = byteBuffer.getInt();
 
                 int lUsername = byteBuffer.getInt();
                 byte[] bUsername = new byte[lUsername];
@@ -52,8 +46,8 @@ public class CReceiveLogin extends ClientDataModel {
 
                 int rStatus = byteBuffer.getInt();
 
-                Opponent opponent = new Opponent(rID, rUsername, rPosition, 0, rStatus, ClientGameConfig.STATUS_STRING[rStatus]);
-                cOpponents.put(rID, opponent);
+                ClientOpponent clientOpponent = new ClientOpponent(rUsername, rPosition, 0, rStatus, ClientGameConfig.STATUS_STRING[rStatus]);
+                cOpponents.put(rUsername, clientOpponent);
             }
         }
     }
@@ -63,13 +57,6 @@ public class CReceiveLogin extends ClientDataModel {
     }
     public void setEventFlag(int eventFlag) {
         this.eventFlag = eventFlag;
-    }
-
-    public int getClientID() {
-        return clientID;
-    }
-    public void setClientID(int clientID) {
-        this.clientID = clientID;
     }
 
     public int getRacerVictory() {
@@ -86,11 +73,11 @@ public class CReceiveLogin extends ClientDataModel {
         this.numOfRacers = numOfRacers;
     }
 
-    public HashMap<Integer, Opponent> getcOpponents() {
+    public HashMap<String, ClientOpponent> getcOpponents() {
         return cOpponents;
     }
 
-    public void setcOpponents(HashMap<Integer, Opponent> cOpponents) {
+    public void setcOpponents(HashMap<String, ClientOpponent> cOpponents) {
         this.cOpponents = cOpponents;
     }
 }

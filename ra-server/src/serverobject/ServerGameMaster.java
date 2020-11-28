@@ -1,14 +1,12 @@
 package serverobject;
 
-import servernetwork.ServerCSocketThread;
-
 import java.util.HashMap;
 import java.util.Map;
 
 public class ServerGameMaster {
     private int numOfRacers;
     private int raceLength;
-    private HashMap<Integer, ServerRacerObject> sRacers;
+    private HashMap<String, ServerRacerObject> sRacers;
 
     // Singleton
     private static ServerGameMaster serverGameMaster = null;
@@ -40,14 +38,10 @@ public class ServerGameMaster {
     }
 
     public void addSRacer (ServerRacerObject sRacer) {
-        sRacers.put(sRacer.getRacerID(), sRacer);
+        sRacers.put(sRacer.getUsername(), sRacer);
     }
 
-    public int getNextRacerID() {
-        return sRacers.size() + 1;
-    }
-
-    public HashMap<Integer, ServerRacerObject> getsRacers() {
+    public HashMap<String, ServerRacerObject> getsRacers() {
         return sRacers;
     }
 
@@ -55,16 +49,15 @@ public class ServerGameMaster {
         return sRacers.size();
     }
 
-    public int getSizeInBytes(boolean ignore, int clientID) {
+    public int getSizeInBytes(boolean ignore, String cUsername) {
         int capacity = 0;
 
         if (ignore) {
-            for (Map.Entry<Integer, ServerRacerObject> entry : this.sRacers.entrySet()) {
-                if (entry.getKey() != clientID) {
+            for (Map.Entry<String, ServerRacerObject> entry : this.sRacers.entrySet()) {
+                if (!entry.getKey().equals(cUsername)) {
                     ServerRacerObject racerObject = entry.getValue();
-                    // int rID;
-                    capacity += Integer.BYTES;
 
+                    // string rUsername
                     String rUsername = racerObject.getUsername();
                     capacity += Integer.BYTES; // hold rUsername length
                     capacity += rUsername.length();
@@ -72,18 +65,16 @@ public class ServerGameMaster {
                     // int position
                     capacity += Integer.BYTES;
 
-                    // int rStatus;
+                    // int rStatus
                     capacity += Integer.BYTES;
                 }
             }
         }
         else {
-            for (Map.Entry<Integer, ServerRacerObject> entry : this.sRacers.entrySet()) {
+            for (Map.Entry<String, ServerRacerObject> entry : this.sRacers.entrySet()) {
                 ServerRacerObject racerObject = entry.getValue();
 
-                // int rID;
-                capacity += Integer.BYTES;
-
+                // string rUsername
                 String rUsername = racerObject.getUsername();
                 capacity += Integer.BYTES; // hold rUsername length
                 capacity += rUsername.length();
@@ -98,15 +89,13 @@ public class ServerGameMaster {
         return capacity;
     }
 
-    public int getSizeInBytesOfRacer (int racerID) {
+    public int getSizeInBytesOfRacer (String cUsername) {
         int capacity = 0;
-        for (Map.Entry<Integer, ServerRacerObject> entry : this.sRacers.entrySet()) {
-            if (entry.getKey() == racerID) {
+        for (Map.Entry<String, ServerRacerObject> entry : this.sRacers.entrySet()) {
+            if (entry.getKey().equals(cUsername)) {
                 ServerRacerObject racerObject = entry.getValue();
-                
-                // int rID;
-                capacity += Integer.BYTES;
 
+                // string rUsername
                 String rUsername = racerObject.getUsername();
                 capacity += Integer.BYTES; // hold rUsername length
                 capacity += rUsername.length();
@@ -123,8 +112,8 @@ public class ServerGameMaster {
         return capacity;
     }
 
-    public ServerRacerObject getRacerInfo(int racerID) {
-        return sRacers.get(racerID);
+    public ServerRacerObject getRacerInfo(String rUsername) {
+        return sRacers.get(rUsername);
     }
 
     public ServerQuestion getQuestion() { return new ServerQuestion(); }

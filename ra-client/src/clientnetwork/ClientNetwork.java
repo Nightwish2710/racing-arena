@@ -3,9 +3,7 @@ package clientnetwork;
 import clientGUI.ClientGUI;
 import clientdatamodel.ClientDataModel;
 import clientdatamodel.receive.CReceiveLogin;
-import clientobject.ClientGameConfig;
 import clientobject.ClientGameMaster;
-import clientobject.Racer;
 
 import java.io.*;
 import java.net.Socket;
@@ -107,7 +105,7 @@ public class ClientNetwork {
         @Override
         public void run() {
             while (true) {
-                if (ClientNetwork.getInstance().getClientSocket().isClosed()) {
+                if (clientSocket.isClosed() || ClientNetwork.getInstance().getClientSocket().isClosed()) {
                     return;
                 }
 
@@ -147,7 +145,6 @@ public class ClientNetwork {
                     break;
                 case ClientNetworkConfig.LOGIN_FLAG.SUCCESS:
                     // confirm this racer, record his opponent array
-                    ClientGameMaster.getInstance().getcRacer().setId(cReceiveLogin.getClientID());
                     ClientGameMaster.getInstance().getcRacer().setNumOfVictory(cReceiveLogin.getRacerVictory());
                     ClientGameMaster.getInstance().setNumOfRacers(cReceiveLogin.getNumOfRacers());
                     ClientGameMaster.getInstance().setcOpponents(cReceiveLogin.getcOpponents());

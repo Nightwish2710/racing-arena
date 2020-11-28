@@ -12,15 +12,15 @@ public class SResLoginSuccess extends ServerDataModel {
     private int cmd;
     private int eventFlag;
 
-    private int clientID;
+    private String cUsername;
     private int racerVictory;
 
     private ServerGameMaster sGameMaster;
 
-    public SResLoginSuccess(int _cmd, int _eventFlag, int _clientID, int _racerVictory, ServerGameMaster _sGameMaster) {
+    public SResLoginSuccess(int _cmd, int _eventFlag, String _cUsername, int _racerVictory, ServerGameMaster _sGameMaster) {
         this.cmd = _cmd;
         this.eventFlag = _eventFlag;
-        this.clientID = _clientID;
+        this.cUsername = _cUsername;
         this.racerVictory = _racerVictory;
         this.sGameMaster = _sGameMaster;
     }
@@ -29,11 +29,10 @@ public class SResLoginSuccess extends ServerDataModel {
     public byte[] pack() {
         int capacity = Integer.BYTES // cmd
                 + Integer.BYTES // storing eventFlag
-                + Integer.BYTES // storing clientID
                 + Integer.BYTES // storing racerVictory
 
                 + Integer.BYTES // storing numOfRacers
-                + this.sGameMaster.getSizeInBytes(true, this.clientID); // storing racers array
+                + this.sGameMaster.getSizeInBytes(true, this.cUsername); // storing racers array
 
         ByteBuffer byteBuffer = ByteBuffer.allocate(capacity);
 
@@ -42,15 +41,12 @@ public class SResLoginSuccess extends ServerDataModel {
         byteBuffer.putInt(this.cmd);
         // Then put data sequentially
         byteBuffer.putInt(this.eventFlag);
-        byteBuffer.putInt(this.clientID);
         byteBuffer.putInt(this.racerVictory);
         byteBuffer.putInt(this.sGameMaster.getCurrentNumOfRacers());
 
-        for (Map.Entry<Integer, ServerRacerObject> entry : this.sGameMaster.getsRacers().entrySet()) {
-            if (entry.getKey() != this.clientID) {
+        for (Map.Entry<String, ServerRacerObject> entry : this.sGameMaster.getsRacers().entrySet()) {
+            if (!entry.getKey().equals(this.cUsername)) {
                 ServerRacerObject racerObject = entry.getValue();
-                // int rID;
-                byteBuffer.putInt(racerObject.getRacerID());
 
                 // string username
                 byteBuffer.putInt(racerObject.getUsername().length());

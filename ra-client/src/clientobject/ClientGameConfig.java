@@ -9,7 +9,7 @@ public class ClientGameConfig {
     public static final int FLAG_TIMEOUT = 3;
 
     public static final String[] STATUS_STRING = {
-            "Racer Ready",
+            "ClientRacer Ready",
             "Correct Answer",
             "Correct and Fastest Answer",
             "Timeout"

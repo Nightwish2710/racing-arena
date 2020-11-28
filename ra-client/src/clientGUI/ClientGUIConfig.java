@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ClientGUIConfig {
-    public static final String GAME_NAME = "RACING ARENA: Racer";
+    public static final String GAME_NAME = "RACING ARENA: ClientRacer";
 
     public static final Color BACKGROUND_COLOR = new Color(0xF5F5F5);
     public static final Color BORDER_COLOR = new Color(0xE0E0E0);

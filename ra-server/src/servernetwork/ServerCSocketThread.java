@@ -17,17 +17,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ServerCSocketThread implements Runnable{
-    private int clientID;
+    private int cSocketID;
     private Socket socketOfServer;
     private DataInputStream inStream;
     private DataOutputStream outStream;
     private ServerNetwork.ServerNetworkThread parentThread;
 
-    public ServerCSocketThread(Socket _socketOfServer, int _clientNumber, ServerNetwork.ServerNetworkThread _parentThread) {
-        this.clientID = _clientNumber;
+    public ServerCSocketThread(Socket _socketOfServer, int _cSocketID, ServerNetwork.ServerNetworkThread _parentThread) {
+        this.cSocketID = _cSocketID;
         this.socketOfServer = _socketOfServer;
         this.parentThread = _parentThread;
-        System.out.println(this.getClass().getSimpleName() + " new connection with client# " + this.clientID + " at " + socketOfServer);
+        System.out.println(this.getClass().getSimpleName() + " new connection with client# " + this.cSocketID + " at " + socketOfServer);
     }
 
     @Override
@@ -68,10 +68,10 @@ public class ServerCSocketThread implements Runnable{
         System.out.println(this.getClass().getSimpleName() + ": request login: " + sReqAccount.getUsername() + ", " + sReqAccount.getPassword());
 
         // check if there is available slots
-        if (this.parentThread.getNumberOfClient() < ServerGameMaster.getInstance().getNumOfRacers()) {
+        if (ServerGameMaster.getInstance().getCurrentNumOfRacers() < ServerGameMaster.getInstance().getNumOfRacers()) {
             // check if username exists in database
             String queryUser = "SELECT * FROM " + ServerDBConfig.TABLE_RACER
-                    + " WHERE " + ServerDBConfig.TABLE_RACER_username + " = " + sReqAccount.getUsername() + ";";
+                    + " WHERE " + ServerDBConfig.TABLE_RACER_username + " = '" + sReqAccount.getUsername() + "'";
             ResultSet user = ServerDBHelper.getInstance().execForResult(queryUser);
 
             if (user != null && !user.isClosed()) {
@@ -86,14 +86,14 @@ public class ServerCSocketThread implements Runnable{
                             System.out.println(this.getClass().getSimpleName() + ": exist user");
 
                             int victory = user.getInt(ServerDBConfig.TABLE_RACER_victory);
-                            ServerRacerObject sRacer = new ServerRacerObject(clientID, sReqAccount.getUsername(), sReqAccount.getPassword(), victory);
+                            ServerRacerObject sRacer = new ServerRacerObject(sReqAccount.getUsername(), sReqAccount.getPassword(), victory);
                             ServerGameMaster.getInstance().addSRacer(sRacer);
 
-                            SResLoginSuccess sResLoginSuccess = new SResLoginSuccess(cmd, ServerNetworkConfig.LOGIN_FLAG.SUCCESS, clientID, victory, ServerGameMaster.getInstance());
+                            SResLoginSuccess sResLoginSuccess = new SResLoginSuccess(cmd, ServerNetworkConfig.LOGIN_FLAG.SUCCESS, sReqAccount.getUsername(), victory, ServerGameMaster.getInstance());
                             outStream.write(sResLoginSuccess.pack());
 
-                            SResNewRacerInfo sResNewRacerInfo = new SResNewRacerInfo(ServerNetworkConfig.CMD.CMD_INFO, ServerNetworkConfig.INFO_TYPE_FLAG.TYPE_NOTICE_NEW_RACER, clientID, ServerGameMaster.getInstance());
-                            this.parentThread.signalAllClients(sResNewRacerInfo, clientID, true);
+                            SResNewRacerInfo sResNewRacerInfo = new SResNewRacerInfo(ServerNetworkConfig.CMD.CMD_INFO, ServerNetworkConfig.INFO_TYPE_FLAG.TYPE_NOTICE_NEW_RACER, sReqAccount.getUsername(), ServerGameMaster.getInstance());
+                            this.parentThread.signalAllClients(sResNewRacerInfo, this.cSocketID, true);
                         }
                         else {
                             // if password not match, username duplicate error, not record login, send individually (username has been taken)
@@ -109,21 +109,20 @@ public class ServerCSocketThread implements Runnable{
                     System.out.println(this.getClass().getSimpleName() + ": new user");
 
                     int victory = 0;
-                    ServerRacerObject sRacer = new ServerRacerObject(clientID, sReqAccount.getUsername(), sReqAccount.getPassword(), victory);
+                    ServerRacerObject sRacer = new ServerRacerObject(sReqAccount.getUsername(), sReqAccount.getPassword(), victory);
                     ServerGameMaster.getInstance().addSRacer(sRacer);
 
                     String insertUser = "INSERT INTO " + ServerDBConfig.TABLE_RACER + " VALUES ("
-                            + clientID + ", "
                             + "'" + sReqAccount.getUsername() + "', "
                             + "'" + sReqAccount.getPassword() + "', "
                             + victory + ");";
                     ServerDBHelper.getInstance().exec(insertUser);
 
-                    SResLoginSuccess sResLoginSuccess = new SResLoginSuccess(cmd, ServerNetworkConfig.LOGIN_FLAG.SUCCESS, clientID, victory, ServerGameMaster.getInstance());
+                    SResLoginSuccess sResLoginSuccess = new SResLoginSuccess(cmd, ServerNetworkConfig.LOGIN_FLAG.SUCCESS, sReqAccount.getUsername(), victory, ServerGameMaster.getInstance());
                     outStream.write(sResLoginSuccess.pack());
 
-                    SResNewRacerInfo sResNewRacerInfo = new SResNewRacerInfo(ServerNetworkConfig.CMD.CMD_INFO, ServerNetworkConfig.INFO_TYPE_FLAG.TYPE_NOTICE_NEW_RACER, clientID, ServerGameMaster.getInstance());
-                    this.parentThread.signalAllClients(sResNewRacerInfo, clientID, true);
+                    SResNewRacerInfo sResNewRacerInfo = new SResNewRacerInfo(ServerNetworkConfig.CMD.CMD_INFO, ServerNetworkConfig.INFO_TYPE_FLAG.TYPE_NOTICE_NEW_RACER, sReqAccount.getUsername(), ServerGameMaster.getInstance());
+                    this.parentThread.signalAllClients(sResNewRacerInfo, this.cSocketID, true);
                 }
             }
         }

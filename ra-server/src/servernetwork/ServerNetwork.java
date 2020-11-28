@@ -32,6 +32,7 @@ public class ServerNetwork {
     public ServerNetwork() {
         serverNetworkThread = null;
         networkPool = Executors.newFixedThreadPool(1);
+        serverNetwork = this;
     }
 
     public boolean isNetworkOpenning() {
@@ -51,11 +52,13 @@ public class ServerNetwork {
     public static class ServerNetworkThread implements Runnable {
         private ServerSocket serverSocket;
         private ExecutorService clientPool;
+        private int cSocketID;
         private HashMap<Integer, ServerCSocketThread> cSocketThreads;
 
         public ServerNetworkThread() {
             this.serverSocket = null;
             this.cSocketThreads = new HashMap<>();
+            this.cSocketID = 0;
             this.clientPool = Executors.newFixedThreadPool(ServerGameConfig.MAX_NUM_OF_RACERS);
         }
 
@@ -79,11 +82,10 @@ public class ServerNetwork {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    this.cSocketID += 1;
+                    ServerCSocketThread clientThread = new ServerCSocketThread(cSocket, this.cSocketID, this);
 
-                    int nextClientID = ServerGameMaster.getInstance().getNextRacerID();
-                    ServerCSocketThread clientThread = new ServerCSocketThread(cSocket, nextClientID, this);
-
-                    this.cSocketThreads.put(nextClientID, clientThread);
+                    this.cSocketThreads.put(this.cSocketID, clientThread);
                     this.clientPool.execute(clientThread);
                 }
             } finally {

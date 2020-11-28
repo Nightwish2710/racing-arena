@@ -24,7 +24,7 @@ public class SResAllRacersInfo extends ServerDataModel {
                 + Integer.BYTES // storing eventFlag
                 + Integer.BYTES // storing numOfRacers
 
-                + this.sGameMaster.getSizeInBytes(false, -1);
+                + this.sGameMaster.getSizeInBytes(false, null);
         ByteBuffer byteBuffer = ByteBuffer.allocate(capacity);
 
         // Pour in data
@@ -34,10 +34,8 @@ public class SResAllRacersInfo extends ServerDataModel {
         byteBuffer.putInt(this.eventFlag);
         byteBuffer.putInt(this.sGameMaster.getCurrentNumOfRacers());
 
-        for (Map.Entry<Integer, ServerRacerObject> entry : this.sGameMaster.getsRacers().entrySet()) {
+        for (Map.Entry<String, ServerRacerObject> entry : this.sGameMaster.getsRacers().entrySet()) {
             ServerRacerObject racerObject = entry.getValue();
-            // int rID;
-            byteBuffer.putInt(racerObject.getRacerID());
             // string username
             byteBuffer.putInt(racerObject.getUsername().length());
             byteBuffer.put(racerObject.getUsername().getBytes());

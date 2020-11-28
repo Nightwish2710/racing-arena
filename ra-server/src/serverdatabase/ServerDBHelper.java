@@ -70,7 +70,7 @@ public class ServerDBHelper {
             if (!statement.isClosed()) {
                 statement.close();
             }
-            statement = conn.createStatement();
+            statement = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = statement.executeQuery(query);
 
         } catch (SQLException e) {}

@@ -1,15 +1,13 @@
 package serverobject;
 
 public class ServerRacerObject {
-    private int racerID;
     private String username;
     private String password; // private to individual
     private int numOfVictory; // private to individual
     private int position;
     private int status;
 
-    public ServerRacerObject(int _racerID, String _username, String _password, int _numOfVictory) {
-        this.racerID = _racerID;
+    public ServerRacerObject(String _username, String _password, int _numOfVictory) {
         this.username = _username;
         this.password = _password;
         this.numOfVictory = _numOfVictory;
@@ -19,11 +17,6 @@ public class ServerRacerObject {
 
     public ServerRacerObject() {
     }
-
-    public int getRacerID() {
-        return racerID;
-    }
-    public void setRacerID(int racerID) { this.racerID = racerID; }
 
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
