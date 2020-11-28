@@ -14,14 +14,13 @@ import java.io.IOException;
 public class ClientMain {
     private static ClientNetwork network;
     private static ClientGameMaster clientGameMaster;
+    private static JFrame clientGUI;
+
     public static void main(String[] args) {
-
-//        java.net.URL url = ClassLoader.getSystemResource("com/xyz/assets/dog-sharpei-icon.png");
-
         // connect to server
-        connectToServer();
-
         initClientGUI();
+
+        connectToServer();
 
         initClientGameMaster();
     }
@@ -39,20 +38,21 @@ public class ClientMain {
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                JFrame jFrame = new ClientGUI(ClientGUIConfig.GAME_NAME);
-                jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                jFrame.pack();
+                clientGUI = new ClientGUI(ClientGUIConfig.GAME_NAME);
+                clientGUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
                 try {
-                    jFrame.setIconImage(ImageIO.read(new File("assets/dog-sharpei-icon.png")));
+                    clientGUI.setIconImage(ImageIO.read(new File("assets/dog-sharpei-icon.png")));
                 } catch (IOException e) {
+                    System.err.println("Cannot set icon for Client UI");
                     e.printStackTrace();
                 }
 
-                jFrame.setLocationRelativeTo(null);
-                jFrame.setVisible(true);
+                clientGUI.pack();
+                clientGUI.setLocationRelativeTo(null);
+//                clientGUI.setVisible(true);
 
-                jFrame.addWindowListener(new WindowAdapter() {
+                clientGUI.addWindowListener(new WindowAdapter() {
                     @Override
                     public void windowClosing(WindowEvent e) {
                         if (network.isConnected()) {

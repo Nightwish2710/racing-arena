@@ -38,19 +38,20 @@ public class ServerMain {
     }
 
     private static void initServerGUI() {
-        JFrame jFrame = new ServerGUI(ServerGUIConfig.GAME_NAME);
-        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jFrame.pack();
+        JFrame serverGUI = new ServerGUI(ServerGUIConfig.GAME_NAME);
+        serverGUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        serverGUI.pack();
 
         try {
-            jFrame.setIconImage(ImageIO.read(new File("assets/dog-russel-grin-icon.png")));
+            serverGUI.setIconImage(ImageIO.read(new File("assets/dog-russel-grin-icon.png")));
         } catch (IOException e) {
+            System.err.println("Cannot set icon for Server UI");
             e.printStackTrace();
         }
 
-        jFrame.setLocationRelativeTo(null);
-        jFrame.setVisible(true);
-        jFrame.addWindowListener(new WindowAdapter() {
+        serverGUI.setLocationRelativeTo(null);
+        serverGUI.setVisible(true);
+        serverGUI.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 if (serverDBHelper.isDBOpenning()) {

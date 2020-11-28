@@ -5,11 +5,13 @@ import clientnetwork.ClientNetwork;
 import clientnetwork.ClientNetworkConfig;
 import clientobject.ClientGameMaster;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.plaf.basic.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import java.util.*;
 import java.util.List;
 
@@ -60,6 +62,12 @@ public class ClientGUI extends JFrame {
     private JButton c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15;
     private List<JButton> colorButtons = Arrays.asList(c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15);
 
+    // error pane components
+    private JOptionPane noOpenConnectionPane;
+    JButton retryButton, cancelButton;
+    JLabel errorMessage;
+
+    // Singleton
     private static ClientGUI clientGUI = null;
     public static ClientGUI getInstance() {
         if (clientGUI == null) {
@@ -80,6 +88,84 @@ public class ClientGUI extends JFrame {
         this.setButtonAction();
 
         this.pack();
+    }
+
+    private void setErrorPaneUIComponent() {
+        retryButton = new JButton();
+
+        retryButton.setText("RETRY");
+        retryButton.setPreferredSize(new Dimension(80, 25));
+        retryButton.setBackground(ClientGUIConfig.COLOR_LIST.get(9));
+        retryButton.setForeground(ClientGUIConfig.BACKGROUND_COLOR);
+        retryButton.setBorder(new LineBorder(ClientGUIConfig.COLOR_LIST.get(9)));
+
+        cancelButton = new JButton();
+
+        cancelButton.setText("CANCEL");
+        cancelButton.setPreferredSize(new Dimension(80, 25));
+        cancelButton.setBackground(ClientGUIConfig.COLOR_LIST.get(0));
+        cancelButton.setForeground(ClientGUIConfig.BACKGROUND_COLOR);
+        cancelButton.setBorder(new LineBorder(ClientGUIConfig.COLOR_LIST.get(0)));
+
+        errorMessage = new JLabel("<HTML><center>NO OPEN CONNECTION FOR CLIENT</center><HTML>");
+        errorMessage.setHorizontalAlignment(SwingConstants.CENTER);
+        errorMessage.setFont(new Font("Arial", Font.BOLD, 13));
+    }
+
+    public void noOpenConnection() {
+        setErrorPaneUIComponent();
+
+        noOpenConnectionPane = new JOptionPane(errorMessage, JOptionPane.PLAIN_MESSAGE, JOptionPane.YES_NO_OPTION);
+
+        noOpenConnectionPane.setOptions(new Object[]{retryButton, cancelButton});
+        noOpenConnectionPane.setInitialValue(null);
+
+        JDialog dialog = new JDialog(this,"CONNECTION ERROR", true);
+
+        try {
+            dialog.setIconImage(ImageIO.read(new File("assets/metal-error.png")));
+        } catch (IOException e) {
+            System.err.println("Cannot set icon for Error Message Popup");
+            e.printStackTrace();
+        }
+        dialog.setContentPane(noOpenConnectionPane);
+        dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+
+        dialog.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent we) {
+                System.exit(-1);
+            }
+        });
+
+//        noOpenConnectionPane.addPropertyChangeListener(new PropertyChangeListener() {
+//            public void propertyChange(PropertyChangeEvent e) {
+//                String prop = e.getPropertyName();
+//                if (dialog.isVisible() && (e.getSource() == noOpenConnectionPane) && (prop.equals(JOptionPane.VALUE_PROPERTY))) {
+//                    // place to check something before closing dialog
+//                    dialog.setVisible(false);
+//                }
+//            }
+//        });
+
+        dialog.pack();
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+
+        // click button
+        String value = (String)noOpenConnectionPane.getValue();
+        System.out.println((JButton)noOpenConnectionPane.getValue());
+        if (value == "Retry") {
+            // try to connect again
+        }
+        else if (value == "Cancel") {
+            // close GUI
+            ClientGUI.getInstance().addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    super.windowClosed(e);
+                }
+            });
+        }
     }
 
     // set color for objects that change color after button click

@@ -52,13 +52,18 @@ public class ClientNetwork {
         } catch (UnknownHostException e) {
             System.err.println("Unknown host named " + ClientNetworkConfig.SERVER_HOST);
             return;
-        } catch (IOException e) {
+        } catch (IOException e) { // if no connection
+            ClientGUI.getInstance().setVisible(false);
+            ClientGUI.getInstance().noOpenConnection();
+
             System.err.println("I/O Exception in connection to " + ClientNetworkConfig.SERVER_HOST);
             return;
         }
 
         // notify of successful connection
         System.out.println(this.getClass().getSimpleName() + ": notification of successful connection");
+        // open client UI
+        ClientGUI.getInstance().setVisible(true);
 
         // Start receiver thread, in case we might need
         receiverThread = new ClientReceiverThread(inStream);
