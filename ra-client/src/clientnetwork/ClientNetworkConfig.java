@@ -15,7 +15,8 @@ public class ClientNetworkConfig {
         public static final int SUCCESS = 0;
         public static final int USERNAME_TAKEN = 1;
         public static final int NO_MORE_SLOTS = 2;
-        public static final int ERROR = 3;
+        public static final int DUPLICATED_LOGIN = 3;
+        public static final int ERROR = 4;
     }
 
     public static class INFO_TYPE_FLAG {

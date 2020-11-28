@@ -82,18 +82,31 @@ public class ServerCSocketThread implements Runnable{
                         String uPassword = user.getString(ServerDBConfig.TABLE_RACER_password);
 
                         if (uPassword.equals(sReqAccount.getPassword())) {
-                            // if password match, create existing user, send individually (success login) and bulk (update number of racers to all)
-                            System.out.println(this.getClass().getSimpleName() + ": exist user");
+                            // if password match, check if duplicated login by isOnline
+                            int isOnline = user.getInt(ServerDBConfig.TABLE_RACER_isonline);
+                            System.out.println(this.getClass().getSimpleName() + ": online status " + isOnline);
+                            if (isOnline == 1) {
+                                System.out.println(this.getClass().getSimpleName() + ": duplicated login");
 
-                            int victory = user.getInt(ServerDBConfig.TABLE_RACER_victory);
-                            ServerRacerObject sRacer = new ServerRacerObject(sReqAccount.getUsername(), sReqAccount.getPassword(), victory);
-                            ServerGameMaster.getInstance().addSRacer(sRacer);
+                                SResLoginError sResLoginError = new SResLoginError(cmd, ServerNetworkConfig.LOGIN_FLAG.DUPLICATED_LOGIN);
+                                outStream.write(sResLoginError.pack());
+                            } else {
+                                // create existing user, set isonline, send individually (success login) and bulk (update number of racers to all)
+                                System.out.println(this.getClass().getSimpleName() + ": exist user");
 
-                            SResLoginSuccess sResLoginSuccess = new SResLoginSuccess(cmd, ServerNetworkConfig.LOGIN_FLAG.SUCCESS, sReqAccount.getUsername(), victory, ServerGameMaster.getInstance());
-                            outStream.write(sResLoginSuccess.pack());
+                                int victory = user.getInt(ServerDBConfig.TABLE_RACER_victory);
+                                ServerRacerObject sRacer = new ServerRacerObject(sReqAccount.getUsername(), sReqAccount.getPassword(), victory);
+                                ServerGameMaster.getInstance().addSRacer(sRacer);
 
-                            SResNewRacerInfo sResNewRacerInfo = new SResNewRacerInfo(ServerNetworkConfig.CMD.CMD_INFO, ServerNetworkConfig.INFO_TYPE_FLAG.TYPE_NOTICE_NEW_RACER, sReqAccount.getUsername(), ServerGameMaster.getInstance());
-                            this.parentThread.signalAllClients(sResNewRacerInfo, this.cSocketID, true);
+                                String updateUser = "UPDATE " + ServerDBConfig.TABLE_RACER + " SET " + ServerDBConfig.TABLE_RACER_isonline + " = 1 WHERE " + ServerDBConfig.TABLE_RACER_username + " = '"+ sReqAccount.getUsername() + "'";
+                                ServerDBHelper.getInstance().exec(updateUser);
+
+                                SResLoginSuccess sResLoginSuccess = new SResLoginSuccess(cmd, ServerNetworkConfig.LOGIN_FLAG.SUCCESS, sReqAccount.getUsername(), victory, ServerGameMaster.getInstance());
+                                outStream.write(sResLoginSuccess.pack());
+
+                                SResNewRacerInfo sResNewRacerInfo = new SResNewRacerInfo(ServerNetworkConfig.CMD.CMD_INFO, ServerNetworkConfig.INFO_TYPE_FLAG.TYPE_NOTICE_NEW_RACER, sReqAccount.getUsername(), ServerGameMaster.getInstance());
+                                this.parentThread.signalAllClients(sResNewRacerInfo, this.cSocketID, true);
+                            }
                         }
                         else {
                             // if password not match, username duplicate error, not record login, send individually (username has been taken)
@@ -115,7 +128,8 @@ public class ServerCSocketThread implements Runnable{
                     String insertUser = "INSERT INTO " + ServerDBConfig.TABLE_RACER + " VALUES ("
                             + "'" + sReqAccount.getUsername() + "', "
                             + "'" + sReqAccount.getPassword() + "', "
-                            + victory + ");";
+                            + victory + ", "
+                            + "1) ";
                     ServerDBHelper.getInstance().exec(insertUser);
 
                     SResLoginSuccess sResLoginSuccess = new SResLoginSuccess(cmd, ServerNetworkConfig.LOGIN_FLAG.SUCCESS, sReqAccount.getUsername(), victory, ServerGameMaster.getInstance());
