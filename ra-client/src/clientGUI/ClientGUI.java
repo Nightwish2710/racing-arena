@@ -1,7 +1,6 @@
 package clientGUI;
 
 import clientdatamodel.send.CSendLogin;
-import clientobject.ClientGameConfig;
 import clientobject.ClientGameMaster;
 
 import clientnetwork.ClientNetwork;
@@ -49,8 +48,6 @@ public class ClientGUI extends JFrame {
     private JLabel timerLabel;
     private JProgressBar timerBar;
 
-    private JScrollPane serverResponsePane;
-
     private JSeparator separator1, separator2, separator3;
     final private List<JSeparator> sep = Arrays.asList(separator1, separator2, separator3);
 
@@ -60,6 +57,9 @@ public class ClientGUI extends JFrame {
 
     private JLabel racerStatusLabel;
     private JPanel racerStatusPanel;
+
+    private JScrollPane serverResponsePane;
+    private JTextArea consoleTextArea;
 
     private JButton c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15;
     private final List<JButton> colorButtons = Arrays.asList(c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15);
@@ -77,8 +77,8 @@ public class ClientGUI extends JFrame {
         return clientGUI;
     }
 
-    public ClientGUI(String gameName) {
-        super(gameName);
+    public ClientGUI(String _gameName) {
+        super(_gameName);
         clientGUI = this;
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -191,6 +191,7 @@ public class ClientGUI extends JFrame {
         joinServerButton.setBackground(ACCENT_COLOR);
         joinServerButton.setForeground(ClientGUIConfig.BACKGROUND_COLOR);
         joinServerButton.setBorder(new LineBorder(ACCENT_COLOR));
+        joinServerButton.setEnabled(false);
 
         sendAnswerButton.setBackground(ACCENT_COLOR);
         sendAnswerButton.setForeground(ClientGUIConfig.BACKGROUND_COLOR);
@@ -221,11 +222,12 @@ public class ClientGUI extends JFrame {
 
         // set answer status
         updateStatus.setFont(new Font("Arial", Font.BOLD, 9));
-        updateExtraStatus.setFont(new Font("Arial", Font.BOLD, 9));
+        updateExtraStatus.setFont(new Font("Arial", Font.ITALIC, 9));
 
         // set server response scroll pane
         setServerResponsePaneUI();
 
+        // create racer status bar
         createUIComponents();
         createRacerStatusBar();
     }
@@ -404,6 +406,11 @@ public class ClientGUI extends JFrame {
                 return button;
             }
         });
+
+        consoleTextArea.setEnabled(false);
+        consoleTextArea.setBackground(ClientGUIConfig.BORDER_COLOR);
+        consoleTextArea.setFont(new Font("Consolas", Font.PLAIN, 12));
+        consoleTextArea.setDisabledTextColor(Color.BLACK);
     }
 
     private void setButtonAction() {
@@ -414,13 +421,14 @@ public class ClientGUI extends JFrame {
 
             ClientGameMaster.getInstance().getcRacer().setNickname(userNickname);
             ClientGameMaster.getInstance().getcRacer().setPassword(userPassword);
+
             CSendLogin cdLogin = new CSendLogin(ClientNetworkConfig.CMD.CMD_LOGIN, userNickname, userPassword);
             ClientNetwork.getInstance().send(cdLogin);
         });
 
         // click send answer button
         sendAnswerButton.addActionListener(e -> {
-
+            sendAnswerButton.setEnabled(false);
         });
     }
 
@@ -435,6 +443,7 @@ public class ClientGUI extends JFrame {
         JProgressBar tmpBar = new JProgressBar();
 
         tmpBar.setStringPainted(true);
+        tmpBar.setPreferredSize(new Dimension(ClientGUIConfig.RACER_STAT_PANEL_WIDTH, -1));
         tmpBar.setBorder(border);
         tmpBar.setForeground(ACCENT_COLOR);
         tmpBar.setBackground(ClientGUIConfig.BACKGROUND_COLOR);
@@ -448,8 +457,8 @@ public class ClientGUI extends JFrame {
         });
 
         tmpBar.setMaximum(ClientGUIConfig.MAX_RACE_LENGTH);
-        tmpBar.setValue(15);
-        tmpBar.setString(Integer.toString(15));
+        tmpBar.setValue(ClientGUIConfig.INIT_POSITION);
+        tmpBar.setString(Integer.toString(ClientGUIConfig.INIT_POSITION));
 
         return tmpBar;
     }
@@ -471,7 +480,8 @@ public class ClientGUI extends JFrame {
         gbconstraints.fill = GridBagConstraints.HORIZONTAL;
 
         JLabel tmpLabel = new JLabel();
-        tmpLabel.setText("YOU");
+        tmpLabel.setText("<HTML>&#x2666; YOU &#x2666;</HTML>");
+        tmpLabel.setFont(new Font("Calibri", Font.BOLD, 14));
         tmpLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         addComponent(tmpLabel, racerStatusPanel, gblayout, gbconstraints, 0, 0); // label on the left
 
@@ -479,7 +489,7 @@ public class ClientGUI extends JFrame {
         addComponent(tmpBar, racerStatusPanel, gblayout, gbconstraints, 1, 0); // progress bar on the right
     }
 
-    // craete a line to separate between current racer and other racers
+    // create a line to separate between current racer and other racers
     private void createSeparatorBetweenYouAndOtherRacers(GridBagLayout gblayout, GridBagConstraints gbconstraints) {
         JSeparator separator4 = new JSeparator();
         separator4.setBackground(ClientGUIConfig.BORDER_COLOR);
@@ -508,7 +518,7 @@ public class ClientGUI extends JFrame {
             racerStatusPanel.setPreferredSize(new Dimension(250, -1));
             racerStatusPanel.setLayout(gblayout);
 
-            List<String> tmpStr = Arrays.asList("H", "HH", "HHH", "HHHH", "HHHHH", "HHHHHH", "HHHHHHH", "HHHHHHHH", "HHHHHHHHH", "HHHHHHHHHH");
+            List<String> tmpStr = Arrays.asList("derer", "34t3vr", "sgg_grw", "evs", "283jjsa", "sdvsd", "34fza", "askj", "_sjoi", "ushdjufchs");
 
             createYouProgressBar(gblayout, gbconstraints);
             createSeparatorBetweenYouAndOtherRacers(gblayout, gbconstraints);
@@ -519,15 +529,16 @@ public class ClientGUI extends JFrame {
 
             for (int i = 0; i < 10; ++i) {
                 // 1st column width
-                gbconstraints.ipadx = ClientGUIConfig.RACER_STAT_PANEL_LABEL_WIDTH;
+                gbconstraints.ipadx = ClientGUIConfig.RACER_STAT_PANEL_LABEL_PAD;
 
                 JLabel tmpLabel = new JLabel();
                 tmpLabel.setText(tmpStr.get(i));
+                tmpLabel.setFont(new Font("Arial", Font.PLAIN, 9));
                 tmpLabel.setHorizontalAlignment(SwingConstants.RIGHT);
                 addComponent(tmpLabel, racerStatusPanel, gblayout, gbconstraints, 0, i+2); // label on the left
 
                 // 2nd column width
-                gbconstraints.ipadx = ClientGUIConfig.RACER_STAT_PANEL_WIDTH - ClientGUIConfig.RACER_STAT_PANEL_LABEL_WIDTH;
+                gbconstraints.ipadx = ClientGUIConfig.RACER_STAT_PANEL_WIDTH - ClientGUIConfig.RACER_STAT_PANEL_LABEL_PAD;
 
                 JProgressBar tmpBar = createRacerStatusBar();
                 addComponent(tmpBar, racerStatusPanel, gblayout, gbconstraints, 1, i+2); // progress bar on the right
@@ -570,5 +581,20 @@ public class ClientGUI extends JFrame {
         enterNickname.setEnabled(false);
         enterPassword.setEnabled(false);
         joinServerButton.setEnabled(false);
+    }
+
+    public void setConsoleTextArea(String str) {
+        if (EventQueue.isDispatchThread()) {
+            consoleTextArea.setText(consoleTextArea.getText() + str);
+        }
+        else {
+            EventQueue.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    // nothing to add yet
+                }
+            });
+
+        }
     }
 }

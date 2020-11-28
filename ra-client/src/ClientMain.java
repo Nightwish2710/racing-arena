@@ -1,3 +1,4 @@
+import clientGUI.ClientConsoleOutput;
 import clientGUI.ClientGUI;
 import clientGUI.ClientGUIConfig;
 import clientnetwork.ClientNetwork;
@@ -8,15 +9,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 public class ClientMain {
     private static ClientNetwork network;
+
     private static ClientGameMaster clientGameMaster;
     private static JFrame clientGUI;
 
     public static void main(String[] args) {
+        System.setOut(new PrintStream(ClientConsoleOutput.getInstance()));
+
         initClientGUI();
         connectToServer();
         initClientGameMaster();
@@ -36,7 +39,10 @@ public class ClientMain {
             @Override
             public void run() {
                 clientGUI = new ClientGUI(ClientGUIConfig.GAME_NAME);
+
                 clientGUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                clientGUI.setResizable(false);
+                clientGUI.pack();
 
                 try {
                     clientGUI.setIconImage(ImageIO.read(new File("assets/dog-sharpei-icon.png")));
@@ -44,10 +50,6 @@ public class ClientMain {
                     System.err.println("Cannot set icon for Client UI");
                     e.printStackTrace();
                 }
-
-                clientGUI.pack();
-                clientGUI.setLocationRelativeTo(null);
-//                clientGUI.setVisible(true);
 
                 clientGUI.addWindowListener(new WindowAdapter() {
                     @Override
@@ -59,6 +61,32 @@ public class ClientMain {
                         super.windowClosed(e);
                     }
                 });
+
+                System.out.println("HELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLO");
+//                System.out.println("HELLO");
+//                System.out.println("HELLO");
+//                System.out.println("HELLO");
+//                System.out.println("HELLO");
+//                System.out.println("HELLO");
+//                System.out.println("HELLO");
+//                System.out.println("HELLO");
+//                System.out.println("HELLO");
+//                System.out.println("HELLO");
+//                System.out.println("HELLO");
+//                System.out.println("HELLO");
+//                System.out.println("HELLO");
+//                System.out.println("HELLO");
+//                System.out.println("HELLO");
+//                System.out.println("HELLO");
+//                System.out.println("HELLO");
+//                System.out.println("HELLO");
+//                System.out.println("HELLO");
+//                System.out.println("HELLO");
+//                System.out.println("HELLO");
+//                System.out.println("HELLO");
+
+                clientGUI.setLocationRelativeTo(null);
+//                clientGUI.setVisible(true);
             }
         });
     }

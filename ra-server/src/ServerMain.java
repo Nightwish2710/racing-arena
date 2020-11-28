@@ -1,3 +1,4 @@
+import serverGUI.ServerConsoleOutput;
 import serverGUI.ServerGUI;
 import serverGUI.ServerGUIConfig;
 
@@ -18,13 +19,19 @@ import java.io.*;
 public class ServerMain {
     private static ServerDBHelper serverDBHelper;
     private static ServerNetwork serverNetwork;
+
     private static ServerGameMaster serverGameMaster;
+    private static JFrame serverGUI;
 
     public static void main(String args[]) throws IOException {
+        System.setOut(new PrintStream(ServerConsoleOutput.getInstance()));
+
         initServerDB();
         initServerGameMaster();
         initServerGUI();
         initServerNetwork();
+
+        System.out.println("HELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLO");
     }
 
     private static void initServerGameMaster() {
@@ -41,8 +48,10 @@ public class ServerMain {
     }
 
     private static void initServerGUI() {
-        JFrame serverGUI = new ServerGUI(ServerGUIConfig.GAME_NAME);
+        serverGUI = new ServerGUI(ServerGUIConfig.GAME_NAME);
+
         serverGUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        serverGUI.setResizable(false);
         serverGUI.pack();
 
         try {
@@ -52,8 +61,6 @@ public class ServerMain {
             e.printStackTrace();
         }
 
-        serverGUI.setLocationRelativeTo(null);
-        serverGUI.setVisible(true);
         serverGUI.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -66,5 +73,8 @@ public class ServerMain {
                 super.windowClosing(e);
             }
         });
+
+        serverGUI.setLocationRelativeTo(null);
+        serverGUI.setVisible(true);
     }
 }

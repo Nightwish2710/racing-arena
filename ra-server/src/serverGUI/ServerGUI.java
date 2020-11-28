@@ -7,6 +7,7 @@ import serverobject.ServerGameMaster;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.*;
 import javax.swing.border.*;
 import java.awt.*;
@@ -19,7 +20,6 @@ import java.util.regex.*;
 public class ServerGUI extends JFrame {
     private JPanel ServerPanel;
 
-    private JPanel serverLogsPanel;
     private JLabel serverLogsPanelLabel;
 
     private JLabel gameConfigLabel;
@@ -48,17 +48,17 @@ public class ServerGUI extends JFrame {
     private JLabel correctAnsLabel;
     private JLabel updateCorrectAns;
 
+    private JScrollPane serverLogsPane;
+    private JTextArea consoleTextArea;
+
     private JSeparator verticalSeparator1, verticalSeparator2, verticalSeparator3;
     private List<JSeparator> vSep = Arrays.asList(verticalSeparator1, verticalSeparator2, verticalSeparator3);
 
     // Singleton
     private static ServerGUI serverGUI = null;
-
     public static ServerGUI getInstance() {
         if (serverGUI == null) {
             serverGUI = new ServerGUI(ServerGUIConfig.GAME_NAME);
-            serverGUI.setLocationRelativeTo(null);
-            serverGUI.setVisible(true);
         }
         return serverGUI;
     }
@@ -66,6 +66,7 @@ public class ServerGUI extends JFrame {
     public ServerGUI(String _gameName) {
         super(_gameName);
         serverGUI = this;
+
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         this.setContentPane(ServerPanel);
@@ -109,9 +110,8 @@ public class ServerGUI extends JFrame {
         // set table
         setTableUI();
 
-        // set server panel
-        serverLogsPanel.setOpaque(true);
-        serverLogsPanel.setBackground(ServerGUIConfig.BORDER_COLOR);
+        // set server logs scroll pane
+        setServerLogsPaneUI();
     }
 
     private void setSpinnerUI() {
@@ -160,6 +160,34 @@ public class ServerGUI extends JFrame {
             vSep.get(i).setForeground(ServerGUIConfig.BORDER_COLOR);
             vSep.get(i).setBorder(BorderFactory.createMatteBorder(0, 1, 0, 2, ServerGUIConfig.BORDER_COLOR));
         }
+    }
+
+    private void setServerLogsPaneUI() {
+        serverLogsPane.setBorder(BorderFactory.createLineBorder(ServerGUIConfig.BORDER_COLOR, 5));
+        serverLogsPane.getViewport().setBackground(ServerGUIConfig.BORDER_COLOR);
+        serverLogsPane.setOpaque(true);
+
+        serverLogsPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+            @Override
+            protected JButton createDecreaseButton(int orientation) {
+                JButton button = super.createDecreaseButton(orientation);
+                button.setBackground(ServerGUIConfig.BACKGROUND_COLOR);
+                button.setBorder(BorderFactory.createLineBorder(ServerGUIConfig.BACKGROUND_COLOR, 1));
+                return button;
+            }
+            @Override
+            protected JButton createIncreaseButton(int orientation) {
+                JButton button = super.createIncreaseButton(orientation);
+                button.setBackground(ServerGUIConfig.BACKGROUND_COLOR);
+                button.setBorder(BorderFactory.createLineBorder(ServerGUIConfig.BACKGROUND_COLOR, 1));
+                return button;
+            }
+        });
+
+        consoleTextArea.setEnabled(false);
+        consoleTextArea.setBackground(ServerGUIConfig.BORDER_COLOR);
+        consoleTextArea.setFont(new Font("Consolas", Font.PLAIN, 12));
+        consoleTextArea.setDisabledTextColor(Color.BLACK);
     }
 
     private void setTableUI() {
@@ -267,6 +295,21 @@ public class ServerGUI extends JFrame {
         numOfRacersSpinner.setEnabled(false);
         raceLengthSpinner.setEnabled(false);
         openConnectionButton.setEnabled(false);
+    }
+
+    public void setConsoleTextArea(String str) {
+        if (EventQueue.isDispatchThread()) {
+            consoleTextArea.setText(consoleTextArea.getText() + str);
+        }
+        else {
+            EventQueue.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    // nothing to add yet
+                }
+            });
+
+        }
     }
 
     private ActionListener actionOpenConnection = e -> ServerNetwork.getInstance().openServerSocket();

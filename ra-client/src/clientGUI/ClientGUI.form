@@ -391,19 +391,26 @@
       </component>
       <scrollpane id="8dfdb" binding="serverResponsePane">
         <constraints>
-          <grid row="2" column="19" row-span="17" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <minimum-size width="250" height="-1"/>
-            <preferred-size width="250" height="-1"/>
+          <grid row="2" column="19" row-span="17" col-span="1" vsize-policy="0" hsize-policy="0" anchor="1" fill="1" indent="0" use-parent-layout="false">
+            <minimum-size width="250" height="330"/>
+            <preferred-size width="250" height="330"/>
           </grid>
         </constraints>
         <properties>
           <background color="-1"/>
           <foreground color="-1"/>
           <horizontalScrollBarPolicy value="31"/>
-          <verticalScrollBarPolicy value="22"/>
+          <verticalScrollBarPolicy value="20"/>
         </properties>
         <border type="line"/>
-        <children/>
+        <children>
+          <component id="c69ff" class="javax.swing.JTextArea" binding="consoleTextArea">
+            <constraints/>
+            <properties>
+              <lineWrap value="true"/>
+            </properties>
+          </component>
+        </children>
       </scrollpane>
       <vspacer id="d6d51">
         <constraints>

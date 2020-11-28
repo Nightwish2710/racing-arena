@@ -1,21 +1,21 @@
-package serverGUI;
+package clientGUI;
 
 import java.io.*;
 
-public class ServerConsoleOutput extends OutputStream {
+public class ClientConsoleOutput extends OutputStream {
     private StringBuilder buffer;
     private PrintStream out;
 
     // Singleton
-    private static ServerConsoleOutput serverConsoleOutput = null;
-    public static ServerConsoleOutput getInstance() {
-        if (serverConsoleOutput == null) {
-            serverConsoleOutput = new ServerConsoleOutput(System.out);
+    private static ClientConsoleOutput clientConsoleOutput = null;
+    public static ClientConsoleOutput getInstance() {
+        if (clientConsoleOutput == null) {
+            clientConsoleOutput = new ClientConsoleOutput(System.out);
         }
-        return serverConsoleOutput;
+        return clientConsoleOutput;
     }
 
-    public ServerConsoleOutput(PrintStream _out) {
+    public ClientConsoleOutput(PrintStream _out) {
         this.buffer = new StringBuilder(128);
         this.out = _out;
 
@@ -29,7 +29,7 @@ public class ServerConsoleOutput extends OutputStream {
         buffer.append(value);
 
         if (value.equals("\n")) {
-            ServerGUI.getInstance().setConsoleTextArea(buffer.toString());
+            ClientGUI.getInstance().setConsoleTextArea(buffer.toString());
             buffer.delete(0, buffer.length());
             buffer.append(">> ");
         }

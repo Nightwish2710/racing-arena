@@ -28,11 +28,12 @@ public class ClientGUIConfig {
     public static final int TIMER_MAX = 10;
 
     // panel size
-    public static final int RACER_STAT_PANEL_WIDTH = 180;
-    public static final int RACER_STAT_PANEL_LABEL_WIDTH = 10;
+    public static final int RACER_STAT_PANEL_WIDTH = 140;
+    public static final int RACER_STAT_PANEL_LABEL_PAD = 0;
 
     public static final int MIN_RACE_LENGTH = 3;
     public static final int MAX_RACE_LENGTH = 26;
+    public static final int INIT_POSITION = 1;
 
     // color theme button configuration
     public static class ColorButtonConfig {

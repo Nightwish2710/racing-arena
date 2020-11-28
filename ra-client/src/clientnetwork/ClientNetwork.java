@@ -57,10 +57,11 @@ public class ClientNetwork {
             System.err.println("Unknown host named " + ClientNetworkConfig.SERVER_HOST);
             return;
         } catch (IOException e) { // if no connection
+            System.err.println("I/O Exception in connection to " + ClientNetworkConfig.SERVER_HOST);
+
             ClientGUI.getInstance().setVisible(false);
             ClientGUI.getInstance().noOpenConnection();
 
-            System.err.println("I/O Exception in connection to " + ClientNetworkConfig.SERVER_HOST);
             return;
         }
 
