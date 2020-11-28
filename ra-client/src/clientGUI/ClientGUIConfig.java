@@ -10,6 +10,10 @@ public class ClientGUIConfig {
     // client game name
     public static final String GAME_NAME = "RACING ARENA: ClientRacer";
 
+    // nickname and passwork max length
+    public static final int MAX_NICKNAME_LENGTH = 10;
+    public static final int MAX_PASSWORD_LENGTH = 16;
+
     // color
     public static final Color BACKGROUND_COLOR = new Color(0xF5F5F5);
     public static final Color BORDER_COLOR = new Color(0xE0E0E0);

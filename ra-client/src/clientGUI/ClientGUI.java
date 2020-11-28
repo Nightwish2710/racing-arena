@@ -1,9 +1,11 @@
 package clientGUI;
 
 import clientdatamodel.send.CSendLogin;
+import clientobject.ClientGameConfig;
+import clientobject.ClientGameMaster;
+
 import clientnetwork.ClientNetwork;
 import clientnetwork.ClientNetworkConfig;
-import clientobject.ClientGameMaster;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -215,24 +217,12 @@ public class ClientGUI extends JFrame {
         setSeparatorUI();
 
         // set text boxes
-        enterNickname.setBorder(ClientGUIConfig.BORDER);
-        enterNickname.setToolTipText("Nickname cannot be longer than 10 and only contains [a-zA-Z0-9_].");
-        enterNickname.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                enterNickname.setForeground(Color.BLACK);
-            }
-            @Override
-            public void focusLost(FocusEvent e) {
-            }
-        });
-        enterPassword.setBorder(ClientGUIConfig.BORDER);
-        enterAnswer.setBorder(ClientGUIConfig.BORDER);
+        setTextBoxUI();
+        setEventWithTextBox();
 
+        // set answer status
         updateStatus.setFont(new Font("Arial", Font.BOLD, 9));
         updateExtraStatus.setFont(new Font("Arial", Font.BOLD, 9));
-
-        setEventWithTextBox();
 
         // set server response scroll pane
         setServerResponsePaneUI();
@@ -253,6 +243,40 @@ public class ClientGUI extends JFrame {
         verticalSeparator.setBackground(ClientGUIConfig.BORDER_COLOR);
         verticalSeparator.setForeground(ClientGUIConfig.BORDER_COLOR);
         verticalSeparator.setBorder(BorderFactory.createMatteBorder(0, 3, 0, 0, ClientGUIConfig.BORDER_COLOR));
+    }
+
+    private void setTextBoxUI() {
+        enterNickname.setBorder(ClientGUIConfig.BORDER);
+        enterNickname.setToolTipText("Nickname cannot be longer than 10 and only contains [a-zA-Z0-9_].");
+        enterNickname.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                enterNickname.setForeground(Color.BLACK);
+            }
+            @Override
+            public void focusLost(FocusEvent e) {
+            }
+        });
+        enterNickname.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (enterNickname.getText().length() >= ClientGUIConfig.MAX_NICKNAME_LENGTH)
+                    e.consume();
+            }
+        });
+
+        enterPassword.setBorder(ClientGUIConfig.BORDER);
+        enterPassword.setToolTipText("Password cannot be longer than 16.");
+        enterPassword.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                String password = String.valueOf(enterPassword.getPassword());
+                if (password.length() >= ClientGUIConfig.MAX_PASSWORD_LENGTH)
+                    e.consume();
+            }
+        });
+
+        enterAnswer.setBorder(ClientGUIConfig.BORDER);
     }
 
     private void setEventWithTextBox() {
@@ -539,7 +563,7 @@ public class ClientGUI extends JFrame {
     }
 
     private static boolean checkNicknameValidity(String nickname) {
-        return nickname.matches("^[a-zA-Z0-9_]+$") && nickname.length() <= 10;
+        return nickname.matches("^[a-zA-Z0-9_]+$");
     }
 
     public void disableComponentAfterJoinServer() {
