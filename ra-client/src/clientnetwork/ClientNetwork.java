@@ -136,12 +136,15 @@ public class ClientNetwork {
             switch (cReceiveLogin.getEventFlag()) {
                 case ClientNetworkConfig.LOGIN_FLAG.NO_MORE_SLOTS:
                     // update UI
+                    System.out.println(getClass().getSimpleName() + ": NO_MORE_SLOTS");
                     break;
                 case ClientNetworkConfig.LOGIN_FLAG.USERNAME_TAKEN:
                     // update UI
+                    System.out.println(getClass().getSimpleName() + ": USERNAME_TAKEN");
                     break;
                 case ClientNetworkConfig.LOGIN_FLAG.ERROR:
                     // update UI
+                    System.out.println(getClass().getSimpleName() + ": ERROR");
                     break;
                 case ClientNetworkConfig.LOGIN_FLAG.SUCCESS:
                     // confirm this racer, record his opponent array
@@ -151,6 +154,7 @@ public class ClientNetwork {
 
                     // update UI
                     ClientGUI.getInstance().disableComponentAfterJoinServer();
+                    System.out.println(getClass().getSimpleName() + ": SUCCESS");
                     break;
                 default:
                     break;
