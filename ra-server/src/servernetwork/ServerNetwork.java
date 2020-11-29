@@ -30,8 +30,8 @@ public class ServerNetwork {
     }
 
     public ServerNetwork() {
-        serverNetworkThread = null;
-        networkPool = Executors.newFixedThreadPool(1);
+        this.serverNetworkThread = null;
+        this.networkPool = Executors.newFixedThreadPool(1);
         serverNetwork = this;
     }
 

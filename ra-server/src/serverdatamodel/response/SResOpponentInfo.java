@@ -5,15 +5,14 @@ import serverobject.ServerGameMaster;
 import serverobject.ServerRacerObject;
 
 import java.nio.ByteBuffer;
-import java.util.Map;
 
-public class SResNewRacerInfo extends ServerDataModel {
+public class SResOpponentInfo extends ServerDataModel {
     private int cmd;
     private int eventFlag;
     private String newRacerUsername;
     private ServerGameMaster sGameMaster;
 
-    public SResNewRacerInfo(int _cmd, int _eventFlag, String _newRacerUsername, ServerGameMaster _sGameMaster) {
+    public SResOpponentInfo(int _cmd, int _eventFlag, String _newRacerUsername, ServerGameMaster _sGameMaster) {
         this.cmd = _cmd;
         this.eventFlag = _eventFlag;
         this.newRacerUsername = _newRacerUsername;

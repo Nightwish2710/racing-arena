@@ -9,13 +9,15 @@ import clientobject.ClientOpponent;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 
-public class CReceiveLogin extends ClientDataModel {
+public class CRecLogin extends ClientDataModel {
     private int eventFlag;
     private int racerVictory;
     private int numOfRacers;
+    private int raceLength;
+    private int currentNumOfRacers;
     private HashMap<String, ClientOpponent> cOpponents;
 
-    public CReceiveLogin() {
+    public CRecLogin() {
         this.eventFlag = -1;
         this.racerVictory = -1;
         this.cOpponents = null;
@@ -31,11 +33,13 @@ public class CReceiveLogin extends ClientDataModel {
         if (this.eventFlag == ClientNetworkConfig.LOGIN_FLAG.SUCCESS) {
             this.racerVictory = byteBuffer.getInt();
             this.numOfRacers = byteBuffer.getInt();
+            this.raceLength = byteBuffer.getInt();
+            this.currentNumOfRacers = byteBuffer.getInt();
 
-            System.out.println("RECEIVE no Of racers: " + this.numOfRacers);
+            System.out.println("RECEIVE no Of racers: " + this.currentNumOfRacers);
 
             cOpponents = new HashMap<>();
-            for (int i = 0; i < this.numOfRacers - 1; ++i) { // exclude this racer
+            for (int i = 0; i < this.currentNumOfRacers - 1; ++i) { // exclude this racer
                 System.out.println("LOOP: " + i);
 
                 int lUsername = byteBuffer.getInt();
@@ -72,8 +76,24 @@ public class CReceiveLogin extends ClientDataModel {
     public int getNumOfRacers() {
         return numOfRacers;
     }
+
     public void setNumOfRacers(int numOfRacers) {
         this.numOfRacers = numOfRacers;
+    }
+
+    public int getRaceLength() {
+        return raceLength;
+    }
+
+    public void setRaceLength(int raceLength) {
+        this.raceLength = raceLength;
+    }
+
+    public int getCurrentNumOfRacers() {
+        return currentNumOfRacers;
+    }
+    public void setCurrentNumOfRacers(int currentNumOfRacers) {
+        this.currentNumOfRacers = currentNumOfRacers;
     }
 
     public HashMap<String, ClientOpponent> getcOpponents() {

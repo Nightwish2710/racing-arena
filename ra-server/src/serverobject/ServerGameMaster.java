@@ -1,5 +1,7 @@
 package serverobject;
 
+import serverGUI.ServerGUI;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,6 +39,9 @@ public class ServerGameMaster {
 
     public void addSRacer (ServerRacerObject sRacer) {
         sRacers.put(sRacer.getUsername(), sRacer);
+
+        // Show this new racer on UI (increase number of joining racers and add to statistics table)
+        ServerGUI.getInstance().updateNumOfPplJoiningValue(this.getCurrentNumOfRacers());
     }
 
     public HashMap<String, ServerRacerObject> getsRacers() {

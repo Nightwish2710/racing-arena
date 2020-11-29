@@ -28,8 +28,9 @@ public class SResLoginSuccess extends ServerDataModel {
         int capacity = Integer.BYTES // cmd
                 + Integer.BYTES // storing eventFlag
                 + Integer.BYTES // storing racerVictory
-
                 + Integer.BYTES // storing numOfRacers
+                + Integer.BYTES // storing racerLength
+                + Integer.BYTES // storing currentNumOfRacers
                 + this.sGameMaster.getSizeInBytes(true, this.cUsername); // storing racers array
 
         ByteBuffer byteBuffer = ByteBuffer.allocate(capacity);
@@ -40,6 +41,8 @@ public class SResLoginSuccess extends ServerDataModel {
         // Then put data sequentially
         byteBuffer.putInt(this.eventFlag);
         byteBuffer.putInt(this.racerVictory);
+        byteBuffer.putInt(this.sGameMaster.getNumOfRacers());
+        byteBuffer.putInt(this.sGameMaster.getRaceLength());
         byteBuffer.putInt(this.sGameMaster.getCurrentNumOfRacers());
 
         for (Map.Entry<String, ServerRacerObject> entry : this.sGameMaster.getsRacers().entrySet()) {

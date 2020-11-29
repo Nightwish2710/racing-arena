@@ -60,7 +60,7 @@ public class ClientGUI extends JFrame {
     private JLabel racerStatusLabel;
     private JPanel racerStatusPanel;
     private List<Component> racerStatusList;
-    private int racePanelFlag = 0;
+    private int racePanelFlag = -1;
 
     private JScrollPane serverResponsePane;
     private JTextArea consoleTextArea;
@@ -164,8 +164,8 @@ public class ClientGUI extends JFrame {
         setServerResponsePaneUI();
 
         // create racer status bar
-        createUIComponents();
-//        createRacerStatusBar();
+//        racePanelFlag = 0;
+//        createUIComponents();
     }
 
     private void setSeparatorUI() {
@@ -314,7 +314,7 @@ public class ClientGUI extends JFrame {
             int index = i;
             colorButtons.get(i).addActionListener(e -> {
                 colorIndex = index;
-                changeThemeBool = true;
+                racePanelFlag = CHANGE_THEME_FLAG;
                 setChangeClientGUI();
                 createUIComponents();
             });
@@ -363,9 +363,7 @@ public class ClientGUI extends JFrame {
         });
 
         // click send answer button
-        sendAnswerButton.addActionListener(e -> {
-            sendAnswerButton.setEnabled(false);
-        });
+        sendAnswerButton.addActionListener(e -> { sendAnswerButton.setEnabled(false); });
     }
 
     private CompoundBorder createProgressBarBorder(int rightThickness) {
@@ -437,38 +435,42 @@ public class ClientGUI extends JFrame {
     // create a line to separate between current racer and other racers
     private void createSeparatorBetweenYouAndOtherRacers(GridBagLayout gblayout, GridBagConstraints gbconstraints) {
         JSeparator separator4 = new JSeparator();
-        separator4.setBackground(ClientGUIConfig.BORDER_COLOR);
-        separator4.setForeground(ClientGUIConfig.BORDER_COLOR);
-        separator4.setBorder(BorderFactory.createMatteBorder(3, 0, 0, 0, ClientGUIConfig.BORDER_COLOR));
+        separator4.setBorder(BorderFactory.createMatteBorder(3, 0, 0, 0, ClientGUIConfig.BACKGROUND_COLOR));
+        separator4.setAlignmentY(Component.TOP_ALIGNMENT);
 
         gbconstraints.gridwidth = 2; // separator will go across 2 cells
         gbconstraints.ipadx = ClientGUIConfig.RACER_STAT_PANEL_WIDTH; // padding width
-        gbconstraints.ipady = 2; // padding height
+        gbconstraints.ipady = 1; // padding height
 
         addComponent(separator4, racerStatusPanel, gblayout, gbconstraints, 0, 1);
     }
 
     // dont't change the function name
     public void createUIComponents() {
+        System.out.println("Race pane flag: " + racePanelFlag);
         switch (racePanelFlag) {
             case CREATE_FLAG: // create a grid bag layout to dynamically add racer progress bar
+                System.out.println("Create race status pane");
                 createRacerStatusPanelUI();
                 racePanelFlag = -1;
                 break;
             case CHANGE_THEME_FLAG: // change racers' progress bar theme
+                System.out.println("Change color");
                 changeTheme();
                 racePanelFlag = -1;
                 break;
             case UPDATE_POINT_FLAG: // update the progress bar to show how far each racer has come
+                System.out.println("Update point");
                 updatePoint();
                 racePanelFlag = -1;
                 break;
             case INIT_OPPONENT_BAR_FLAG: // init opponents' bar when receive number of ppl joinning
+                System.out.println("Show opponent's bar");
                 initOpponentBarWhenReceiveNumOfPplJoinning();
                 racePanelFlag = -1;
                 break;
-            case -1:
-                return;
+            default:
+                break;
         }
     }
 
@@ -480,10 +482,12 @@ public class ClientGUI extends JFrame {
         gbconstraints.fill = GridBagConstraints.HORIZONTAL;
         gbconstraints.insets = new Insets(0, 2, 0, 2);
         gbconstraints.weightx = 1;
+        gbconstraints.weighty = 1;
 
         racerStatusPanel = new JPanel();
         racerStatusPanel.setBackground(ClientGUIConfig.BACKGROUND_COLOR);
         racerStatusPanel.setPreferredSize(new Dimension(250, -1));
+        racerStatusPanel.setAlignmentY(Component.TOP_ALIGNMENT);
         racerStatusPanel.setLayout(gblayout);
 
         createYouProgressBar(gblayout, gbconstraints);
@@ -491,7 +495,8 @@ public class ClientGUI extends JFrame {
 
         // reset parameter to correctly add labels and progress bars
         gbconstraints.gridwidth = 1;
-        gbconstraints.ipady = -1;
+        gbconstraints.ipadx = 0;
+        gbconstraints.ipady = 2;
 
         for (int i = 0; i < ClientGameConfig.MAX_NUM_OF_RACERS - 1; ++i) {
             JLabel tmpLabel = new JLabel();
@@ -511,7 +516,7 @@ public class ClientGUI extends JFrame {
 
     private void changeTheme() {
         // change current racer's progress bar
-        racerStatusList.get(1).setForeground(ClientGUIConfig.COLOR_LIST.get(colorIndex));
+        ((JProgressBar)racerStatusList.get(1)).setForeground(ClientGUIConfig.COLOR_LIST.get(colorIndex));
 
         // change other racers' progress bar
         for (int i = 2; i < ClientGameMaster.getInstance().getNumOfRacers() + 1; ++i) {
@@ -527,6 +532,8 @@ public class ClientGUI extends JFrame {
     }
 
     private void initOpponentBarWhenReceiveNumOfPplJoinning() {
+        ((JSeparator)racerStatusList.get(2)).setBorder(BorderFactory.createMatteBorder(4, 0, 0, 0, ClientGUIConfig.BORDER_COLOR));
+
         for (int i = 2; i < ClientGameMaster.getInstance().getNumOfRacers() + 1; ++i) {
             racerStatusList.get(i*2-1).setVisible(true); // show opponent name
 
@@ -545,9 +552,7 @@ public class ClientGUI extends JFrame {
         retryButton.setForeground(ClientGUIConfig.BACKGROUND_COLOR);
         retryButton.setBorder(new LineBorder(ClientGUIConfig.COLOR_LIST.get(9)));
 
-        retryButton.addActionListener(e -> {
-            ClientNetwork.getInstance().connect();
-        });
+        retryButton.addActionListener(e -> { ClientNetwork.getInstance().connect(); });
 
         cancelButton = new JButton();
 
