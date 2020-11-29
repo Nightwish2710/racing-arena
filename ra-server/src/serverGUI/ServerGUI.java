@@ -4,18 +4,17 @@ import servernetwork.ServerNetwork;
 import serverobject.ServerGameConfig;
 import serverobject.ServerGameMaster;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import javax.swing.event.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.*;
 import javax.swing.border.*;
-import java.awt.*;
-import java.awt.event.ActionListener;
+
+import javax.imageio.ImageIO;
 
 import java.io.File;
 import java.io.IOException;
+import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.*;
@@ -31,6 +30,8 @@ public class ServerGUI extends JFrame {
     private JLabel raceLengthLabel;
     private JSpinner raceLengthSpinner;
 
+    private JLabel connectionNoti;
+
     private JLabel openConnectionWarning;
     private JButton openConnectionButton;
     private JButton startGameButton;
@@ -40,7 +41,7 @@ public class ServerGUI extends JFrame {
     private JLabel numOfPplJoining;
 
     private JSeparator separator1, separator2;
-    private List<JSeparator> hSep = Arrays.asList(separator1, separator2);
+    final private List<JSeparator> hSep = Arrays.asList(separator1, separator2);
 
     public JTable racerStatTable;
     private JLabel racerStatLabel;
@@ -55,7 +56,7 @@ public class ServerGUI extends JFrame {
     private JTextArea consoleTextArea;
 
     private JSeparator verticalSeparator1, verticalSeparator2, verticalSeparator3;
-    private List<JSeparator> vSep = Arrays.asList(verticalSeparator1, verticalSeparator2, verticalSeparator3);
+    final private List<JSeparator> vSep = Arrays.asList(verticalSeparator1, verticalSeparator2, verticalSeparator3);
 
     // Singleton
     private static ServerGUI serverGUI = null;
@@ -94,6 +95,8 @@ public class ServerGUI extends JFrame {
         raceLengthLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         numOfPplJoiningLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
+        connectionNoti.setFont(new Font("Arial", Font.ITALIC, 10));
+
         gameConfigLabel.setFont(new Font("Britannic Bold", Font.PLAIN, 16));
         gameControlLabel.setFont(new Font("Britannic Bold", Font.PLAIN, 16));
 
@@ -107,12 +110,7 @@ public class ServerGUI extends JFrame {
         setSpinnerUI();
 
         // set button
-        openConnectionButton.setBackground(ServerGUIConfig.LIGHT_GREEN);
-        openConnectionButton.setBorder(new LineBorder(ServerGUIConfig.LIGHT_GREEN));
-        openConnectionButton.addActionListener(actionOpenConnection);
-
-        startGameButton.setBackground(ServerGUIConfig.LIGHT_GREEN);
-        startGameButton.setBorder(new LineBorder(ServerGUIConfig.LIGHT_GREEN));
+        setButtonUI();
 
         // set separator
         setSeparatorUI();
@@ -140,12 +138,7 @@ public class ServerGUI extends JFrame {
         });
 
         // update race length in server
-        raceLengthSpinner.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                ServerGameMaster.getInstance().setRaceLength((int) raceLengthSpinner.getValue());
-            }
-        });
+        raceLengthSpinner.addChangeListener(e -> ServerGameMaster.getInstance().setRaceLength((int) raceLengthSpinner.getValue()));
 
         JFormattedTextField numOfRacersTextField = ((JSpinner.DefaultEditor)numOfRacersSpinner.getEditor()).getTextField();
         numOfRacersTextField.setEditable(false);
@@ -154,6 +147,22 @@ public class ServerGUI extends JFrame {
         JFormattedTextField raceLengthTextField = ((JSpinner.DefaultEditor)raceLengthSpinner.getEditor()).getTextField();
         raceLengthTextField.setEditable(false);
         raceLengthTextField.setHorizontalAlignment(SwingConstants.CENTER);
+    }
+
+    private void setButtonUI() {
+        openConnectionButton.setBackground(ServerGUIConfig.LIGHT_GREEN);
+        openConnectionButton.setBorder(new LineBorder(ServerGUIConfig.LIGHT_GREEN));
+        openConnectionButton.addActionListener(e -> {
+            openConnectionButton.setEnabled(false); // can no longer click the button
+            ServerNetwork.getInstance().openServerSocket(); // open server socket and connect to database
+            connectionNoti.setText("Connection Open "); // show text to notify that server has opened
+            disableComponentAfterOpenConnection(); // disable changeability of configuration
+        });
+
+
+        startGameButton.setBackground(ServerGUIConfig.LIGHT_GREEN);
+        startGameButton.setBorder(new LineBorder(ServerGUIConfig.LIGHT_GREEN));
+        startGameButton.setEnabled(false);
     }
 
     private void setSeparatorUI() {
@@ -207,7 +216,7 @@ public class ServerGUI extends JFrame {
         statTableScrollPane.getHorizontalScrollBar().setBorder(null);
         statTableScrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
-        int height = 0, width = -1;
+        int height, width = -1;
         height = (ServerGameMaster.getInstance().getNumOfRacers() + 1) * ServerGUIConfig.ROW_HEIGHT;
         for (int i = 0; i < ServerGUIConfig.PREFERRED_WIDTH.length; ++i) { width += ServerGUIConfig.PREFERRED_WIDTH[i]; }
         statTableScrollPane.setPreferredSize(new Dimension(width, height));
@@ -307,20 +316,24 @@ public class ServerGUI extends JFrame {
         openConnectionButton.setEnabled(false);
     }
 
+    private void updateNumOfPplJoiningValue(int i) {
+        numOfPplJoining.setText(Integer.toString(i));
+
+        // if number of ppl join equal number of racers config then enable start game button
+        if (numOfPplJoining.getText().equals(numOfRacersSpinner.getValue().toString())) {
+            startGameButton.setEnabled(true);
+        }
+    }
+
     public void setConsoleTextArea(String str) {
         if (EventQueue.isDispatchThread()) {
             consoleTextArea.setText(consoleTextArea.getText() + str);
         }
         else {
-            EventQueue.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    // nothing to add yet
-                }
+            EventQueue.invokeLater(() -> {
+                // nothing to add yet
             });
 
         }
     }
-
-    private ActionListener actionOpenConnection = e -> ServerNetwork.getInstance().openServerSocket();
 }
