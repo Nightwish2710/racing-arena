@@ -31,5 +31,9 @@ public class ClientGameMaster {
     public void setcOpponents(HashMap<String, ClientOpponent> cOpponents) { this.cOpponents = cOpponents; }
 
     public int getNumOfRacers() { return this.numOfRacers; }
-    public void setNumOfRacers(int numOfRacers) { this.numOfRacers = numOfRacers; }
+    public void setNumOfRacers(int numOfRacers) {
+        this.numOfRacers = numOfRacers;
+
+        // MainGUI.updateNumOfRacers (this.numOfNumbers);
+    }
 }

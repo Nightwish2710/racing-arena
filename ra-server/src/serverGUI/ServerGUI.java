@@ -160,7 +160,6 @@ public class ServerGUI extends JFrame {
             setTableUI();
         });
 
-
         startGameButton.setBackground(ServerGUIConfig.LIGHT_GREEN);
         startGameButton.setBorder(new LineBorder(ServerGUIConfig.LIGHT_GREEN));
         startGameButton.setEnabled(false);

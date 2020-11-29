@@ -1,6 +1,7 @@
 package clientnetwork;
 
 import clientGUI.ClientGUI;
+import static clientGUI.ClientGUIConfig.ACTION_ON_RACER_STATUS_PANEL_FLAG.*;
 
 import clientdatamodel.ClientDataModel;
 import clientdatamodel.receive.CReceiveLogin;
@@ -172,6 +173,9 @@ public class ClientNetwork {
                     // update UI
                     ClientGUI.getInstance().disableComponentAfterJoinServer();
                     System.out.println(getClass().getSimpleName() + ": SUCCESS");
+
+                    ClientGUI.getInstance().setRacerStatusPanelFlag(INIT_OPPONENT_BAR_FLAG);
+                    ClientGUI.getInstance().createUIComponents();
 
                     for (Map.Entry<String, ClientOpponent> opps : cReceiveLogin.getcOpponents().entrySet()) {
                         System.out.println(getClass().getSimpleName() + " got: " + opps.getKey() + " - " + opps.getValue().getStatusFlag());

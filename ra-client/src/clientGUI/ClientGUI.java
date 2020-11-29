@@ -1,6 +1,7 @@
 package clientGUI;
 
 import clientdatamodel.send.CSendLogin;
+import clientobject.ClientGameConfig;
 import clientobject.ClientGameMaster;
 
 import clientnetwork.ClientNetwork;
@@ -16,13 +17,14 @@ import java.io.*;
 import java.util.*;
 import java.util.List;
 
+import static clientGUI.ClientGUIConfig.ACTION_ON_RACER_STATUS_PANEL_FLAG.*;
 import static clientGUI.ClientGUIConfig.ColorButtonConfig.*;
 
 public class ClientGUI extends JFrame {
     private static String userNickname, userPassword;
 
     private int colorIndex = 0;
-    private boolean create = true, changeTheme = false, updatePoint = false;
+    private boolean create = true, changeThemeBool = false, updatePointBool = false, changeOpponentNameBool = false;
 
     private JPanel ClientPanel;
 
@@ -57,6 +59,8 @@ public class ClientGUI extends JFrame {
 
     private JLabel racerStatusLabel;
     private JPanel racerStatusPanel;
+    private List<Component> racerStatusList;
+    private int racePanelFlag = 0;
 
     private JScrollPane serverResponsePane;
     private JTextArea consoleTextArea;
@@ -161,7 +165,7 @@ public class ClientGUI extends JFrame {
 
         // create racer status bar
         createUIComponents();
-        createRacerStatusBar();
+//        createRacerStatusBar();
     }
 
     private void setSeparatorUI() {
@@ -310,7 +314,7 @@ public class ClientGUI extends JFrame {
             int index = i;
             colorButtons.get(i).addActionListener(e -> {
                 colorIndex = index;
-                changeTheme = true;
+                changeThemeBool = true;
                 setChangeClientGUI();
                 createUIComponents();
             });
@@ -364,20 +368,24 @@ public class ClientGUI extends JFrame {
         });
     }
 
-    // create progress bar for every race with the same template
-    private JProgressBar createRacerStatusBar() {
-        Color ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(colorIndex);
-
-        Border line = BorderFactory.createMatteBorder(0, 0, 0, 3, ClientGUIConfig.BORDER_COLOR);
+    private CompoundBorder createProgressBarBorder(int rightThickness) {
+        Border line = BorderFactory.createMatteBorder(0, 0, 0, rightThickness, ClientGUIConfig.BORDER_COLOR);
         Border empty = new EmptyBorder(2, 2, 2, 2);
         CompoundBorder border = new CompoundBorder(line, empty);
 
+        return border;
+    }
+
+    // create progress bar for every race with the same template
+    private JProgressBar createRacerStatusBar(int rightThickness) {
         JProgressBar tmpBar = new JProgressBar();
 
-        tmpBar.setStringPainted(true);
-        tmpBar.setPreferredSize(new Dimension(ClientGUIConfig.RACER_STAT_PANEL_WIDTH, -1));
-        tmpBar.setBorder(border);
-        tmpBar.setForeground(ACCENT_COLOR);
+        tmpBar.setStringPainted(false);
+        tmpBar.setVisible(true);
+
+        tmpBar.setMinimumSize(new Dimension(40, 25));
+        tmpBar.setBorder(createProgressBarBorder(rightThickness));
+        tmpBar.setForeground(ClientGUIConfig.BACKGROUND_COLOR);
         tmpBar.setBackground(ClientGUIConfig.BACKGROUND_COLOR);
         tmpBar.setUI(new BasicProgressBarUI() {
             protected Color getSelectionBackground() {
@@ -409,15 +417,20 @@ public class ClientGUI extends JFrame {
 
     // create current racer progress bar first
     private void createYouProgressBar(GridBagLayout gblayout, GridBagConstraints gbconstraints) {
+        Color ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(colorIndex);
+
         gbconstraints.fill = GridBagConstraints.HORIZONTAL;
 
         JLabel tmpLabel = new JLabel();
+        tmpLabel.setMinimumSize(new Dimension(ClientGUIConfig.RACER_STAT_PANEL_LABEL_WIDTH, 25));
         tmpLabel.setText("<HTML>&#x2666; YOU &#x2666;</HTML>");
         tmpLabel.setFont(new Font("Calibri", Font.BOLD, 14));
         tmpLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         addComponent(tmpLabel, racerStatusPanel, gblayout, gbconstraints, 0, 0); // label on the left
 
-        JProgressBar tmpBar = createRacerStatusBar();
+        JProgressBar tmpBar = createRacerStatusBar(3);
+        tmpBar.setStringPainted(true);
+        tmpBar.setForeground(ACCENT_COLOR);
         addComponent(tmpBar, racerStatusPanel, gblayout, gbconstraints, 1, 0); // progress bar on the right
     }
 
@@ -436,72 +449,90 @@ public class ClientGUI extends JFrame {
     }
 
     // dont't change the function name
-    private void createUIComponents() {
-        if (create) { // create a grid bag layout to dynamically add racer progress bar
-
-            GridBagLayout gblayout = new GridBagLayout();
-            GridBagConstraints gbconstraints = new GridBagConstraints();
-            gbconstraints.fill = GridBagConstraints.HORIZONTAL;
-            gbconstraints.insets = new Insets(0, 2, 0, 2);
-            gbconstraints.weightx = 1;
-
-            racerStatusPanel = new JPanel();
-            racerStatusPanel.setBackground(ClientGUIConfig.BACKGROUND_COLOR);
-            racerStatusPanel.setPreferredSize(new Dimension(250, -1));
-            racerStatusPanel.setLayout(gblayout);
-
-            List<String> tmpStr = Arrays.asList("derer", "34t3vr", "sgg_grw", "evs", "283jjsa", "sdvsd", "34fza", "askj", "_sjoi", "ushdjufchs");
-
-            createYouProgressBar(gblayout, gbconstraints);
-            createSeparatorBetweenYouAndOtherRacers(gblayout, gbconstraints);
-
-            // reset parameter to correctly add labels and progress bars
-            gbconstraints.gridwidth = 1;
-            gbconstraints.ipady = -1;
-
-            for (int i = 0; i < 10; ++i) {
-                // 1st column width
-                gbconstraints.ipadx = ClientGUIConfig.RACER_STAT_PANEL_LABEL_PAD;
-
-                JLabel tmpLabel = new JLabel();
-                tmpLabel.setText(tmpStr.get(i));
-                tmpLabel.setFont(new Font("Arial", Font.PLAIN, 9));
-                tmpLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-                addComponent(tmpLabel, racerStatusPanel, gblayout, gbconstraints, 0, i+2); // label on the left
-
-                // 2nd column width
-                gbconstraints.ipadx = ClientGUIConfig.RACER_STAT_PANEL_WIDTH - ClientGUIConfig.RACER_STAT_PANEL_LABEL_PAD;
-
-                JProgressBar tmpBar = createRacerStatusBar();
-                addComponent(tmpBar, racerStatusPanel, gblayout, gbconstraints, 1, i+2); // progress bar on the right
-            }
-
-            create = false;
+    public void createUIComponents() {
+        switch (racePanelFlag) {
+            case CREATE_FLAG: // create a grid bag layout to dynamically add racer progress bar
+                createRacerStatusPanelUI();
+                racePanelFlag = -1;
+                break;
+            case CHANGE_THEME_FLAG: // change racers' progress bar theme
+                changeTheme();
+                racePanelFlag = -1;
+                break;
+            case UPDATE_POINT_FLAG: // update the progress bar to show how far each racer has come
+                updatePoint();
+                racePanelFlag = -1;
+                break;
+            case INIT_OPPONENT_BAR_FLAG: // init opponents' bar when receive number of ppl joinning
+                initOpponentBarWhenReceiveNumOfPplJoinning();
+                racePanelFlag = -1;
+                break;
+            case -1:
+                return;
         }
-        else if (changeTheme) { // change racers' progress bar theme
+    }
 
-            List<Component> racerStatusList = Arrays.asList(racerStatusPanel.getComponents());
+    public void setRacerStatusPanelFlag(int flag) { this.racePanelFlag = flag; }
 
-            // change current racer's progress bar
-            racerStatusList.get(1).setForeground(ClientGUIConfig.COLOR_LIST.get(colorIndex));
+    private void createRacerStatusPanelUI() {
+        GridBagLayout gblayout = new GridBagLayout();
+        GridBagConstraints gbconstraints = new GridBagConstraints();
+        gbconstraints.fill = GridBagConstraints.HORIZONTAL;
+        gbconstraints.insets = new Insets(0, 2, 0, 2);
+        gbconstraints.weightx = 1;
 
-            // change other racers' progress bar
-            for (int i = 2; i < (racerStatusList.size()+1) / 2; ++i) {
-                racerStatusList.get(i*2).setForeground(ClientGUIConfig.COLOR_LIST.get(colorIndex));
-            }
+        racerStatusPanel = new JPanel();
+        racerStatusPanel.setBackground(ClientGUIConfig.BACKGROUND_COLOR);
+        racerStatusPanel.setPreferredSize(new Dimension(250, -1));
+        racerStatusPanel.setLayout(gblayout);
 
-            changeTheme = false;
+        createYouProgressBar(gblayout, gbconstraints);
+        createSeparatorBetweenYouAndOtherRacers(gblayout, gbconstraints);
+
+        // reset parameter to correctly add labels and progress bars
+        gbconstraints.gridwidth = 1;
+        gbconstraints.ipady = -1;
+
+        for (int i = 0; i < ClientGameConfig.MAX_NUM_OF_RACERS - 1; ++i) {
+            JLabel tmpLabel = new JLabel();
+            tmpLabel.setMinimumSize(new Dimension(ClientGUIConfig.RACER_STAT_PANEL_LABEL_WIDTH, 25));
+            tmpLabel.setText("Opponent_" + Integer.toString(i+1));
+            tmpLabel.setFont(new Font("Arial", Font.PLAIN, 9));
+            tmpLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+            tmpLabel.setVisible(false);
+            addComponent(tmpLabel, racerStatusPanel, gblayout, gbconstraints, 0, i+2); // label on the left
+
+            JProgressBar tmpBar = createRacerStatusBar(0);
+            addComponent(tmpBar, racerStatusPanel, gblayout, gbconstraints, 1, i+2); // progress bar on the right
         }
-        else if (updatePoint) { // update the progress bar to show how far each racer has come
 
-            List<Component> racerStatusList = Arrays.asList(racerStatusPanel.getComponents());
+        racerStatusList = Arrays.asList(racerStatusPanel.getComponents());
+    }
 
-            for (int i = 0; i < racerStatusList.size(); ++i) {
-                ((JProgressBar)racerStatusList.get(i)).setValue(8);
-                ((JProgressBar)racerStatusList.get(i)).setString(Integer.toString(8));
-            }
+    private void changeTheme() {
+        // change current racer's progress bar
+        racerStatusList.get(1).setForeground(ClientGUIConfig.COLOR_LIST.get(colorIndex));
 
-            updatePoint = false;
+        // change other racers' progress bar
+        for (int i = 2; i < ClientGameMaster.getInstance().getNumOfRacers() + 1; ++i) {
+            racerStatusList.get(i*2).setForeground(ClientGUIConfig.COLOR_LIST.get(colorIndex));
+        }
+    }
+
+    private void updatePoint() {
+        for (int i = 0; i < racerStatusList.size(); ++i) {
+            ((JProgressBar)racerStatusList.get(i)).setValue(8);
+            ((JProgressBar)racerStatusList.get(i)).setString(Integer.toString(8));
+        }
+    }
+
+    private void initOpponentBarWhenReceiveNumOfPplJoinning() {
+        for (int i = 2; i < ClientGameMaster.getInstance().getNumOfRacers() + 1; ++i) {
+            racerStatusList.get(i*2-1).setVisible(true); // show opponent name
+
+            racerStatusList.get(i*2).setForeground(ClientGUIConfig.COLOR_LIST.get(colorIndex)); // show opponent bar
+            ((JProgressBar)racerStatusList.get(i*2)).setStringPainted(true); // show opponent bar value
+            ((JProgressBar)racerStatusList.get(i*2)).setBorder(createProgressBarBorder(3)); // show finnish line
         }
     }
 
@@ -526,14 +557,7 @@ public class ClientGUI extends JFrame {
         cancelButton.setForeground(ClientGUIConfig.BACKGROUND_COLOR);
         cancelButton.setBorder(new LineBorder(ClientGUIConfig.COLOR_LIST.get(0)));
 
-        cancelButton.addActionListener(e -> {
-            ClientGUI.getInstance().addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosing(WindowEvent e) {
-                    System.exit(-1);
-                }
-            });
-        });
+        cancelButton.addActionListener(e -> { System.exit(-1); });
 
         errorMessage = new JLabel("<HTML><center>NO OPEN CONNECTION FOR CLIENT</center><HTML>");
         errorMessage.setHorizontalAlignment(SwingConstants.CENTER);
@@ -560,16 +584,6 @@ public class ClientGUI extends JFrame {
                 System.exit(-1);
             }
         });
-
-        //        noOpenConnectionPane.addPropertyChangeListener(new PropertyChangeListener() {
-//            public void propertyChange(PropertyChangeEvent e) {
-//                String prop = e.getPropertyName();
-//                if (dialog.isVisible() && (e.getSource() == noOpenConnectionPane) && (prop.equals(JOptionPane.VALUE_PROPERTY))) {
-//                    // place to check something before closing dialog
-//                    dialog.setVisible(false);
-//                }
-//            }
-//        });
 
         noOpenConnectionDialog.pack();
         noOpenConnectionDialog.setLocationRelativeTo(null);
