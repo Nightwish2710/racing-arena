@@ -157,6 +157,7 @@ public class ServerGUI extends JFrame {
             ServerNetwork.getInstance().openServerSocket(); // open server socket and connect to database
             connectionNoti.setText("Connection Open "); // show text to notify that server has opened
             disableComponentAfterOpenConnection(); // disable changeability of configuration
+            setTableUI();
         });
 
 
@@ -231,17 +232,20 @@ public class ServerGUI extends JFrame {
         // create table
         DefaultTableModel dtm = new DefaultTableModel(null, ServerGUIConfig.TABLE_COLS);
         dtm.setColumnIdentifiers(ServerGUIConfig.TABLE_COLS);
+
         racerStatTable = new JTable(dtm) {
             // return column class
             @Override
             public Class getColumnClass(int column) {
                 return (column == 0) ? Icon.class : Object.class;
             }
+
             // turn off cell modification
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
+
             // interchange background color for each row
             @Override
             public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {

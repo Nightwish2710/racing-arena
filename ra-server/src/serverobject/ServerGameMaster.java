@@ -23,9 +23,7 @@ public class ServerGameMaster {
         serverGameMaster = this;
     }
 
-    public int getNumOfRacers() {
-        return this.numOfRacers;
-    }
+    public int getNumOfRacers() { return this.numOfRacers; }
     public void setNumOfRacers(int numOfRacers) {
         this.numOfRacers = numOfRacers;
     }
