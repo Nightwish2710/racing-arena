@@ -45,6 +45,7 @@ public class ClientMain {
                     System.out.println(ClientMain.class.getSimpleName() + ": disconnect from server");
                 }
                 super.windowClosed(e);
+                System.exit(-1);
             }
         });
 

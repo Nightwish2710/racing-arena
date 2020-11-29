@@ -160,7 +160,6 @@ public class ServerGUI extends JFrame {
             setTableUI();
         });
 
-
         startGameButton.setBackground(ServerGUIConfig.LIGHT_GREEN);
         startGameButton.setBorder(new LineBorder(ServerGUIConfig.LIGHT_GREEN));
         startGameButton.setEnabled(false);
@@ -320,7 +319,7 @@ public class ServerGUI extends JFrame {
         openConnectionButton.setEnabled(false);
     }
 
-    private void updateNumOfPplJoiningValue(int i) {
+    public void updateNumOfPplJoiningValue(int i) {
         numOfPplJoining.setText(Integer.toString(i));
 
         // if number of ppl join equal number of racers config then enable start game button

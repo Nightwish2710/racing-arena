@@ -23,11 +23,15 @@ public class ServerCSocketThread implements Runnable{
     private DataInputStream inStream;
     private DataOutputStream outStream;
     private ServerNetwork.ServerNetworkThread parentThread;
+    private String sRacerName;
 
     public ServerCSocketThread(Socket _socketOfServer, int _cSocketID, ServerNetwork.ServerNetworkThread _parentThread) {
         this.cSocketID = _cSocketID;
         this.socketOfServer = _socketOfServer;
+        this.inStream = null;
+        this.outStream = null;
         this.parentThread = _parentThread;
+        this.sRacerName = null;
         System.out.println(this.getClass().getSimpleName() + " new connection with client# " + this.cSocketID + " at " + socketOfServer);
     }
 
@@ -61,6 +65,22 @@ public class ServerCSocketThread implements Runnable{
         }
     }
 
+    public void finalizeOnClose () throws IOException {
+        // set isOnline status of this racer to 0
+        String updateUser = "UPDATE " + ServerDBConfig.TABLE_RACER
+                + " SET " + ServerDBConfig.TABLE_RACER_isonline + " = 0 WHERE "
+                + ServerDBConfig.TABLE_RACER_username + " = '" + this.sRacerName + "'";
+        ServerDBHelper.getInstance().exec(updateUser);
+
+        // close all streams
+        inStream.close();
+        outStream.close();
+
+        // close the socket
+        socketOfServer.close();
+
+    }
+
     private void handleLogin(int cmd, byte[] bytes, DataOutputStream outStream, ServerNetwork.ServerNetworkThread parentThread) throws SQLException, IOException {
         SReqAccount sReqAccount = new SReqAccount();
         sReqAccount.unpack(bytes);
@@ -84,7 +104,6 @@ public class ServerCSocketThread implements Runnable{
                         if (uPassword.equals(sReqAccount.getPassword())) {
                             // if password match, check if duplicated login by isOnline
                             int isOnline = user.getInt(ServerDBConfig.TABLE_RACER_isonline);
-                            System.out.println(this.getClass().getSimpleName() + ": online status " + isOnline);
 
                             if (isOnline == 1) {
                                 System.out.println(this.getClass().getSimpleName() + ": duplicated login");
@@ -93,15 +112,20 @@ public class ServerCSocketThread implements Runnable{
                                 outStream.write(sResLoginError.pack());
                             }
                             else {
-                                // create existing user, set isonline, send individually (success login) and bulk (update number of racers to all)
+                                // create existing racer and add to master, set isonline, set this racer to this thread's owner,
+                                // send individually (success login) and bulk (update number of racers to all)
                                 System.out.println(this.getClass().getSimpleName() + ": exist user");
 
                                 int victory = user.getInt(ServerDBConfig.TABLE_RACER_victory);
                                 ServerRacerObject sRacer = new ServerRacerObject(sReqAccount.getUsername(), sReqAccount.getPassword(), victory);
                                 ServerGameMaster.getInstance().addSRacer(sRacer);
 
-                                String updateUser = "UPDATE " + ServerDBConfig.TABLE_RACER + " SET " + ServerDBConfig.TABLE_RACER_isonline + " = 1 WHERE " + ServerDBConfig.TABLE_RACER_username + " = '"+ sReqAccount.getUsername() + "'";
+                                String updateUser = "UPDATE " + ServerDBConfig.TABLE_RACER
+                                        + " SET " + ServerDBConfig.TABLE_RACER_isonline + " = 1 WHERE "
+                                        + ServerDBConfig.TABLE_RACER_username + " = '" + sReqAccount.getUsername() + "'";
                                 ServerDBHelper.getInstance().exec(updateUser);
+
+                                this.sRacerName = sReqAccount.getUsername();
 
                                 SResLoginSuccess sResLoginSuccess = new SResLoginSuccess(cmd, ServerNetworkConfig.LOGIN_FLAG.SUCCESS, sReqAccount.getUsername(), victory, ServerGameMaster.getInstance());
                                 outStream.write(sResLoginSuccess.pack());
@@ -120,7 +144,8 @@ public class ServerCSocketThread implements Runnable{
                     }
                 }
                 else {
-                    // if it is not, create new user, record database, send individually (success login) and bulk (update number of racers to all)
+                    // if it is not, create new racer and add to master, record database, update numberOfJoiningRacers to server, set this racer to this thread's owner,
+                    // send individually (success login) and bulk (update number of racers to all)
                     System.out.println(this.getClass().getSimpleName() + ": new user");
 
                     int victory = 0;
@@ -133,6 +158,8 @@ public class ServerCSocketThread implements Runnable{
                             + victory + ", "
                             + "1) ";
                     ServerDBHelper.getInstance().exec(insertUser);
+
+                    this.sRacerName = sReqAccount.getUsername();
 
                     SResLoginSuccess sResLoginSuccess = new SResLoginSuccess(cmd, ServerNetworkConfig.LOGIN_FLAG.SUCCESS, sReqAccount.getUsername(), victory, ServerGameMaster.getInstance());
                     outStream.write(sResLoginSuccess.pack());
