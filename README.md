@@ -8,5 +8,7 @@ CS494: Socket Programming
 **ASSETS**: https://www.iconarchive.com/show/tailwaggers-icons-by-iconka.html
 
 **CODE REFERENCE**: 
-* Popup error message: https://docs.oracle.com/javase/tutorial/uiswing/components/dialog.html
-* Bring output stream from system to JTextArea: https://stackoverflow.com/questions/13893655/java-redirecting-system-out-println-to-a-jlabel/13893719
+* Popup error message: 
+https://docs.oracle.com/javase/tutorial/uiswing/components/dialog.html
+* Bring output stream from system to JTextArea: 
+https://stackoverflow.com/questions/13893655/java-redirecting-system-out-println-to-a-jlabel/13893719
