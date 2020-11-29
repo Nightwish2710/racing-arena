@@ -14,6 +14,9 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Map;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ClientNetwork {
     private Socket clientSocket;
@@ -75,7 +78,7 @@ public class ClientNetwork {
         // turn off error pane
         ClientGUI.getInstance().turnOffNoOpenConnectionPane();
 
-        // Start receiver thread, in case we might need
+        // Start receiver thread
         receiverThread = new ClientReceiverThread(this.clientSocket, this.inStream);
         executor = new Thread(receiverThread);
         executor.start();
@@ -101,7 +104,7 @@ public class ClientNetwork {
             this.outStream.writeInt(ClientNetworkConfig.CMD.DISCONNECT);
 
             this.receiverThread.stopReceiverThread();
-            this.executor.interrupt();
+            this.executor.stop();
         } catch (IOException e) {
             e.printStackTrace();
         }
