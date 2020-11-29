@@ -61,15 +61,18 @@ public class ClientNetwork {
             System.err.println("I/O Exception in connection to " + ClientNetworkConfig.SERVER_HOST);
 
             ClientGUI.getInstance().setVisible(false);
-            ClientGUI.getInstance().noOpenConnection();
+            ClientGUI.getInstance().turnOnNoOpenConnectionPane();
 
             return;
         }
 
         // notify of successful connection
         System.out.println(this.getClass().getSimpleName() + ": notification of successful connection");
+
         // open client UI
         ClientGUI.getInstance().setVisible(true);
+        // turn off error pane
+        ClientGUI.getInstance().turnOffNoOpenConnectionPane();
 
         // Start receiver thread, in case we might need
         receiverThread = new ClientReceiverThread(inStream);
@@ -177,6 +180,7 @@ public class ClientNetwork {
                     for (Map.Entry<String, ClientOpponent> opps : cRecLogin.getcOpponents().entrySet()) {
                         System.out.println(getClass().getSimpleName() + " got: " + opps.getKey() + " - " + opps.getValue().getStatusFlag());
                     }
+
                     break;
                 default:
                     break;

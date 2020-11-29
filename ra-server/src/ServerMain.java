@@ -49,17 +49,7 @@ public class ServerMain {
 
     private static void initServerGUI() {
         serverGUI = new ServerGUI(ServerGUIConfig.GAME_NAME);
-
-        serverGUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        serverGUI.setResizable(false);
         serverGUI.pack();
-
-        try {
-            serverGUI.setIconImage(ImageIO.read(new File("assets/dog-russel-grin-icon.png")));
-        } catch (IOException e) {
-            System.err.println("Cannot set icon for Server UI");
-            e.printStackTrace();
-        }
 
         serverGUI.addWindowListener(new WindowAdapter() {
             @Override

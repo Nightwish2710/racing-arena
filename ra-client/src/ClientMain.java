@@ -4,7 +4,6 @@ import clientGUI.ClientGUIConfig;
 import clientnetwork.ClientNetwork;
 import clientobject.ClientGameMaster;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
@@ -35,59 +34,23 @@ public class ClientMain {
     }
 
     private static void initClientGUI() {
-        EventQueue.invokeLater(new Runnable() {
+        clientGUI = new ClientGUI(ClientGUIConfig.GAME_NAME);
+        clientGUI.pack();
+
+        clientGUI.addWindowListener(new WindowAdapter() {
             @Override
-            public void run() {
-                clientGUI = new ClientGUI(ClientGUIConfig.GAME_NAME);
-
-                clientGUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                clientGUI.setResizable(false);
-                clientGUI.pack();
-
-                try {
-                    clientGUI.setIconImage(ImageIO.read(new File("assets/dog-sharpei-icon.png")));
-                } catch (IOException e) {
-                    System.err.println("Cannot set icon for Client UI");
-                    e.printStackTrace();
+            public void windowClosing(WindowEvent e) {
+                if (network.isConnected()) {
+                    network.disconnect();
+                    System.out.println(ClientMain.class.getSimpleName() + ": disconnect from server");
                 }
-
-                clientGUI.addWindowListener(new WindowAdapter() {
-                    @Override
-                    public void windowClosing(WindowEvent e) {
-                        if (network.isConnected()) {
-                            network.disconnect();
-                            System.out.println(ClientMain.class.getSimpleName() + ": disconnect from server");
-                        }
-                        super.windowClosed(e);
-                    }
-                });
-
-                System.out.println("HELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLO");
-//                System.out.println("HELLO");
-//                System.out.println("HELLO");
-//                System.out.println("HELLO");
-//                System.out.println("HELLO");
-//                System.out.println("HELLO");
-//                System.out.println("HELLO");
-//                System.out.println("HELLO");
-//                System.out.println("HELLO");
-//                System.out.println("HELLO");
-//                System.out.println("HELLO");
-//                System.out.println("HELLO");
-//                System.out.println("HELLO");
-//                System.out.println("HELLO");
-//                System.out.println("HELLO");
-//                System.out.println("HELLO");
-//                System.out.println("HELLO");
-//                System.out.println("HELLO");
-//                System.out.println("HELLO");
-//                System.out.println("HELLO");
-//                System.out.println("HELLO");
-//                System.out.println("HELLO");
-
-                clientGUI.setLocationRelativeTo(null);
-//                clientGUI.setVisible(true);
+                super.windowClosed(e);
             }
         });
+
+        System.out.println("HELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLO");
+
+        clientGUI.setLocationRelativeTo(null);
+//                clientGUI.setVisible(true);
     }
 }
