@@ -10,7 +10,6 @@ import servernetwork.ServerNetwork;
 import serverobject.ServerGameMaster;
 import serverobject.ServerQuestion;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;

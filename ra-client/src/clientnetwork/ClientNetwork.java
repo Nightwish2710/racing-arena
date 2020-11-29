@@ -3,20 +3,10 @@ package clientnetwork;
 import clientGUI.ClientGUI;
 
 import clientdatamodel.ClientDataModel;
-import clientdatamodel.receive.CRecLogin;
-
-import clientdatamodel.receive.CRecOpponentInfo;
-import clientobject.ClientGameMaster;
-import clientobject.ClientOpponent;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.Map;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class ClientNetwork {
     private Socket clientSocket;
@@ -43,9 +33,7 @@ public class ClientNetwork {
         this.clientNetwork = this;
     }
 
-    public Socket getClientSocket() {
-        return clientSocket;
-    }
+    public Socket getClientSocket() { return this.clientSocket; }
 
     public void connect() {
         try {
@@ -110,5 +98,3 @@ public class ClientNetwork {
         }
     }
 }
-
-

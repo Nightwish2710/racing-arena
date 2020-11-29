@@ -1,6 +1,7 @@
 package clientnetwork;
 
 import clientGUI.ClientGUI;
+import clientGUI.ClientGUIConfig;
 import clientdatamodel.receive.CRecLogin;
 import clientdatamodel.receive.CRecOpponentInfo;
 import clientobject.ClientGameMaster;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.Map;
+
 
 public class ClientReceiverThread implements Runnable {
     private boolean isPermittedToRun;
@@ -84,15 +86,22 @@ public class ClientReceiverThread implements Runnable {
             case ClientNetworkConfig.LOGIN_FLAG.SUCCESS:
                 // confirm this racer, record his opponent array
                 ClientGameMaster.getInstance().getcRacer().setNumOfVictory(cRecLogin.getRacerVictory());
-                ClientGameMaster.getInstance().setNumOfRacers(cRecLogin.getCurrentNumOfRacers());
+                ClientGameMaster.getInstance().setNumOfRacers(cRecLogin.getNumOfRacers());
+                ClientGameMaster.getInstance().setCurentNumOfRacers(cRecLogin.getCurrentNumOfRacers());
                 ClientGameMaster.getInstance().setcOpponents(cRecLogin.getcOpponents());
 
                 // update UI
                 ClientGUI.getInstance().disableComponentAfterJoinServer();
-//                for (Map.Entry<String, ClientOpponent> opps : cRecLogin.getcOpponents().entrySet()) {
-//
-//                }
+
+                ClientGUI.getInstance().setRacerStatusPanelFlag(ClientGUIConfig.ACTION_ON_RACER_STATUS_PANEL_FLAG.INIT_OPPONENT_BAR_FLAG);
+                ClientGUI.getInstance().createUIComponents();
+
+                for (Map.Entry<String, ClientOpponent> opps : cRecLogin.getcOpponents().entrySet()) {
+                    System.out.println(getClass().getSimpleName() + " got: " + opps.getKey() + " - " + opps.getValue().getStatusFlag());
+                }
+
                 break;
+            
             default:
                 break;
         }

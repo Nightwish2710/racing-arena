@@ -17,7 +17,7 @@ public class ClientMain {
     private static JFrame clientGUI;
 
     public static void main(String[] args) {
-        System.setOut(new PrintStream(ClientConsoleOutput.getInstance()));
+//        System.setOut(new PrintStream(ClientConsoleOutput.getInstance()));
 
         initClientGUI();
         connectToServer();

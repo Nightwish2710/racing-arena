@@ -5,6 +5,7 @@ import java.util.HashMap;
 public class ClientGameMaster {
     private ClientRacer cRacer;
     private int numOfRacers;
+    private int curentNumOfRacers;
     private HashMap<String, ClientOpponent> cOpponents;
 
     // Singleton
@@ -32,4 +33,7 @@ public class ClientGameMaster {
 
     public int getNumOfRacers() { return this.numOfRacers; }
     public void setNumOfRacers(int numOfRacers) { this.numOfRacers = numOfRacers; }
+
+    public int getCurentNumOfRacers() { return this.curentNumOfRacers; }
+    public void setCurentNumOfRacers(int curentNumOfRacers) { this.curentNumOfRacers = curentNumOfRacers; }
 }
