@@ -166,6 +166,7 @@ public class ClientGUI extends JFrame {
         // create racer status bar
 //        racePanelFlag = 0;
 //        createUIComponents();
+        createRacerStatusPanelUI();
     }
 
     private void setSeparatorUI() {
@@ -403,8 +404,8 @@ public class ClientGUI extends JFrame {
 
     // add component to racer status panel
     private void addComponent(Component component, Container racerStatusPanel,
-                          GridBagLayout gblayout, GridBagConstraints gbconstraints,
-                          int gridx, int gridy) {
+                              GridBagLayout gblayout, GridBagConstraints gbconstraints,
+                              int gridx, int gridy) {
 
         gbconstraints.gridx = gridx;
         gbconstraints.gridy = gridy;
@@ -450,8 +451,8 @@ public class ClientGUI extends JFrame {
         System.out.println("Race pane flag: " + racePanelFlag);
         switch (racePanelFlag) {
             case CREATE_FLAG: // create a grid bag layout to dynamically add racer progress bar
+                racerStatusPanel = new JPanel();
                 System.out.println("Create race status pane");
-                createRacerStatusPanelUI();
                 racePanelFlag = -1;
                 break;
             case CHANGE_THEME_FLAG: // change racers' progress bar theme
@@ -484,7 +485,6 @@ public class ClientGUI extends JFrame {
         gbconstraints.weightx = 1;
         gbconstraints.weighty = 1;
 
-        racerStatusPanel = new JPanel();
         racerStatusPanel.setBackground(ClientGUIConfig.BACKGROUND_COLOR);
         racerStatusPanel.setPreferredSize(new Dimension(250, -1));
         racerStatusPanel.setAlignmentY(Component.TOP_ALIGNMENT);
