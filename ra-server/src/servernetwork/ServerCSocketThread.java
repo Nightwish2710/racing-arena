@@ -5,10 +5,9 @@ import serverdatabase.ServerDBHelper;
 
 import serverdatamodel.ServerDataModel;
 import serverdatamodel.request.SReqAccount;
-import serverdatamodel.response.SResAllRacersInfo;
 import serverdatamodel.response.SResLoginError;
 import serverdatamodel.response.SResLoginSuccess;
-import serverdatamodel.response.SResNewRacerInfo;
+import serverdatamodel.response.SResOpponentInfo;
 
 import serverobject.ServerGameMaster;
 import serverobject.ServerRacerObject;
@@ -107,8 +106,8 @@ public class ServerCSocketThread implements Runnable{
                                 SResLoginSuccess sResLoginSuccess = new SResLoginSuccess(cmd, ServerNetworkConfig.LOGIN_FLAG.SUCCESS, sReqAccount.getUsername(), victory, ServerGameMaster.getInstance());
                                 outStream.write(sResLoginSuccess.pack());
 
-                                SResNewRacerInfo sResNewRacerInfo = new SResNewRacerInfo(ServerNetworkConfig.CMD.CMD_INFO, ServerNetworkConfig.INFO_TYPE_FLAG.TYPE_NOTICE_NEW_RACER, sReqAccount.getUsername(), ServerGameMaster.getInstance());
-                                this.parentThread.signalAllClients(sResNewRacerInfo, this.cSocketID, true);
+                                SResOpponentInfo sResOpponentInfo = new SResOpponentInfo(ServerNetworkConfig.CMD.CMD_INFO, ServerNetworkConfig.INFO_TYPE_FLAG.TYPE_NOTICE_NEW_OPPONENT, sReqAccount.getUsername(), ServerGameMaster.getInstance());
+                                this.parentThread.signalAllClients(sResOpponentInfo, this.cSocketID, true);
                             }
                         }
                         else {
@@ -138,8 +137,8 @@ public class ServerCSocketThread implements Runnable{
                     SResLoginSuccess sResLoginSuccess = new SResLoginSuccess(cmd, ServerNetworkConfig.LOGIN_FLAG.SUCCESS, sReqAccount.getUsername(), victory, ServerGameMaster.getInstance());
                     outStream.write(sResLoginSuccess.pack());
 
-                    SResNewRacerInfo sResNewRacerInfo = new SResNewRacerInfo(ServerNetworkConfig.CMD.CMD_INFO, ServerNetworkConfig.INFO_TYPE_FLAG.TYPE_NOTICE_NEW_RACER, sReqAccount.getUsername(), ServerGameMaster.getInstance());
-                    this.parentThread.signalAllClients(sResNewRacerInfo, this.cSocketID, true);
+                    SResOpponentInfo sResOpponentInfo = new SResOpponentInfo(ServerNetworkConfig.CMD.CMD_INFO, ServerNetworkConfig.INFO_TYPE_FLAG.TYPE_NOTICE_NEW_OPPONENT, sReqAccount.getUsername(), ServerGameMaster.getInstance());
+                    this.parentThread.signalAllClients(sResOpponentInfo, this.cSocketID, true);
                 }
             }
         }

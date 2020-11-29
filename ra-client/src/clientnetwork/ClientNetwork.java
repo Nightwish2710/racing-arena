@@ -3,8 +3,9 @@ package clientnetwork;
 import clientGUI.ClientGUI;
 
 import clientdatamodel.ClientDataModel;
-import clientdatamodel.receive.CReceiveLogin;
+import clientdatamodel.receive.CRecLogin;
 
+import clientdatamodel.receive.CRecOpponentInfo;
 import clientobject.ClientGameMaster;
 import clientobject.ClientOpponent;
 
@@ -131,6 +132,10 @@ public class ClientNetwork {
                         case ClientNetworkConfig.CMD.CMD_LOGIN:
                             receiveLogin(bytes);
                             break;
+
+                        case ClientNetworkConfig.CMD.CMD_INFO:
+                            receiveOpponentInfo(bytes);
+                            break;
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -140,10 +145,10 @@ public class ClientNetwork {
         }
 
         private void receiveLogin(byte[] bytes) {
-            CReceiveLogin cReceiveLogin = new CReceiveLogin();
-            cReceiveLogin.unpack(bytes);
+            CRecLogin cRecLogin = new CRecLogin();
+            cRecLogin.unpack(bytes);
 
-            switch (cReceiveLogin.getEventFlag()) {
+            switch (cRecLogin.getEventFlag()) {
                 case ClientNetworkConfig.LOGIN_FLAG.NO_MORE_SLOTS:
                     // update UI
                     System.out.println(getClass().getSimpleName() + ": NO_MORE_SLOTS");
@@ -162,20 +167,42 @@ public class ClientNetwork {
                     break;
                 case ClientNetworkConfig.LOGIN_FLAG.SUCCESS:
                     // confirm this racer, record his opponent array
-                    ClientGameMaster.getInstance().getcRacer().setNumOfVictory(cReceiveLogin.getRacerVictory());
-                    ClientGameMaster.getInstance().setNumOfRacers(cReceiveLogin.getNumOfRacers());
-                    ClientGameMaster.getInstance().setcOpponents(cReceiveLogin.getcOpponents());
+                    ClientGameMaster.getInstance().getcRacer().setNumOfVictory(cRecLogin.getRacerVictory());
+                    ClientGameMaster.getInstance().setNumOfRacers(cRecLogin.getCurrentNumOfRacers());
+                    ClientGameMaster.getInstance().setcOpponents(cRecLogin.getcOpponents());
 
                     // update UI
                     ClientGUI.getInstance().disableComponentAfterJoinServer();
                     System.out.println(getClass().getSimpleName() + ": SUCCESS");
-                    for (Map.Entry<String, ClientOpponent> opps : cReceiveLogin.getcOpponents().entrySet()) {
+                    for (Map.Entry<String, ClientOpponent> opps : cRecLogin.getcOpponents().entrySet()) {
                         System.out.println(getClass().getSimpleName() + " got: " + opps.getKey() + " - " + opps.getValue().getStatusFlag());
                     }
                     break;
                 default:
                     break;
             }
+        }
+
+        private void receiveOpponentInfo(byte[] bytes) {
+            CRecOpponentInfo cRecOpponentInfo = new CRecOpponentInfo();
+            cRecOpponentInfo.unpack(bytes);
+
+            switch (cRecOpponentInfo.getEventFlag()) {
+                case ClientNetworkConfig.INFO_TYPE_FLAG.TYPE_NOTICE_NEW_OPPONENT:
+                    _ROI_newOpponentInfo(cRecOpponentInfo);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void _ROI_newOpponentInfo (CRecOpponentInfo info) {
+            // added new racer
+            System.out.println(getClass().getSimpleName() + ": new opponent info: ");
+            System.out.println(getClass().getSimpleName() + info.getOpponentUsername());
+            System.out.println(getClass().getSimpleName() + info.getOpponentPosition());
+            System.out.println(getClass().getSimpleName() + info.getOpponentStatus());
+            System.out.println(getClass().getSimpleName() + info.getCurrentNumOfRacers());
         }
     }
 }
