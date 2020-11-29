@@ -6,6 +6,7 @@ import clientobject.ClientGameMaster;
 
 import clientnetwork.ClientNetwork;
 import clientnetwork.ClientNetworkConfig;
+import clientobject.ClientOpponent;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -163,7 +164,7 @@ public class ClientGUI extends JFrame {
         // set server response scroll pane
         setServerResponsePaneUI();
 
-        // create racer status bar
+//        // create racer status bar
 //        racePanelFlag = 0;
 //        createUIComponents();
         createRacerStatusPanelUI();
@@ -477,6 +478,15 @@ public class ClientGUI extends JFrame {
 
     public void setRacerStatusPanelFlag(int flag) { this.racePanelFlag = flag; }
 
+//    public void showRacer() {
+//        SwingUtilities.invokeLater(new Runnable() {
+//            @Override
+//            public void run() {
+//                initOpponentBarWhenReceiveNumOfPplJoinning();
+//            }
+//        });
+//    }
+
     private void createRacerStatusPanelUI() {
         GridBagLayout gblayout = new GridBagLayout();
         GridBagConstraints gbconstraints = new GridBagConstraints();
@@ -531,12 +541,22 @@ public class ClientGUI extends JFrame {
         }
     }
 
-    private void initOpponentBarWhenReceiveNumOfPplJoinning() {
+    public void updateWithOpponent(int order, ClientOpponent opponent) {
+        JLabel jl = (JLabel)racerStatusList.get(order*2-1); // show opponent name
+        jl.setText(opponent.getNickname());
+
+        JProgressBar jb = (JProgressBar)(racerStatusList.get(order*2));
+        jb.setValue(opponent.getPosition());
+    }
+
+    public void initOpponentBarWhenReceiveNumOfPplJoinning() {
         ((JSeparator)racerStatusList.get(2)).setBorder(BorderFactory.createMatteBorder(4, 0, 0, 0, ClientGUIConfig.BORDER_COLOR));
 
         for (int i = 2; i < ClientGameMaster.getInstance().getNumOfRacers() + 1; ++i) {
             racerStatusList.get(i*2-1).setVisible(true); // show opponent name
 
+            JProgressBar jb = (JProgressBar)(racerStatusList.get(i*2));
+            jb.setValue(5);
             racerStatusList.get(i*2).setForeground(ClientGUIConfig.COLOR_LIST.get(colorIndex)); // show opponent bar
             ((JProgressBar)racerStatusList.get(i*2)).setStringPainted(true); // show opponent bar value
             ((JProgressBar)racerStatusList.get(i*2)).setBorder(createProgressBarBorder(3)); // show finnish line

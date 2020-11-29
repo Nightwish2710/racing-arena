@@ -1,7 +1,6 @@
 package clientnetwork;
 
 import clientGUI.ClientGUI;
-import clientGUI.ClientGUIConfig;
 import clientdatamodel.receive.CRecLogin;
 import clientdatamodel.receive.CRecOpponentInfo;
 import clientobject.ClientGameMaster;
@@ -10,8 +9,6 @@ import clientobject.ClientOpponent;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.SocketException;
-import java.util.Map;
 
 
 public class ClientReceiverThread implements Runnable {
@@ -88,18 +85,13 @@ public class ClientReceiverThread implements Runnable {
                 ClientGameMaster.getInstance().getcRacer().setNumOfVictory(cRecLogin.getRacerVictory());
                 ClientGameMaster.getInstance().setNumOfRacers(cRecLogin.getNumOfRacers());
                 ClientGameMaster.getInstance().setCurentNumOfRacers(cRecLogin.getCurrentNumOfRacers());
-                ClientGameMaster.getInstance().setcOpponents(cRecLogin.getcOpponents());
+                ClientGameMaster.getInstance().setInitCOpponents(cRecLogin.getcOpponents());
 
                 // update UI
                 ClientGUI.getInstance().disableComponentAfterJoinServer();
 
-                ClientGUI.getInstance().setRacerStatusPanelFlag(ClientGUIConfig.ACTION_ON_RACER_STATUS_PANEL_FLAG.INIT_OPPONENT_BAR_FLAG);
-                ClientGUI.getInstance().createUIComponents();
-
-                for (Map.Entry<String, ClientOpponent> opps : cRecLogin.getcOpponents().entrySet()) {
-                    System.out.println(getClass().getSimpleName() + " got: " + opps.getKey() + " - " + opps.getValue().getStatusFlag());
-                }
-
+                // ClientGUI.getInstance().setRacerStatusPanelFlag(ClientGUIConfig.ACTION_ON_RACER_STATUS_PANEL_FLAG.INIT_OPPONENT_BAR_FLAG);
+                // ClientGUI.getInstance().createUIComponents();
                 break;
             
             default:
@@ -122,10 +114,7 @@ public class ClientReceiverThread implements Runnable {
 
     private void _ROI_newOpponentInfo (CRecOpponentInfo info) {
         // added new racer
-        System.out.println(getClass().getSimpleName() + ": new opponent info: ");
-        System.out.println(getClass().getSimpleName() + info.getOpponentUsername());
-        System.out.println(getClass().getSimpleName() + info.getOpponentPosition());
-        System.out.println(getClass().getSimpleName() + info.getOpponentStatus());
-        System.out.println(getClass().getSimpleName() + info.getCurrentNumOfRacers());
+        ClientOpponent clientOpponent = new ClientOpponent(info.getOpponentUsername(), info.getOpponentPosition(), 0, info.getOpponentStatus(), "");
+        ClientGameMaster.getInstance().addNewOpponent(clientOpponent);
     }
 }
