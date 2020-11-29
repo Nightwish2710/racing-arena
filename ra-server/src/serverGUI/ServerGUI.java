@@ -4,6 +4,7 @@ import servernetwork.ServerNetwork;
 import serverobject.ServerGameConfig;
 import serverobject.ServerGameMaster;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -13,6 +14,8 @@ import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.*;
@@ -68,16 +71,23 @@ public class ServerGUI extends JFrame {
         serverGUI = this;
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
 
         this.setContentPane(ServerPanel);
         this.setServerGUI();
-
-        this.pack();
     }
 
     private void setServerGUI() {
+        // set icon
+        try {
+            ServerGUI.getInstance().setIconImage(ImageIO.read(new File("assets/dog-russel-grin-icon.png")));
+        } catch (IOException e) {
+            System.err.println("Cannot set icon for Server UI");
+            e.printStackTrace();
+        }
+
         // set panel
-        ServerPanel.setBackground(ServerGUIConfig.BACKGROUND_COLOR);
+        this.getContentPane().setBackground(ServerGUIConfig.BACKGROUND_COLOR);
 
         // set label
         numOfRacersLabel.setHorizontalAlignment(SwingConstants.RIGHT);

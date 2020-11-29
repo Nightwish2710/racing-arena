@@ -400,7 +400,7 @@
           <background color="-1"/>
           <foreground color="-1"/>
           <horizontalScrollBarPolicy value="31"/>
-          <verticalScrollBarPolicy value="20"/>
+          <verticalScrollBarPolicy value="22"/>
         </properties>
         <border type="line"/>
         <children>

@@ -65,6 +65,8 @@ public class ClientGUI extends JFrame {
     private final List<JButton> colorButtons = Arrays.asList(c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15);
 
     // error pane components
+    JOptionPane noOpenConnectionPane;
+    JDialog noOpenConnectionDialog;
     JButton retryButton, cancelButton;
     JLabel errorMessage;
 
@@ -82,91 +84,13 @@ public class ClientGUI extends JFrame {
         clientGUI = this;
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
 
         this.setContentPane(ClientPanel);
         this.setChangeClientGUI();
         this.setPermanentClientGUI();
         this.setButtonAction();
-
-        this.pack();
-    }
-
-    private void setErrorPaneUIComponent() {
-        retryButton = new JButton();
-
-        retryButton.setText("RETRY");
-        retryButton.setPreferredSize(new Dimension(80, 25));
-        retryButton.setBackground(ClientGUIConfig.COLOR_LIST.get(9));
-        retryButton.setForeground(ClientGUIConfig.BACKGROUND_COLOR);
-        retryButton.setBorder(new LineBorder(ClientGUIConfig.COLOR_LIST.get(9)));
-
-        cancelButton = new JButton();
-
-        cancelButton.setText("CANCEL");
-        cancelButton.setPreferredSize(new Dimension(80, 25));
-        cancelButton.setBackground(ClientGUIConfig.COLOR_LIST.get(0));
-        cancelButton.setForeground(ClientGUIConfig.BACKGROUND_COLOR);
-        cancelButton.setBorder(new LineBorder(ClientGUIConfig.COLOR_LIST.get(0)));
-
-        errorMessage = new JLabel("<HTML><center>NO OPEN CONNECTION FOR CLIENT</center><HTML>");
-        errorMessage.setHorizontalAlignment(SwingConstants.CENTER);
-        errorMessage.setFont(new Font("Arial", Font.BOLD, 13));
-    }
-
-    public void noOpenConnection() {
-        setErrorPaneUIComponent();
-
-        JOptionPane noOpenConnectionPane = new JOptionPane(errorMessage, JOptionPane.PLAIN_MESSAGE, JOptionPane.YES_NO_OPTION);
-
-        noOpenConnectionPane.setOptions(new Object[]{retryButton, cancelButton});
-        noOpenConnectionPane.setInitialValue(null);
-
-        JDialog dialog = new JDialog(this,"CONNECTION ERROR", true);
-
-        try {
-            dialog.setIconImage(ImageIO.read(new File("assets/metal-error.png")));
-        } catch (IOException e) {
-            System.err.println("Cannot set icon for Error Message Popup");
-            e.printStackTrace();
-        }
-        dialog.setContentPane(noOpenConnectionPane);
-        dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-
-        dialog.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent we) {
-                System.exit(-1);
-            }
-        });
-
-//        noOpenConnectionPane.addPropertyChangeListener(new PropertyChangeListener() {
-//            public void propertyChange(PropertyChangeEvent e) {
-//                String prop = e.getPropertyName();
-//                if (dialog.isVisible() && (e.getSource() == noOpenConnectionPane) && (prop.equals(JOptionPane.VALUE_PROPERTY))) {
-//                    // place to check something before closing dialog
-//                    dialog.setVisible(false);
-//                }
-//            }
-//        });
-
-        dialog.pack();
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
-
-        // click button
-        String value = (String)noOpenConnectionPane.getValue();
-        System.out.println((JButton)noOpenConnectionPane.getValue());
-        if (value.equals("Retry")) {
-            // try to connect again
-        }
-        else if (value.equals("Cancel")) {
-            // close GUI
-            ClientGUI.getInstance().addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosing(WindowEvent e) {
-                    super.windowClosed(e);
-                }
-            });
-        }
+        this.setErrorPaneUI();
     }
 
     // set color for objects that change color after button click
@@ -202,8 +126,16 @@ public class ClientGUI extends JFrame {
     }
 
     private void setPermanentClientGUI() {
+        // set icon
+        try {
+            ClientGUI.getInstance().setIconImage(ImageIO.read(new File("assets/dog-sharpei-icon.png")));
+        } catch (IOException e) {
+            System.err.println("Cannot set icon for Client UI");
+            e.printStackTrace();
+        }
+
         // set panel
-        ClientPanel.setBackground(ClientGUIConfig.BACKGROUND_COLOR);
+        this.getContentPane().setBackground(ClientGUIConfig.BACKGROUND_COLOR);
 
         // color palette
         setColorButtonUI();
@@ -573,6 +505,77 @@ public class ClientGUI extends JFrame {
         }
     }
 
+    private void setErrorPaneUI() {
+        retryButton = new JButton();
+
+        retryButton.setText("RETRY");
+        retryButton.setPreferredSize(new Dimension(80, 25));
+        retryButton.setBackground(ClientGUIConfig.COLOR_LIST.get(9));
+        retryButton.setForeground(ClientGUIConfig.BACKGROUND_COLOR);
+        retryButton.setBorder(new LineBorder(ClientGUIConfig.COLOR_LIST.get(9)));
+
+        retryButton.addActionListener(e -> {
+            ClientNetwork.getInstance().connect();
+        });
+
+        cancelButton = new JButton();
+
+        cancelButton.setText("CANCEL");
+        cancelButton.setPreferredSize(new Dimension(80, 25));
+        cancelButton.setBackground(ClientGUIConfig.COLOR_LIST.get(0));
+        cancelButton.setForeground(ClientGUIConfig.BACKGROUND_COLOR);
+        cancelButton.setBorder(new LineBorder(ClientGUIConfig.COLOR_LIST.get(0)));
+
+        cancelButton.addActionListener(e -> {
+            ClientGUI.getInstance().addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    System.exit(-1);
+                }
+            });
+        });
+
+        errorMessage = new JLabel("<HTML><center>NO OPEN CONNECTION FOR CLIENT</center><HTML>");
+        errorMessage.setHorizontalAlignment(SwingConstants.CENTER);
+        errorMessage.setFont(new Font("Arial", Font.BOLD, 13));
+
+        noOpenConnectionDialog = new JDialog((Frame)null, Dialog.ModalityType.TOOLKIT_MODAL);
+        noOpenConnectionDialog.setTitle("CONNECTION ERROR");
+
+        noOpenConnectionPane = new JOptionPane(errorMessage, JOptionPane.PLAIN_MESSAGE, JOptionPane.YES_NO_OPTION);
+        noOpenConnectionPane.setOptions(new Object[]{retryButton, cancelButton});
+
+        try {
+            noOpenConnectionDialog.setIconImage(ImageIO.read(new File("assets/metal-error.png")));
+        } catch (IOException e) {
+            System.err.println("Cannot set icon for Error Message Popup");
+            e.printStackTrace();
+        }
+
+        noOpenConnectionDialog.setContentPane(noOpenConnectionPane);
+        noOpenConnectionDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+
+        noOpenConnectionDialog.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent we) {
+                System.exit(-1);
+            }
+        });
+
+        //        noOpenConnectionPane.addPropertyChangeListener(new PropertyChangeListener() {
+//            public void propertyChange(PropertyChangeEvent e) {
+//                String prop = e.getPropertyName();
+//                if (dialog.isVisible() && (e.getSource() == noOpenConnectionPane) && (prop.equals(JOptionPane.VALUE_PROPERTY))) {
+//                    // place to check something before closing dialog
+//                    dialog.setVisible(false);
+//                }
+//            }
+//        });
+
+        noOpenConnectionDialog.pack();
+        noOpenConnectionDialog.setLocationRelativeTo(null);
+        noOpenConnectionDialog.setVisible(false);
+    }
+
     private static boolean checkNicknameValidity(String nickname) {
         return nickname.matches("^[a-zA-Z0-9_]+$");
     }
@@ -581,6 +584,15 @@ public class ClientGUI extends JFrame {
         enterNickname.setEnabled(false);
         enterPassword.setEnabled(false);
         joinServerButton.setEnabled(false);
+    }
+
+    public void turnOnNoOpenConnectionPane() {
+        noOpenConnectionDialog.setVisible(true);
+    }
+
+    public void turnOffNoOpenConnectionPane() {
+        if (this.noOpenConnectionDialog == null) return;
+        this.noOpenConnectionDialog.setVisible(false);
     }
 
     public void setConsoleTextArea(String str) {
