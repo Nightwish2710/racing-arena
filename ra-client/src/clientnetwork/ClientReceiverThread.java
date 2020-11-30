@@ -5,6 +5,7 @@ import clientGUI.ClientGUI;
 import clientdatamodel.receive.CRecLogin;
 import clientdatamodel.receive.CRecOpponentInfo;
 
+import clientdatamodel.receive.CRecQuestion;
 import clientobject.ClientGameMaster;
 import clientobject.ClientOpponent;
 
@@ -46,6 +47,13 @@ public class ClientReceiverThread implements Runnable {
                     case ClientNetworkConfig.CMD.CMD_INFO:
                         receiveOpponentInfo(bytes);
                         break;
+
+                    case ClientNetworkConfig.CMD.CMD_QUESTION:
+                        receiveQuestion(bytes);
+                        break;
+
+                    default:
+                        break;
                 }
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
@@ -58,6 +66,13 @@ public class ClientReceiverThread implements Runnable {
         this.isPermittedToRun = false;
         this.inStream.close();
         this.clientSocket.close();
+    }
+
+    private void receiveQuestion(byte[] bytes) {
+        CRecQuestion cRecQuestion = new CRecQuestion();
+        cRecQuestion.unpack(bytes);
+
+        // update UI
     }
 
     private void receiveLogin(byte[] bytes) throws InterruptedException {

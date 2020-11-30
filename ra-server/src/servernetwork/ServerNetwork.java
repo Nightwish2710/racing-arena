@@ -49,6 +49,10 @@ public class ServerNetwork {
         networkPool.execute(serverNetworkThread);
     }
 
+    public void sendToAllClient (ServerDataModel data, int callerID, boolean ignoreCaller) {
+        serverNetworkThread.signalAllClients(data, callerID, ignoreCaller);
+    }
+
     public static class ServerNetworkThread implements Runnable {
         private ServerSocket serverSocket;
         private ExecutorService clientPool;

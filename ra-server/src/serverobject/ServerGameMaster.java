@@ -1,6 +1,9 @@
 package serverobject;
 
 import serverGUI.ServerGUI;
+import serverdatamodel.response.SResQuestion;
+import servernetwork.ServerNetwork;
+import servernetwork.ServerNetworkConfig;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +12,7 @@ public class ServerGameMaster {
     private int numOfRacers;
     private int raceLength;
     private HashMap<String, ServerRacerObject> sRacers;
+    private HashMap<Integer, ServerQuestion> sQuestions;
 
     // Singleton
     private static ServerGameMaster serverGameMaster = null;
@@ -21,6 +25,7 @@ public class ServerGameMaster {
 
     public ServerGameMaster() {
         this.sRacers = new HashMap<>();
+        this.sQuestions = new HashMap<>();
         this.numOfRacers = ServerGameConfig.INIT_NUM_OF_RACERS;
         serverGameMaster = this;
     }
@@ -141,5 +146,21 @@ public class ServerGameMaster {
         return sRacers.get(rUsername);
     }
 
-    public ServerQuestion getQuestion() { return new ServerQuestion(); }
+    public int getNumberOfPrevQuestions () {
+        return this.sQuestions.size();
+    }
+
+    public void giveQuestion() {
+        ServerQuestion serverQuestion = new ServerQuestion();
+        int sCurrentQuestionID = getNumberOfPrevQuestions() + 1;
+        this.sQuestions.put(sCurrentQuestionID, serverQuestion);
+
+        // Show Num1, Op, Num2 on UI
+
+        // Send packet to all clients
+        SResQuestion sResQuestion = new SResQuestion(ServerNetworkConfig.CMD.CMD_QUESTION, sCurrentQuestionID, serverQuestion.getFirstNum(), serverQuestion.getOperator(), serverQuestion.getSecondNum());
+        ServerNetwork.getInstance().sendToAllClient(sResQuestion, -1, false);
+
+        // Start timer
+    }
 }
