@@ -109,7 +109,7 @@ public class ClientReceiverThread implements Runnable {
 
                 // confirm this racer ==> means local input username and password are accepted
                 ClientGameMaster.getInstance().confirmRacerPostLogin(cRecLogin.getRacerVictory());
-                ClientGUI.getInstance().setJoinServerNoti("Success Login ", 9);
+                ClientGUI.getInstance().setJoinServerNoti("Login Successfully ", 9);
 
                 // record his opponent array
                 ClientGameMaster.getInstance().setNumOfRacers(cRecLogin.getNumOfRacers());
