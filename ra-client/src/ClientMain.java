@@ -1,4 +1,3 @@
-import clientGUI.ClientConsoleOutput;
 import clientGUI.ClientGUI;
 import clientGUI.ClientGUIConfig;
 import clientnetwork.ClientNetwork;
@@ -15,8 +14,6 @@ public class ClientMain {
     private static JFrame clientGUI;
 
     public static void main(String[] args) {
-//        System.setOut(new PrintStream(ClientConsoleOutput.getInstance()));
-
         initClientGUI();
         connectToServer();
         initClientGameMaster();
