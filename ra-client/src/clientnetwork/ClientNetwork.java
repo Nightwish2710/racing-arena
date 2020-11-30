@@ -88,6 +88,7 @@ public class ClientNetwork {
 
     public void disconnect() {
         try {
+            // send packet to server saying close connection
             this.outStream.writeInt(ClientNetworkConfig.CMD.DISCONNECT);
 
             this.receiverThread.stopReceiverThread();

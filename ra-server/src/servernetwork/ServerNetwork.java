@@ -115,14 +115,16 @@ public class ServerNetwork {
         public void signalAllClients(ServerDataModel data, int callerID, boolean ignoreCaller) {
             if (ignoreCaller) {
                 for (Map.Entry<Integer, ServerCSocketThread> entry : this.cSocketThreads.entrySet()) {
-                    if (entry.getKey() != callerID) {
+                    if (entry.getKey() != callerID && entry.getValue().getsRacerName() != null) {
                         entry.getValue().reply(data);
                     }
                 }
             }
             else {
                 for (Map.Entry<Integer, ServerCSocketThread> entry : this.cSocketThreads.entrySet()) {
-                    entry.getValue().reply(data);
+                    if (entry.getValue().getsRacerName() != null) {
+                        entry.getValue().reply(data);
+                    }
                 }
             }
         }

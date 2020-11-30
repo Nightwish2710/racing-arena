@@ -183,4 +183,8 @@ public class ServerCSocketThread implements Runnable{
             e.printStackTrace();
         }
     }
+
+    public String getsRacerName() {
+        return sRacerName;
+    }
 }

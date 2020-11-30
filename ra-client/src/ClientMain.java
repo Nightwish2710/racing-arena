@@ -47,9 +47,6 @@ public class ClientMain {
             }
         });
 
-        System.out.println("HELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLO");
-
         clientGUI.setLocationRelativeTo(null);
-//                clientGUI.setVisible(true);
     }
 }
