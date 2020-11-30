@@ -13,12 +13,15 @@ public class SResQuestion extends ServerDataModel {
     private int sOp;
     private int sNum2;
 
-    public SResQuestion(int _cmd, int _sQuestionID, int _sNum1, int _sNum2, int _sOp) {
+    private long sQuestionStartTime;
+
+    public SResQuestion(int _cmd, int _sQuestionID, int _sNum1, int _sOp, int _sNum2, long _sQuestionStartTime) {
         this.cmd = _cmd;
         this.sQuestionID = _sQuestionID;
         this.sNum1 = _sNum1;
         this.sOp = _sOp;
         this.sNum2 = _sNum2;
+        this.sQuestionStartTime = _sQuestionStartTime;
     }
 
     @Override
@@ -27,7 +30,8 @@ public class SResQuestion extends ServerDataModel {
                 + Integer.BYTES // storing sQuestionID
                 + Integer.BYTES // storing sNum1
                 + Integer.BYTES // storing sOp
-                + Integer.BYTES; // storing sNum2
+                + Integer.BYTES // storing sNum2
+                + Long.BYTES; // storing sQuestionStartTime
         ByteBuffer byteBuffer = ByteBuffer.allocate(capacity);
 
         // Pour in data
@@ -38,6 +42,7 @@ public class SResQuestion extends ServerDataModel {
         byteBuffer.putInt(this.sNum1);
         byteBuffer.putInt(this.sOp);
         byteBuffer.putInt(this.sNum2);
+        byteBuffer.putLong(this.sQuestionStartTime);
 
         // Return a byte[] array
         return byteBuffer.array();

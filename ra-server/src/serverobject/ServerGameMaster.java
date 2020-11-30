@@ -152,15 +152,26 @@ public class ServerGameMaster {
 
     public void giveQuestion() {
         ServerQuestion serverQuestion = new ServerQuestion();
+        serverQuestion.setStartingTimeOfQuestion(System.currentTimeMillis());
+
+        // Keep a record of this question in game master
         int sCurrentQuestionID = getNumberOfPrevQuestions() + 1;
         this.sQuestions.put(sCurrentQuestionID, serverQuestion);
 
-        // Show Num1, Op, Num2 on UI
+        // Update question on UI
+        ServerGUI.getInstance().setFirstNum(serverQuestion.getFirstNum());
+        ServerGUI.getInstance().setSecondNum(serverQuestion.getSecondNum());
+        ServerGUI.getInstance().setOperator(serverQuestion.getOperator());
 
         // Send packet to all clients
-        SResQuestion sResQuestion = new SResQuestion(ServerNetworkConfig.CMD.CMD_QUESTION, sCurrentQuestionID, serverQuestion.getFirstNum(), serverQuestion.getOperator(), serverQuestion.getSecondNum());
+        SResQuestion sResQuestion = new SResQuestion(
+                ServerNetworkConfig.CMD.CMD_QUESTION,
+                sCurrentQuestionID,
+                serverQuestion.getFirstNum(),
+                serverQuestion.getOperator(),
+                serverQuestion.getSecondNum(),
+                serverQuestion.getStartingTimeOfQuestion()
+        );
         ServerNetwork.getInstance().sendToAllClient(sResQuestion, -1, false);
-
-        // Start timer
     }
 }

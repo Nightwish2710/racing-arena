@@ -9,6 +9,7 @@ public class ClientGameMaster {
     private int numOfRacers;
     private ClientRacer cRacer;
     private HashMap<String, ClientOpponent> cOpponents; // <username, opponentObject>
+    private ClientQuestion currentQuestion;
 
     // Singleton
     private static ClientGameMaster clientGameMaster = null;
@@ -23,6 +24,7 @@ public class ClientGameMaster {
         this.cRacer = new ClientRacer("", 0, 0, -1, "");
         this.numOfRacers = 0;
         this.cOpponents = null;
+        this.currentQuestion = null;
         clientGameMaster = this;
     }
 
@@ -66,5 +68,24 @@ public class ClientGameMaster {
 
         ClientGUI.getInstance().setNickname(this.cRacer.getNickname());
         ClientGUI.getInstance().setNumOfVictory(numOfVictory); // update victory count on UI
+    }
+
+    public ClientQuestion getCurrentQuestion() {
+        return currentQuestion;
+    }
+
+    public void setCurrentQuestion(ClientQuestion currentQuestion) {
+        this.currentQuestion = currentQuestion;
+
+        ClientGUI.getInstance().setFirstNum(currentQuestion.getFirstNum());
+        ClientGUI.getInstance().setOperator(currentQuestion.getOperator());
+        ClientGUI.getInstance().setSecondNum(currentQuestion.getSecondNum());
+
+        try {
+            ClientGUI.getInstance().startAnswering();
+            ClientGUI.getInstance().stopAnswering();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
