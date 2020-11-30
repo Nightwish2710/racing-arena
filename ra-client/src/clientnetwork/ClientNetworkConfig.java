@@ -10,6 +10,7 @@ public class ClientNetworkConfig {
         public static final int CMD_LOGIN = 0;
         public static final int CMD_INFO = 1;
         public static final int CMD_QUESTION = 2;
+        public static final int CMD_ANSWER = 3;
     }
 
     public static class LOGIN_FLAG {

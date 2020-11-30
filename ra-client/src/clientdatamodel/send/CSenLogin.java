@@ -3,12 +3,12 @@ package clientdatamodel.send;
 import clientdatamodel.ClientDataModel;
 import java.nio.ByteBuffer;
 
-public class CSendLogin extends ClientDataModel {
+public class CSenLogin extends ClientDataModel {
     private int cmd;
     private String username;
     private String password;
 
-    public CSendLogin(int _cmd, String _username, String _password) {
+    public CSenLogin(int _cmd, String _username, String _password) {
         this.cmd = _cmd;
         this.username = _username;
         this.password = _password;
@@ -36,10 +36,5 @@ public class CSendLogin extends ClientDataModel {
 
         // Return a byte[] array
         return byteBuffer.array();
-    }
-
-    @Override
-    public void unpack(byte[] bytes) {
-        super.unpack(bytes);
     }
 }

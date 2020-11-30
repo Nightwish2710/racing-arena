@@ -1,6 +1,6 @@
 package clientGUI;
 
-import clientdatamodel.send.CSendLogin;
+import clientdatamodel.send.CSenLogin;
 import clientobject.ClientGameConfig;
 import clientobject.ClientGameMaster;
 
@@ -383,10 +383,10 @@ public class ClientGUI extends JFrame {
             userNickname = enterNickname.getText();
             userPassword = String.valueOf(enterPassword.getPassword());
 
-            ClientGameMaster.getInstance().getcRacer().setNickname(userNickname);
-            ClientGameMaster.getInstance().getcRacer().setPassword(userPassword);
+            ClientGameMaster.getInstance().getCRacer().setNickname(userNickname);
+            ClientGameMaster.getInstance().getCRacer().setPassword(userPassword);
 
-            CSendLogin cdLogin = new CSendLogin(ClientNetworkConfig.CMD.CMD_LOGIN, userNickname, userPassword);
+            CSenLogin cdLogin = new CSenLogin(ClientNetworkConfig.CMD.CMD_LOGIN, userNickname, userPassword);
             ClientNetwork.getInstance().send(cdLogin);
         });
 

@@ -16,7 +16,7 @@ public class ClientGameMaster {
         if (clientGameMaster == null) {
             clientGameMaster = new ClientGameMaster();
         }
-        return  clientGameMaster;
+        return clientGameMaster;
     }
 
     public ClientGameMaster() {
@@ -26,15 +26,12 @@ public class ClientGameMaster {
         clientGameMaster = this;
     }
 
-    public ClientRacer getcRacer() { return this.cRacer; }
-    public void setcRacer(ClientRacer cClientRacer) { this.cRacer = cClientRacer; }
-
-    public HashMap<String, ClientOpponent> getcOpponents() { return this.cOpponents; }
+    public ClientRacer getCRacer() { return this.cRacer; }
 
     public int getNumOfRacers() { return this.numOfRacers; }
     public void setNumOfRacers(int numOfRacers) { this.numOfRacers = numOfRacers; }
 
-    public int getCurentNumOfRacers() { return this.cOpponents.size() + 1; }
+    public int getCurrentNumOfRacers() { return this.cOpponents.size() + 1; }
 
     public void setInitCOpponents(HashMap<String, ClientOpponent> cOpponents) {
         this.cOpponents = cOpponents;
@@ -53,7 +50,7 @@ public class ClientGameMaster {
     public void addNewOpponent(ClientOpponent cNewOpponent) {
         System.out.println("NEW OPPOs: " + cNewOpponent.getNickname());
         this.cOpponents.put(cNewOpponent.getNickname(), cNewOpponent);
-        int order = this.getCurentNumOfRacers();
+        int order = this.getCurrentNumOfRacers();
         ClientGUI.getInstance().updateOpponentProgress(order, cNewOpponent);
     }
 
