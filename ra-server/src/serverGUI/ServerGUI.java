@@ -41,7 +41,6 @@ public class ServerGUI extends JFrame {
     private JLabel numOfPplJoining;
 
     private JSeparator separator1, separator2;
-    final private List<JSeparator> hSep = Arrays.asList(separator1, separator2);
 
     public JTable racerStatTable;
     private JLabel racerStatLabel;
@@ -56,7 +55,6 @@ public class ServerGUI extends JFrame {
     private JTextArea consoleTextArea;
 
     private JSeparator verticalSeparator1, verticalSeparator2, verticalSeparator3;
-    final private List<JSeparator> vSep = Arrays.asList(verticalSeparator1, verticalSeparator2, verticalSeparator3);
 
     // Singleton
     private static ServerGUI serverGUI = null;
@@ -166,11 +164,15 @@ public class ServerGUI extends JFrame {
     }
 
     private void setSeparatorUI() {
+        List<JSeparator> hSep = Arrays.asList(separator1, separator2);
+
         for (int i = 0; i < hSep.size(); ++i) {
             hSep.get(i).setBackground(ServerGUIConfig.BORDER_COLOR);
             hSep.get(i).setForeground(ServerGUIConfig.BORDER_COLOR);
             hSep.get(i).setBorder(BorderFactory.createMatteBorder(3, 0, 0, 0, ServerGUIConfig.BORDER_COLOR));
         }
+
+        List<JSeparator> vSep = Arrays.asList(verticalSeparator1, verticalSeparator2, verticalSeparator3);
 
         for (int i = 0; i < vSep.size(); ++i) {
             vSep.get(i).setOrientation(SwingConstants.VERTICAL);

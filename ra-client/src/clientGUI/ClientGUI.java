@@ -50,8 +50,6 @@ public class ClientGUI extends JFrame {
     private JProgressBar timerBar;
 
     private JSeparator separator1, separator2, separator3;
-    final private List<JSeparator> sep = Arrays.asList(separator1, separator2, separator3);
-
     private JSeparator verticalSeparator;
 
     private JLabel serverResponsePanelLabel;
@@ -64,7 +62,6 @@ public class ClientGUI extends JFrame {
     private JTextArea consoleTextArea;
 
     private JButton c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15;
-    private final List<JButton> colorButtons = Arrays.asList(c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15);
 
     // error pane components
     JOptionPane noOpenConnectionPane;
@@ -171,6 +168,8 @@ public class ClientGUI extends JFrame {
     }
 
     private void setSeparatorUI() {
+        List<JSeparator> sep = Arrays.asList(separator1, separator2, separator3);
+        
         for (int i = 0; i < sep.size(); ++i) {
             sep.get(i).setBackground(ClientGUIConfig.BORDER_COLOR);
             sep.get(i).setForeground(ClientGUIConfig.BORDER_COLOR);
@@ -302,6 +301,8 @@ public class ClientGUI extends JFrame {
     }
 
     private void setColorButtonUI() {
+        List<JButton> colorButtons = Arrays.asList(c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15);
+
         for (int i = 0; i < NUMBER_OF_BUTTONS; ++i) {
             colorButtons.get(i).setMaximumSize(new Dimension(COLOR_BUTTON_SIZE, COLOR_BUTTON_SIZE));
             colorButtons.get(i).setPreferredSize(new Dimension(COLOR_BUTTON_SIZE, COLOR_BUTTON_SIZE));
