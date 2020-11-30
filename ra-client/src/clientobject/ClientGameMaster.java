@@ -62,7 +62,7 @@ public class ClientGameMaster {
         // might call UI here
         System.out.println(getClass().getSimpleName() + ": " + cOpponent.getNickname() + " status: " + this.cOpponents.get(cOpponent.getNickname()).getStatusFlag());
     }
-    
+
     public void confirmRacerPostLogin(int numOfVictory) {
         this.cRacer.setNumOfVictory(numOfVictory);
 
