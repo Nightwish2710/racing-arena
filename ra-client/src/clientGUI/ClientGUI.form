@@ -538,7 +538,7 @@
       </hspacer>
       <component id="6b277" class="javax.swing.JLabel" binding="questionWarn">
         <constraints>
-          <grid row="10" column="11" row-span="2" col-span="5" vsize-policy="0" hsize-policy="0" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="10" column="11" row-span="2" col-span="5" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <font name="Arial" size="9" style="2"/>
