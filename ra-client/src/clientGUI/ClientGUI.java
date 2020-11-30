@@ -183,6 +183,23 @@ public class ClientGUI extends JFrame {
         verticalSeparator.setBorder(BorderFactory.createMatteBorder(0, 3, 0, 0, ClientGUIConfig.BORDER_COLOR));
     }
 
+    private boolean checkNicknameValidity(String nickname) {
+        return nickname.matches("^[a-zA-Z0-9_]+$");
+    }
+
+    private boolean isNicknameAndPasswordValid() {
+        // if nickname is not empty, invalid, and "Enter your nickname" string and
+        // if password is not empty, and "Enter your password" string
+        // then return true else return false
+        String password = String.valueOf(enterPassword.getPassword());
+        if (checkNicknameValidity(enterNickname.getText()) &&
+                !enterNickname.equals("Enter your nickname") && !(enterNickname.getText().length() == 0) &&
+                !password.equals("Enter your password") && !(password.length() == 0)) {
+            return true;
+        }
+        return false;
+    }
+
     private void setTextBoxUI() {
         UIManager.put("ToolTip.background", Color.YELLOW);
         UIManager.put("ToolTip.foreground", Color.BLACK);
@@ -507,7 +524,8 @@ public class ClientGUI extends JFrame {
         }
     }
 
-    private void updatePoint() {
+    // update racers' status bar and value
+    private void updateRacerPoints() {
         for (int i = 0; i < racerStatusList.size(); ++i) {
             ((JProgressBar)racerStatusList.get(i)).setValue(8);
             ((JProgressBar)racerStatusList.get(i)).setString(Integer.toString(8));
@@ -586,22 +604,6 @@ public class ClientGUI extends JFrame {
         noOpenConnectionDialog.pack();
         noOpenConnectionDialog.setLocationRelativeTo(null);
         noOpenConnectionDialog.setVisible(false);
-    }
-
-    private boolean checkNicknameValidity(String nickname) {
-        return nickname.matches("^[a-zA-Z0-9_]+$");
-    }
-
-    private boolean isNicknameAndPasswordValid() {
-        // if nickname is not empty, invalid, and "Enter your nickname" string and
-        // if password is not empty, and "Enter your password" string
-        // then return true else return false
-        String password = String.valueOf(enterPassword.getPassword());
-        if (!enterNickname.equals("Enter your nickname") && checkNicknameValidity(enterNickname.getText()) && !(enterNickname.getText().length() == 0) &&
-                !password.equals("Enter your password") && !(password.length() == 0)) {
-            return true;
-        }
-        return false;
     }
 
     public void setNumOfVictory(int numOfVictory) {

@@ -29,7 +29,7 @@ public class ClientGUIConfig {
 
     // panel size
     public static final int RACER_STAT_PANEL_WIDTH = 140;
-    public static final int RACER_STAT_PANEL_LABEL_WIDTH = 40;
+    public static final int RACER_STAT_PANEL_LABEL_WIDTH = 35;
 
     public static final int MIN_RACE_LENGTH = 3;
     public static final int MAX_RACE_LENGTH = 26;
