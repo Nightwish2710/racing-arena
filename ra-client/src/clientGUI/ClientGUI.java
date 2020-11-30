@@ -10,6 +10,7 @@ import clientobject.ClientOpponent;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.Timer;
 import javax.swing.border.*;
 import javax.swing.plaf.basic.*;
 import java.awt.*;
@@ -17,6 +18,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import static clientGUI.ClientGUIConfig.ColorButtonConfig.*;
 
@@ -48,6 +50,7 @@ public class ClientGUI extends JFrame {
 
     private JLabel timerLabel;
     private JProgressBar timerBar;
+    private Timer timer;
 
     private JSeparator separator1, separator2, separator3;
     private JSeparator verticalSeparator;
@@ -124,9 +127,8 @@ public class ClientGUI extends JFrame {
         sendAnswerButton.setBackground(ACCENT_COLOR);
         sendAnswerButton.setForeground(ClientGUIConfig.BACKGROUND_COLOR);
         sendAnswerButton.setBorder(new LineBorder(ACCENT_COLOR));
-
-        // set timer
-        createCountDownTimer();
+        sendAnswerButton.setEnabled(false);
+        sendAnswerButton.addActionListener(e -> { sendAnswerButton.setEnabled(false); });
     }
 
     private void setPermanentClientGUI() {
@@ -165,6 +167,9 @@ public class ClientGUI extends JFrame {
 
         // create racer status bar
         setRacerStatusPanelUI();
+
+        // set timer
+        createCountDownTimer();
     }
 
     private void setSeparatorUI() {
@@ -305,26 +310,20 @@ public class ClientGUI extends JFrame {
     }
 
     private void createCountDownTimer() {
-        Color ACCENT_COLOR = ClientGUIConfig.COLOR_LIST.get(colorIndex);
-
         timerBar.setStringPainted(true);
 
         timerBar.setBorder(new LineBorder(ClientGUIConfig.BORDER_COLOR, 2));
-        timerBar.setForeground(ACCENT_COLOR);
+        timerBar.setForeground(Color.BLACK);
         timerBar.setBackground(ClientGUIConfig.BACKGROUND_COLOR);
         timerBar.setUI(new BasicProgressBarUI() {
-            protected Color getSelectionBackground() {
-                return Color.BLACK;
-            }
-            protected Color getSelectionForeground() {
-                return ClientGUIConfig.BACKGROUND_COLOR;
-            }
+            protected Color getSelectionBackground() { return Color.BLACK; }
+            protected Color getSelectionForeground() { return ClientGUIConfig.BACKGROUND_COLOR; }
         });
 
         timerBar.setMaximum(ClientGUIConfig.TIMER_MAX);
-        timerBar.setValue(1);
+        timerBar.setValue(ClientGameConfig.MAX_TIMER);
 
-        timerBar.setString(Integer.toString(1));
+        timerBar.setString(Integer.toString(ClientGameConfig.MAX_TIMER));
     }
 
     private void setColorButtonUI() {
@@ -450,7 +449,7 @@ public class ClientGUI extends JFrame {
         JLabel tmpLabel = new JLabel();
         tmpLabel.setMinimumSize(new Dimension(ClientGUIConfig.RACER_STAT_PANEL_LABEL_WIDTH, 25));
         tmpLabel.setText("<HTML>&#x2666; ME &#x2666;</HTML>");
-        tmpLabel.setFont(new Font("Arial", Font.ITALIC, 9));
+        tmpLabel.setFont(new Font("Arial", Font.PLAIN, 9));
         tmpLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         tmpLabel.setVerticalAlignment(SwingConstants.CENTER);
         addComponent(tmpLabel, racerStatusPanel, gblayout, gbconstraints, 0, 0); // label on the left
@@ -631,6 +630,47 @@ public class ClientGUI extends JFrame {
     public void turnOffNoOpenConnectionPane() {
         if (this.noOpenConnectionDialog == null) return;
         this.noOpenConnectionDialog.setVisible(false);
+    }
+
+    public void startAnswering() throws InterruptedException {
+        System.out.println("TIMER START COUNTING DOWN");
+
+        enterAnswer.setEnabled(true);
+        sendAnswerButton.setEnabled(true);
+
+        CountDownLatch lock = new CountDownLatch(ClientGameConfig.MAX_TIMER);
+
+        timer = new Timer(1000, new ActionListener() {
+            int counter = ClientGameConfig.MAX_TIMER;
+
+            public void actionPerformed(ActionEvent ae) {
+                --counter;
+                timerBar.setValue(counter);
+                timerBar.setString(Integer.toString(counter));
+                lock.countDown();
+                if (counter < 1) {
+                    timer.stop();
+                }
+            }
+        });
+
+        timer.start();
+
+        try {
+            lock.await();
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void stopAnswering() {
+        System.out.println("TIMER RESET");
+
+        timerBar.setValue(ClientGameConfig.MAX_TIMER);
+        timerBar.setString(Integer.toString(ClientGameConfig.MAX_TIMER));
+
+        enterAnswer.setEnabled(false);
+        sendAnswerButton.setEnabled(false);
     }
 
     public void setConsoleTextArea(String str) {

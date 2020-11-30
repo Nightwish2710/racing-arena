@@ -56,6 +56,8 @@ public class ServerGUI extends JFrame {
 
     private JSeparator verticalSeparator1, verticalSeparator2, verticalSeparator3;
 
+    DefaultTableModel dtm;
+
     // Singleton
     private static ServerGUI serverGUI = null;
     public static ServerGUI getInstance() {
@@ -74,6 +76,34 @@ public class ServerGUI extends JFrame {
 
         this.setContentPane(ServerPanel);
         this.setServerGUI();
+    }
+
+    // create table UI
+    // this is a default function, therefore, have to use this name for the function
+    private void createUIComponents() {
+        dtm = new DefaultTableModel(null, ServerGUIConfig.TABLE_COLS);
+        dtm.setColumnIdentifiers(ServerGUIConfig.TABLE_COLS);
+
+        racerStatTable = new JTable(dtm) {
+            @Override
+            public Class getColumnClass(int column) { // return column class
+                return (column == 0) ? Icon.class : Object.class;
+            }
+            @Override
+            public boolean isCellEditable(int row, int column) { // turn off cell modification
+                return false;
+            }
+            @Override
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) { // interchange background color for each row
+                Component c = super.prepareRenderer(renderer, row, column);
+                if (!c.getBackground().equals(getSelectionBackground())) {
+                    c .setBackground(row % 2 == 0 ? Color.WHITE : ServerGUIConfig.BORDER_COLOR);
+                }
+                return c;
+            }
+        };
+
+        statTableScrollPane = new JScrollPane(racerStatTable);
     }
 
     private void setServerGUI() {
@@ -218,45 +248,10 @@ public class ServerGUI extends JFrame {
         statTableScrollPane.getHorizontalScrollBar().setBorder(null);
         statTableScrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
-        int height, width = -1;
+        int height, width = 0;
         height = (ServerGameMaster.getInstance().getNumOfRacers() + 1) * ServerGUIConfig.ROW_HEIGHT;
         for (int i = 0; i < ServerGUIConfig.PREFERRED_WIDTH.length; ++i) { width += ServerGUIConfig.PREFERRED_WIDTH[i]; }
         statTableScrollPane.setPreferredSize(new Dimension(width, height));
-
-        // set table
-        createUIComponents();
-    }
-
-    // create table UI
-    // this is a default function, therefore, have to use this name for the function
-    private void createUIComponents() {
-        // create table
-        DefaultTableModel dtm = new DefaultTableModel(null, ServerGUIConfig.TABLE_COLS);
-        dtm.setColumnIdentifiers(ServerGUIConfig.TABLE_COLS);
-
-        racerStatTable = new JTable(dtm) {
-            // return column class
-            @Override
-            public Class getColumnClass(int column) {
-                return (column == 0) ? Icon.class : Object.class;
-            }
-
-            // turn off cell modification
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-
-            // interchange background color for each row
-            @Override
-            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
-                Component c = super.prepareRenderer(renderer, row, column);
-                if (!c.getBackground().equals(getSelectionBackground())) {
-                    c .setBackground(row % 2 == 0 ? Color.WHITE : ServerGUIConfig.BORDER_COLOR);
-                }
-                return c;
-            }
-        };
 
         // set table: row height, empty border, no horizontal line
         racerStatTable.setRowHeight(ServerGUIConfig.ROW_HEIGHT);
@@ -265,7 +260,7 @@ public class ServerGUI extends JFrame {
 
         // set table's header: no border, row height, bg color, text color, text font
         UIManager.getDefaults().put("TableHeader.cellBorder", BorderFactory.createEmptyBorder(0,0,0,0));
-        racerStatTable.getTableHeader().setPreferredSize(new Dimension(-1, ServerGUIConfig.ROW_HEIGHT-2));
+        racerStatTable.getTableHeader().setPreferredSize(new Dimension(-1, ServerGUIConfig.ROW_HEIGHT-1));
         racerStatTable.getTableHeader().setBackground(Color.BLACK);
         racerStatTable.getTableHeader().setForeground(Color.WHITE);
         racerStatTable.getTableHeader().setFont(new Font("Britannic Bold", Font.PLAIN, 12));
@@ -278,21 +273,9 @@ public class ServerGUI extends JFrame {
             racerStatTable.getColumnModel().getColumn(i).setCellRenderer(center); // align center text in each cell
         }
 
-//        dtm.addRow(new Object[]{1,"HHHHHHHHHH", "+10", "ELIMINATED", 10});
-//        dtm.addRow(new Object[]{2, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
-//        dtm.addRow(new Object[]{3, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
-//        dtm.addRow(new Object[]{4, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
-//        dtm.addRow(new Object[]{5, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
-//        dtm.addRow(new Object[]{6, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
-//        dtm.addRow(new Object[]{7, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
-//        dtm.addRow(new Object[]{8, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
-//        dtm.addRow(new Object[]{9, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
-//        dtm.addRow(new Object[]{10, "HHHHHHHHHH", "+10", "ELIMINATED", 10});
-
 //        dtm.setValueAt(strikeThroughText((String)dtm.getValueAt(0, 3)), 0, 3);
 //        dtm.setValueAt(atStarToCurrentLeadingRacer((String)dtm.getValueAt(0, 1)), 0, 1);
 //        dtm.setValueAt(removeStarFromPreviouslyLeadingRacer((String)dtm.getValueAt(0, 1)), 0, 1);
-
     }
 
     // strike through name of whom is eliminated from the race
@@ -319,6 +302,21 @@ public class ServerGUI extends JFrame {
         numOfRacersSpinner.setEnabled(false);
         raceLengthSpinner.setEnabled(false);
         openConnectionButton.setEnabled(false);
+    }
+
+    public void addSRacerToUI(String racerName, int gain, int status, int position) {
+        String gainStr = gain >= 0 ? ("+"+String.valueOf(gain)) : String.valueOf(gain);
+        System.out.println(0 + racerName + gainStr + ServerGameConfig.STATUS_STRING[status] + position);
+        dtm.addRow(new Object[]{racerName, gainStr, ServerGameConfig.STATUS_STRING[status], position});
+    }
+
+    public void removeSRacerFromUI(String racerName) {
+        for (int i = 0; i < ServerGameMaster.getInstance().getNumOfRacers(); ++i) {
+            if (dtm.getValueAt(i, 1).equals(racerName)) {
+                dtm.removeRow(i);
+                break;
+            }
+        }
     }
 
     public void updateNumOfPplJoiningValue(int i) {

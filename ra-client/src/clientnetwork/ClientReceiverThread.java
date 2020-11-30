@@ -47,7 +47,7 @@ public class ClientReceiverThread implements Runnable {
                         receiveOpponentInfo(bytes);
                         break;
                 }
-            } catch (IOException e) {
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
                 break;
             }
@@ -60,7 +60,7 @@ public class ClientReceiverThread implements Runnable {
         this.clientSocket.close();
     }
 
-    private void receiveLogin(byte[] bytes) {
+    private void receiveLogin(byte[] bytes) throws InterruptedException {
         CRecLogin cRecLogin = new CRecLogin();
         cRecLogin.unpack(bytes);
 
@@ -90,7 +90,10 @@ public class ClientReceiverThread implements Runnable {
                 ClientGameMaster.getInstance().setNumOfRacers(cRecLogin.getNumOfRacers());
                 ClientGameMaster.getInstance().setInitCOpponents(cRecLogin.getcOpponents());
 
-                // might check for cheating by check client current no. of racers vs. server num of racers here
+//                System.out.println("START ANSWERING");
+//                ClientGUI.getInstance().startAnswering();
+//                System.out.println("STOP ANSWERING");
+//                ClientGUI.getInstance().stopAnswering();
 
                 // lock connection button and text area for nickname and password
                 ClientGUI.getInstance().disableComponentAfterJoinServer();

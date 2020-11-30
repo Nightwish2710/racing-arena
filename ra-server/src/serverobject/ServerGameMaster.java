@@ -42,10 +42,12 @@ public class ServerGameMaster {
 
         // Show this new racer on UI (increase number of joining racers and add to statistics table)
         ServerGUI.getInstance().updateNumOfPplJoiningValue(this.getCurrentNumOfRacers());
+        ServerGUI.getInstance().addSRacerToUI(sRacer.getUsername(), sRacer.getGain(), sRacer.getStatus(), sRacer.getPosition());
     }
     public void removeRacer(String racerName) {
         sRacers.remove(racerName);
         ServerGUI.getInstance().updateNumOfPplJoiningValue(this.getCurrentNumOfRacers());
+        ServerGUI.getInstance().removeSRacerFromUI(racerName);
     }
 
     public HashMap<String, ServerRacerObject> getsRacers() {
