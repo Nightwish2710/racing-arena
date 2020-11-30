@@ -633,7 +633,7 @@ public class ClientGUI extends JFrame {
     }
 
     public void startAnswering() throws InterruptedException {
-        System.out.println("TIMER START COUNTING DOWN");
+        System.out.println("START ANSWERING");
 
         enterAnswer.setEnabled(true);
         sendAnswerButton.setEnabled(true);
@@ -664,7 +664,7 @@ public class ClientGUI extends JFrame {
     }
 
     public void stopAnswering() {
-        System.out.println("TIMER RESET");
+        System.out.println("STOP ANSWERING");
 
         timerBar.setValue(ClientGameConfig.MAX_TIMER);
         timerBar.setString(Integer.toString(ClientGameConfig.MAX_TIMER));
