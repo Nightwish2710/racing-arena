@@ -86,7 +86,7 @@ public class ServerNetwork {
                     this.cSocketID += 1;
                     ServerCSocketThread clientThread = new ServerCSocketThread(cSocket, this.cSocketID, this);
 
-                    this.cSocketThreads.put(this.cSocketID, clientThread);
+                    this.subscribeClientSocket(this.cSocketID, clientThread);
                     this.clientPool.execute(clientThread);
                 }
             } finally {
@@ -97,6 +97,14 @@ public class ServerNetwork {
                 }
                 this.clientPool.shutdown();
             }
+        }
+
+        public void subscribeClientSocket (int cSocketThreadID, ServerCSocketThread cSockThread) {
+            this.cSocketThreads.put(cSocketThreadID, cSockThread);
+        }
+
+        public void unSubscribeClientSocket (int cSocketThreadID) {
+            this.cSocketThreads.remove(cSocketThreadID);
         }
 
         public boolean isOpenning() {

@@ -44,6 +44,11 @@ public class ServerGameMaster {
         ServerGUI.getInstance().updateNumOfPplJoiningValue(this.getCurrentNumOfRacers());
     }
 
+    public void removeRacer(String racerName) {
+        sRacers.remove(racerName);
+        ServerGUI.getInstance().updateNumOfPplJoiningValue(this.getCurrentNumOfRacers());
+    }
+
     public HashMap<String, ServerRacerObject> getsRacers() {
         return sRacers;
     }

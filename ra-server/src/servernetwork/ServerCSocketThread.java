@@ -19,19 +19,26 @@ import java.sql.SQLException;
 
 public class ServerCSocketThread implements Runnable{
     private int cSocketID;
+    private boolean isPermittedToRun;
+
     private Socket socketOfServer;
     private DataInputStream inStream;
     private DataOutputStream outStream;
     private ServerNetwork.ServerNetworkThread parentThread;
+
     private String sRacerName;
 
     public ServerCSocketThread(Socket _socketOfServer, int _cSocketID, ServerNetwork.ServerNetworkThread _parentThread) {
         this.cSocketID = _cSocketID;
+        this.isPermittedToRun = true;
+
         this.socketOfServer = _socketOfServer;
         this.inStream = null;
         this.outStream = null;
         this.parentThread = _parentThread;
+
         this.sRacerName = null;
+
         System.out.println(this.getClass().getSimpleName() + " new connection with client# " + this.cSocketID + " at " + socketOfServer);
     }
 
@@ -42,9 +49,9 @@ public class ServerCSocketThread implements Runnable{
             inStream = new DataInputStream(socketOfServer.getInputStream());
             outStream = new DataOutputStream(socketOfServer.getOutputStream());
 
-            while (true) {
+            while (this.isPermittedToRun) {
                 int cmd = inStream.readInt();
-                if (cmd == ServerNetworkConfig.CMD.DISCONNECT) { break; }
+                //if (cmd == ServerNetworkConfig.CMD.DISCONNECT) { break; }
 
                 int lData = inStream.available();
                 byte[] bytes = new byte[lData];
@@ -54,6 +61,12 @@ public class ServerCSocketThread implements Runnable{
                 switch (cmd) {
                     case ServerNetworkConfig.CMD.CMD_LOGIN:
                         handleLogin(cmd, bytes, this.outStream, this.parentThread);
+                        break;
+
+                    case ServerNetworkConfig.CMD.DISCONNECT:
+                        finalizeOnClose ();
+                        break;
+                    default:
                         break;
                 }
             }
@@ -72,13 +85,23 @@ public class ServerCSocketThread implements Runnable{
                 + ServerDBConfig.TABLE_RACER_username + " = '" + this.sRacerName + "'";
         ServerDBHelper.getInstance().exec(updateUser);
 
+        // tell master to remove myself
+        ServerGameMaster.getInstance().removeRacer(this.sRacerName);
+
         // close all streams
         inStream.close();
         outStream.close();
 
-        // close the socket
+        // close the given socket
         socketOfServer.close();
 
+        // remove this client socket from the array of network's client sockets
+        this.parentThread.unSubscribeClientSocket(this.cSocketID);
+
+        // break loop in run()
+        this.isPermittedToRun = false;
+
+        System.out.println(getClass().getSimpleName() + ": Client "+ this.getsRacerName() +" disconnected");
     }
 
     private void handleLogin(int cmd, byte[] bytes, DataOutputStream outStream, ServerNetwork.ServerNetworkThread parentThread) throws SQLException, IOException {

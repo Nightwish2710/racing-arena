@@ -90,11 +90,18 @@ public class ClientNetwork {
         try {
             // send packet to server saying close connection
             this.outStream.writeInt(ClientNetworkConfig.CMD.DISCONNECT);
-
             this.receiverThread.stopReceiverThread();
             this.executor.stop();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void _wait (int sec) {
+        try {
+            Thread.sleep(sec);
+        } catch(InterruptedException ex){
+            Thread.currentThread().interrupt();
         }
     }
 }
