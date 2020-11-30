@@ -92,7 +92,8 @@ public class ClientGameMaster {
         }
     }
 
-    public void giveAnswer (int cAnswer) {
+    // khúc này chỗ nhấn nút submit answer bên UI, tui cần get được cái int value answer á
+    public void giveAnswer(int cAnswer) {
         CSenAnswer cSenAnswer = new CSenAnswer(
                 ClientNetworkConfig.CMD.CMD_ANSWER,
                 this.currentQuestion.getQuestionId(),
@@ -102,8 +103,30 @@ public class ClientGameMaster {
         ClientNetwork.getInstance().send(cSenAnswer);
     }
 
-    public void updateThisRacer(String nickname) {
-        // new position, new status
+    public void updateThisRacer(ClientRacer updatedThisRacer) {
+        // new position, new status on UI
+        this.cRacer = updatedThisRacer;
+        ClientGUI.getInstance().updateYouPoint(this.cRacer.getPosition());
+        ClientGUI.getInstance().setUpdateStatus(ClientGameConfig.STATUS_STRING[this.cRacer.getStatusFlag()]);
+
+        String gainStr = this.cRacer.getGain() >= 0 ? ("+"+String.valueOf(this.cRacer.getGain())) : String.valueOf(this.cRacer.getGain());
+        ClientGUI.getInstance().setUpdateExtraStatus("Gain: " + gainStr + " ");
+
+        switch (this.cRacer.getStatusFlag()) {
+            case ClientGameConfig.RACER_STATUS_FLAG.FLAG_WRONG:
+                this.cRacer.updateNumOfIncorrectBy(1);
+                ClientGUI.getInstance().setUpdateExtraStatus("You have been wrong " + this.cRacer.getNumOfIncorrect() + " times ");
+                break;
+            case ClientGameConfig.RACER_STATUS_FLAG.FLAG_TIMEOUT:
+                break;
+            case ClientGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED:
+                // block answer box and send-answer button
+
+                ClientGUI.getInstance().setUpdateExtraStatus("You have been ejected :>> ");
+                break;
+            default:
+                break;
+        }
     }
 
     public void updateAllOpponents(HashMap<String, ClientPlayer> allRacers) {

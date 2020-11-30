@@ -176,10 +176,11 @@ public class ClientReceiverThread implements Runnable {
         thisRacer.setPosition(newPositionOfThisRacer);
 
         // signal the master to update its racer with these info
-        ClientGameMaster.getInstance().updateThisRacer(thisRacer.getNickname());
+        ClientGameMaster.getInstance().updateThisRacer(thisRacer);
     }
 
     private void _RR_updateOpponentsInfo(CRecAllRacersInfo cRecAllRacersInfo) {
+        // signal the master to update the racer opponents with these info
         ClientGameMaster.getInstance().updateAllOpponents(cRecAllRacersInfo.getAllRacers());
     }
 

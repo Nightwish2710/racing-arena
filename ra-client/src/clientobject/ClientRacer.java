@@ -14,6 +14,7 @@ public class ClientRacer extends ClientPlayer {
 
     public int getNumOfIncorrect() { return this.numOfIncorrect; }
     public void setNumOfIncorrect(int numOfIncorrect) { this.numOfIncorrect = numOfIncorrect; }
+    public void updateNumOfIncorrectBy(int incorrectPenalty) { this.numOfIncorrect += incorrectPenalty; }
 
     public String getPassword() {
         return this.password;

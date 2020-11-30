@@ -353,7 +353,10 @@ public class ClientGUI extends JFrame {
         });
 
         // click send answer button
-        sendAnswerButton.addActionListener(e -> { sendAnswerButton.setEnabled(false); });
+        sendAnswerButton.addActionListener(e -> {
+            sendAnswerButton.setEnabled(false);
+            submitAnswer();
+        });
     }
 
     private CompoundBorder createProgressBarBorder(int rightThickness) {
@@ -630,6 +633,24 @@ public class ClientGUI extends JFrame {
     public void setFirstNum(int firstNum) { this.firstNum.setText(Integer.toString(firstNum)); }
     public void setOperator(int operator) { this.operator.setText(ClientGameConfig.OPERATORS[operator]); }
     public void setSecondNum(int secondNum) { this.secondNum.setText(Integer.toString(secondNum)); }
+
+    private void submitAnswer() {
+        int answer;
+        try {
+            answer = Integer.parseInt(this.enterAnswer.getText());
+            ClientGameMaster.getInstance().giveAnswer(answer);
+        } catch (NumberFormatException e) {
+            answer = 100000001;
+        }
+    }
+
+    public void updateYouPoint(int point) {
+        ((JProgressBar)racerStatusList.get(1)).setValue(point);
+        ((JProgressBar)racerStatusList.get(1)).setString(String.valueOf(point));
+    }
+
+    public void setUpdateStatus(String status) { updateStatus.setText(status); }
+    public void setUpdateExtraStatus(String status) { updateExtraStatus.setText(status); }
 
     public void stopAnswering() {
         System.out.println("STOP ANSWERING");
