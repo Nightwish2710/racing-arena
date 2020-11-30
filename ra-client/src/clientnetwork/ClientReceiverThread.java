@@ -88,8 +88,9 @@ public class ClientReceiverThread implements Runnable {
 
                 // record his opponent array
                 ClientGameMaster.getInstance().setNumOfRacers(cRecLogin.getNumOfRacers());
-                ClientGameMaster.getInstance().setCurentNumOfRacers(cRecLogin.getCurrentNumOfRacers());
                 ClientGameMaster.getInstance().setInitCOpponents(cRecLogin.getcOpponents());
+
+                // might check for cheating by check client current no. of racers vs. server num of racers here
 
                 // lock connection button and text area for nickname and password
                 ClientGUI.getInstance().disableComponentAfterJoinServer();

@@ -7,7 +7,6 @@ import java.util.Map;
 
 public class ClientGameMaster {
     private int numOfRacers;
-    private int curentNumOfRacers;
     private ClientRacer cRacer;
     private HashMap<String, ClientOpponent> cOpponents; // <username, opponentObject>
 
@@ -35,8 +34,7 @@ public class ClientGameMaster {
     public int getNumOfRacers() { return this.numOfRacers; }
     public void setNumOfRacers(int numOfRacers) { this.numOfRacers = numOfRacers; }
 
-    public int getCurentNumOfRacers() { return this.curentNumOfRacers; }
-    public void setCurentNumOfRacers(int curentNumOfRacers) { this.curentNumOfRacers = curentNumOfRacers; }
+    public int getCurentNumOfRacers() { return this.cOpponents.size() + 1; }
 
     public void setInitCOpponents(HashMap<String, ClientOpponent> cOpponents) {
         this.cOpponents = cOpponents;
@@ -61,6 +59,8 @@ public class ClientGameMaster {
 
     public void confirmRacerPostLogin(int numOfVictory) {
         this.cRacer.setNumOfVictory(numOfVictory);
+
+        ClientGUI.getInstance().setNickname(this.cRacer.getNickname());
         ClientGUI.getInstance().setNumOfVictory(numOfVictory); // update victory count on UI
     }
 }
