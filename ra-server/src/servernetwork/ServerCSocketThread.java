@@ -5,12 +5,14 @@ import serverdatabase.ServerDBHelper;
 
 import serverdatamodel.ServerDataModel;
 import serverdatamodel.request.SReqAccount;
+import serverdatamodel.request.SReqAnswer;
 import serverdatamodel.response.SResLoginError;
 import serverdatamodel.response.SResLoginSuccess;
 import serverdatamodel.response.SResOpponentInfo;
 
 import serverobject.ServerGameConfig;
 import serverobject.ServerGameMaster;
+import serverobject.ServerQuestion;
 import serverobject.ServerRacerObject;
 
 import java.io.*;
@@ -66,6 +68,10 @@ public class ServerCSocketThread implements Runnable{
                         handleLogin(cmd, bytes, this.outStream, this.parentThread);
                         break;
 
+                    case ServerNetworkConfig.CMD.CMD_ANSWER:
+                        handleAnswer(bytes);
+                        break;
+
                     case ServerNetworkConfig.CMD.DISCONNECT:
                         finalizeOnClose();
                         break;
@@ -81,6 +87,7 @@ public class ServerCSocketThread implements Runnable{
         }
     }
 
+
     public void finalizeOnClose () throws IOException {
         // set isOnline status of myself to 0
         String updateUser = "UPDATE " + ServerDBConfig.TABLE_RACER
@@ -89,7 +96,7 @@ public class ServerCSocketThread implements Runnable{
         ServerDBHelper.getInstance().exec(updateUser);
 
         // update myself with new status: disconnected to master array
-        ServerGameMaster.getInstance().updateRacerInfo(this.sRacerName, ServerGameConfig.RACER_OBJECT_INFO_TYPE_FLAG.TYPE_STATUS, ServerGameConfig.RACER_STATUS_FLAG.FLAG_QUIT);
+        ServerGameMaster.getInstance().getRacerByUsername(this.sRacerName).setStatus(ServerGameConfig.RACER_STATUS_FLAG.FLAG_QUIT);
         // signal this info to other opponents
         SResOpponentInfo sResOpponentInfo = new SResOpponentInfo(ServerNetworkConfig.CMD.CMD_INFO, ServerNetworkConfig.INFO_TYPE_FLAG.TYPE_NOTICE_UPDATE_OPPONENT, this.sRacerName, ServerGameMaster.getInstance());
         this.parentThread.signalAllClients(sResOpponentInfo, this.cSocketID, true);
@@ -107,6 +114,18 @@ public class ServerCSocketThread implements Runnable{
         ServerGameMaster.getInstance().removeRacer(this.sRacerName);
 
         System.out.println(getClass().getSimpleName() + ": Client "+ this.getsRacerName() +" disconnected");
+    }
+
+    public void reply (ServerDataModel data) {
+        try {
+            outStream.write(data.pack());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getsRacerName() {
+        return sRacerName;
     }
 
     private void handleLogin(int cmd, byte[] bytes, DataOutputStream outStream, ServerNetwork.ServerNetworkThread parentThread) throws SQLException, IOException {
@@ -204,15 +223,35 @@ public class ServerCSocketThread implements Runnable{
         }
     }
 
-    public void reply (ServerDataModel data) {
-        try {
-            outStream.write(data.pack());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    private void handleAnswer(byte[] bytes) {
+        SReqAnswer sReqAnswer = new SReqAnswer();
+        sReqAnswer.unpack(bytes);
 
-    public String getsRacerName() {
-        return sRacerName;
+        ServerRacerObject thisRacer = ServerGameMaster.getInstance().getRacerByUsername(this.sRacerName);
+
+        ServerQuestion currentSQuestion = ServerGameMaster.getInstance().getQuestion(sReqAnswer.getCQuestionID());
+
+        // check for time-out first
+        long sDeltaAnsweringTime =  sReqAnswer.getCAnsweringTime() - currentSQuestion.getStartingTimeOfQuestion();
+        thisRacer.setCurrDeltaSAnsweringTime(sDeltaAnsweringTime);
+
+        if (sDeltaAnsweringTime <= ServerGameConfig.MAX_TIMER) {
+            // not timeout, go check for correctness
+            // get actual answer from server
+            int sAnswer = currentSQuestion.getAnswer();
+            if (sAnswer == sReqAnswer.getCAnswer()) {
+                // correct answer, get 1 point, status normal
+                thisRacer.updatePositionBy(ServerGameConfig.GAME_BALANCE.GAIN_NORMAL);
+                thisRacer.setStatus(ServerGameConfig.RACER_STATUS_FLAG.FLAG_NORMAL);
+            } else {
+                thisRacer.updatePositionBy(ServerGameConfig.GAME_BALANCE.GAIN_WRONG);
+                thisRacer.setStatus(ServerGameConfig.RACER_STATUS_FLAG.FLAG_WRONG);
+                thisRacer.updateNumOfWrongBy(1);
+            }
+        } else {
+            // timeout
+            thisRacer.updatePositionBy(ServerGameConfig.GAME_BALANCE.GAIN_TIMEOUT);
+            thisRacer.setStatus(ServerGameConfig.RACER_STATUS_FLAG.FLAG_TIMEOUT);
+        }
     }
 }

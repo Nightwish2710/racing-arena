@@ -4,7 +4,7 @@ import clientdatamodel.ClientDataModel;
 import clientnetwork.ClientNetworkConfig;
 
 import clientobject.ClientGameConfig;
-import clientobject.ClientOpponent;
+import clientobject.ClientPlayer;
 
 import java.nio.ByteBuffer;
 import java.util.HashMap;
@@ -15,7 +15,7 @@ public class CRecLogin extends ClientDataModel {
     private int numOfRacers;
     private int raceLength;
     private int currentNumOfRacers;
-    private HashMap<String, ClientOpponent> cOpponents;
+    private HashMap<String, ClientPlayer> cOpponents;
 
     public CRecLogin() {
         this.eventFlag = -1;
@@ -53,7 +53,7 @@ public class CRecLogin extends ClientDataModel {
 
                 int rStatus = byteBuffer.getInt();
 
-                ClientOpponent clientOpponent = new ClientOpponent(rUsername, rPosition, 0, rStatus, ClientGameConfig.STATUS_STRING[rStatus]);
+                ClientPlayer clientOpponent = new ClientPlayer(rUsername, rPosition, 0, rStatus, ClientGameConfig.STATUS_STRING[rStatus]);
                 cOpponents.put(rUsername, clientOpponent);
             }
         }
@@ -96,11 +96,11 @@ public class CRecLogin extends ClientDataModel {
         this.currentNumOfRacers = currentNumOfRacers;
     }
 
-    public HashMap<String, ClientOpponent> getcOpponents() {
+    public HashMap<String, ClientPlayer> getcOpponents() {
         return cOpponents;
     }
 
-    public void setcOpponents(HashMap<String, ClientOpponent> cOpponents) {
+    public void setcOpponents(HashMap<String, ClientPlayer> cOpponents) {
         this.cOpponents = cOpponents;
     }
 }

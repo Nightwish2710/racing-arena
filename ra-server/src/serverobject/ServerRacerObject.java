@@ -1,7 +1,5 @@
 package serverobject;
 
-import serverGUI.ServerGUIConfig;
-
 public class ServerRacerObject {
     private String username;
     private String password; // private to individual
@@ -10,6 +8,8 @@ public class ServerRacerObject {
     private int status;
 
     private int gain;
+    private int numOfWrong;
+    private long currDeltaSAnsweringTime;
 
     public ServerRacerObject(String _username, String _password, int _numOfVictory) {
         this.username = _username;
@@ -19,6 +19,8 @@ public class ServerRacerObject {
         this.status = ServerGameConfig.RACER_STATUS_FLAG.FLAG_READY;
 
         this.gain = ServerGameConfig.INIT_RACER_GAIN;
+        this.numOfWrong = 0;
+        this.currDeltaSAnsweringTime = 0;
     }
 
     public ServerRacerObject() {
@@ -38,7 +40,34 @@ public class ServerRacerObject {
 
     public int getPosition() { return position; }
     public void setPosition(int position) { this.position = position; }
+    public void updatePositionBy(int delta) {
+        this.gain = delta;
+        this.position += delta;
+        if (this.position < ServerGameConfig.INIT_RACER_POSITION) {
+            this.position = ServerGameConfig.INIT_RACER_POSITION;
+        }
+    }
 
     public int getGain() { return gain; }
     public void setGain(int gain) { this.gain = gain; }
+
+    public int getNumOfWrong() {
+        return numOfWrong;
+    }
+
+    public void setNumOfWrong(int numOfWrong) {
+        this.numOfWrong = numOfWrong;
+    }
+
+    public void updateNumOfWrongBy(int delta) {
+        this.numOfWrong += delta;
+    }
+
+    public long getCurrDeltaSAnsweringTime() {
+        return currDeltaSAnsweringTime;
+    }
+
+    public void setCurrDeltaSAnsweringTime(long currDeltaSAnsweringTime) {
+        this.currDeltaSAnsweringTime = currDeltaSAnsweringTime;
+    }
 }

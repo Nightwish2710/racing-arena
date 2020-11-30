@@ -6,7 +6,7 @@ import clientobject.ClientGameMaster;
 
 import clientnetwork.ClientNetwork;
 import clientnetwork.ClientNetworkConfig;
-import clientobject.ClientOpponent;
+import clientobject.ClientPlayer;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -533,7 +533,7 @@ public class ClientGUI extends JFrame {
     }
 
     // update the progress bar to show how far each racer has come
-    public void updateOpponentProgress(int order, ClientOpponent opponent) {
+    public void updateOpponentProgress(int order, ClientPlayer opponent) {
         System.out.println("NEW OPPOS order: ");
         ((JLabel)racerStatusList.get(order*2-1)).setText(opponent.getNickname()); // update opponent name
 

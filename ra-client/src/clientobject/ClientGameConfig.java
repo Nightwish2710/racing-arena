@@ -27,9 +27,10 @@ public class ClientGameConfig {
         public static final int FLAG_READY = 0;
         public static final int FLAG_NORMAL = 1;
         public static final int FLAG_FASTEST = 2;
-        public static final int FLAG_TIMEOUT = 3;
-        public static final int FLAG_ELIMINATED = 4;
-        public static final int FLAG_QUIT = 5;
+        public static final int FLAG_WRONG = 3;
+        public static final int FLAG_TIMEOUT = 4;
+        public static final int FLAG_ELIMINATED = 5;
+        public static final int FLAG_QUIT = 6;
     }
     public static final String[] STATUS_STRING = {
             "ClientRacer Ready",
@@ -39,11 +40,4 @@ public class ClientGameConfig {
             "Eliminated",
             "Raged Quit"
     };
-
-    // type of racer object info flag
-    public static class RACER_OBJECT_INFO_TYPE_FLAG {
-        public static final int TYPE_VICTORY = 0;
-        public static final int TYPE_POSITION = 1;
-        public static final int TYPE_STATUS = 2;
-    }
 }

@@ -6,6 +6,7 @@ public class ServerGameConfig {
     public static final int MAX_NUM_OF_RACERS = 10;
     public static final int MIN_RACE_LENGTH = 3;
     public static final int MAX_RACE_LENGTH = 26;
+    public static final int MAX_TIMER = 10;
 
     // initial race value
     public static final int INIT_NUM_OF_RACERS = 6;
@@ -32,9 +33,10 @@ public class ServerGameConfig {
         public static final int FLAG_READY = 0;
         public static final int FLAG_NORMAL = 1;
         public static final int FLAG_FASTEST = 2;
-        public static final int FLAG_TIMEOUT = 3;
-        public static final int FLAG_ELIMINATED = 4;
-        public static final int FLAG_QUIT = 5;
+        public static final int FLAG_WRONG = 3;
+        public static final int FLAG_TIMEOUT = 4;
+        public static final int FLAG_ELIMINATED = 5;
+        public static final int FLAG_QUIT = 6;
     }
     public static final String[] STATUS_STRING = {
             "Racer Ready",
@@ -45,10 +47,11 @@ public class ServerGameConfig {
             "Raged Quit"
     };
 
-    // type of racer object info flag
-    public static class RACER_OBJECT_INFO_TYPE_FLAG {
-        public static final int TYPE_VICTORY = 0;
-        public static final int TYPE_POSITION = 1;
-        public static final int TYPE_STATUS = 2;
+    public static class GAME_BALANCE {
+        public static final int GAIN_NORMAL = 1;
+        public static final int GAIN_WRONG = -1;
+        public static final int GAIN_TIMEOUT = -1;
+
+        public static final int MAX_NUM_OF_WRONG = 3;
     }
 }

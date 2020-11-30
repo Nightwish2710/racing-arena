@@ -2,13 +2,12 @@ package clientnetwork;
 
 import clientGUI.ClientGUI;
 
+import clientdatamodel.receive.CRecAllRacersInfo;
 import clientdatamodel.receive.CRecLogin;
 import clientdatamodel.receive.CRecOpponentInfo;
 
 import clientdatamodel.receive.CRecQuestion;
-import clientobject.ClientGameMaster;
-import clientobject.ClientOpponent;
-import clientobject.ClientQuestion;
+import clientobject.*;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -51,6 +50,10 @@ public class ClientReceiverThread implements Runnable {
 
                     case ClientNetworkConfig.CMD.CMD_QUESTION:
                         receiveQuestion(bytes);
+                        break;
+
+                    case ClientNetworkConfig.CMD.CMD_RESULT:
+                        receiveResult(bytes);
                         break;
 
                     default:
@@ -134,6 +137,7 @@ public class ClientReceiverThread implements Runnable {
             case ClientNetworkConfig.INFO_TYPE_FLAG.TYPE_NOTICE_UPDATE_OPPONENT:
                 _ROI_updateOpponentInfo(cRecOpponentInfo);
                 break;
+
             default:
                 break;
         }
@@ -141,13 +145,42 @@ public class ClientReceiverThread implements Runnable {
 
     private void _ROI_newOpponentInfo (CRecOpponentInfo info) {
         // added new racer
-        ClientOpponent clientOpponent = new ClientOpponent(info.getOpponentUsername(), info.getOpponentPosition(), 0, info.getOpponentStatus(), "");
+        ClientPlayer clientOpponent = new ClientPlayer(info.getOpponentUsername(), info.getOpponentPosition(), 0, info.getOpponentStatus(), "");
         ClientGameMaster.getInstance().addNewOpponent(clientOpponent);
     }
 
     private void _ROI_updateOpponentInfo (CRecOpponentInfo info) {
         // updated a racer
-        ClientOpponent clientOpponent = new ClientOpponent(info.getOpponentUsername(), info.getOpponentPosition(), 0, info.getOpponentStatus(), "");
+        ClientPlayer clientOpponent = new ClientPlayer(info.getOpponentUsername(), info.getOpponentPosition(), 0, info.getOpponentStatus(), "");
         ClientGameMaster.getInstance().updateAnOpponent(clientOpponent);
     }
+
+    private void receiveResult(byte[] bytes) {
+        CRecAllRacersInfo cRecAllRacersInfo = new CRecAllRacersInfo();
+        cRecAllRacersInfo.unpack(bytes);
+
+        this._RR_updateThisRacer(cRecAllRacersInfo);
+
+        this._RR_updateOpponentsInfo(cRecAllRacersInfo);
+    }
+
+    private void _RR_updateThisRacer (CRecAllRacersInfo cRecAllRacersInfo) {
+        // update this racer info
+        ClientRacer thisRacer = ClientGameMaster.getInstance().getCRacer();
+        ClientPlayer thisPlayer = cRecAllRacersInfo.getThisRacer(thisRacer.getNickname());
+
+        thisRacer.setStatusFlag(thisPlayer.getStatusFlag());
+
+        int newPositionOfThisRacer = thisPlayer.getPosition();
+        thisRacer.setGain(newPositionOfThisRacer - thisRacer.getPosition());
+        thisRacer.setPosition(newPositionOfThisRacer);
+
+        // signal the master to update its racer with these info
+        ClientGameMaster.getInstance().updateThisRacer(thisRacer.getNickname());
+    }
+
+    private void _RR_updateOpponentsInfo(CRecAllRacersInfo cRecAllRacersInfo) {
+        ClientGameMaster.getInstance().updateAllOpponents(cRecAllRacersInfo.getAllRacers());
+    }
+
 }
