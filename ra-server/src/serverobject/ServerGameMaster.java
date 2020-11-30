@@ -43,7 +43,6 @@ public class ServerGameMaster {
         // Show this new racer on UI (increase number of joining racers and add to statistics table)
         ServerGUI.getInstance().updateNumOfPplJoiningValue(this.getCurrentNumOfRacers());
     }
-
     public void removeRacer(String racerName) {
         sRacers.remove(racerName);
         ServerGUI.getInstance().updateNumOfPplJoiningValue(this.getCurrentNumOfRacers());
@@ -52,7 +51,6 @@ public class ServerGameMaster {
     public HashMap<String, ServerRacerObject> getsRacers() {
         return sRacers;
     }
-
     public int getCurrentNumOfRacers() {
         return sRacers.size();
     }
@@ -97,7 +95,6 @@ public class ServerGameMaster {
 
         return capacity;
     }
-
     public int getSizeInBytesOfRacer (String cUsername) {
         int capacity = 0;
 
@@ -123,6 +120,21 @@ public class ServerGameMaster {
         return capacity;
     }
 
+    public void updateRacerInfo (String rUsername, int infoType, Object info) {
+        switch (infoType) {
+            case ServerGameConfig.RACER_OBJECT_INFO_TYPE_FLAG.TYPE_VICTORY:
+                this.sRacers.get(rUsername).setNumOfVictory((int) info);
+                break;
+            case ServerGameConfig.RACER_OBJECT_INFO_TYPE_FLAG.TYPE_POSITION:
+                this.sRacers.get(rUsername).setPosition((int) info);
+                break;
+            case ServerGameConfig.RACER_OBJECT_INFO_TYPE_FLAG.TYPE_STATUS:
+                this.sRacers.get(rUsername).setStatus((int) info);
+                break;
+            default:
+                break;
+        }
+    }
     public ServerRacerObject getRacerInfo(String rUsername) {
         return sRacers.get(rUsername);
     }

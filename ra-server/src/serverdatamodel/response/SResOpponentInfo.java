@@ -35,15 +35,15 @@ public class SResOpponentInfo extends ServerDataModel {
         byteBuffer.putInt(this.eventFlag);
         byteBuffer.putInt(this.sGameMaster.getCurrentNumOfRacers());
 
-        ServerRacerObject newRacer = this.sGameMaster.getRacerInfo(this.newRacerUsername);
+        ServerRacerObject aRacer = this.sGameMaster.getRacerInfo(this.newRacerUsername);
 
         // string username
-        byteBuffer.putInt(newRacer.getUsername().length());
-        byteBuffer.put(newRacer.getUsername().getBytes());
+        byteBuffer.putInt(aRacer.getUsername().length());
+        byteBuffer.put(aRacer.getUsername().getBytes());
         // int position;
-        byteBuffer.putInt(newRacer.getPosition());
+        byteBuffer.putInt(aRacer.getPosition());
         // int rStatus;
-        byteBuffer.putInt(newRacer.getStatus());
+        byteBuffer.putInt(aRacer.getStatus());
 
         // Return a byte[] array
         return byteBuffer.array();

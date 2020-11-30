@@ -105,6 +105,9 @@ public class ClientReceiverThread implements Runnable {
             case ClientNetworkConfig.INFO_TYPE_FLAG.TYPE_NOTICE_NEW_OPPONENT:
                 _ROI_newOpponentInfo(cRecOpponentInfo);
                 break;
+            case ClientNetworkConfig.INFO_TYPE_FLAG.TYPE_NOTICE_UPDATE_OPPONENT:
+                _ROI_updateOpponentInfo(cRecOpponentInfo);
+                break;
             default:
                 break;
         }
@@ -114,5 +117,11 @@ public class ClientReceiverThread implements Runnable {
         // added new racer
         ClientOpponent clientOpponent = new ClientOpponent(info.getOpponentUsername(), info.getOpponentPosition(), 0, info.getOpponentStatus(), "");
         ClientGameMaster.getInstance().addNewOpponent(clientOpponent);
+    }
+
+    private void _ROI_updateOpponentInfo (CRecOpponentInfo info) {
+        // updated a racer
+        ClientOpponent clientOpponent = new ClientOpponent(info.getOpponentUsername(), info.getOpponentPosition(), 0, info.getOpponentStatus(), "");
+        ClientGameMaster.getInstance().updateAnOpponent(clientOpponent);
     }
 }

@@ -57,4 +57,10 @@ public class ClientGameMaster {
         int order = this.getCurentNumOfRacers();
         ClientGUI.getInstance().updateOpponentProgress(order, cNewOpponent);
     }
+
+    public void updateAnOpponent(ClientOpponent cOpponent) {
+        this.cOpponents.put(cOpponent.getNickname(), cOpponent);
+        // might call UI here
+        System.out.println(getClass().getSimpleName() + ": "+ cOpponent.getNickname() +" status: " + this.cOpponents.get(cOpponent.getNickname()).getStatusFlag());
+    }
 }

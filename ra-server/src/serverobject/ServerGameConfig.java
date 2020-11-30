@@ -15,9 +15,20 @@ public class ServerGameConfig {
     // number of incorrect answer that racer can make
     public static final int MAX_NUM_OF_INCORRECT = 3;
 
-    // racer answer status
-    public static final int FLAG_READY = 0;
-    public static final int FLAG_NORMAL = 1;
-    public static final int FLAG_FASTEST = 2;
-    public static final int FLAG_TIMEOUT = 3;
+    // racer status
+    public static class RACER_STATUS_FLAG {
+        public static final int FLAG_READY = 0;
+        public static final int FLAG_NORMAL = 1;
+        public static final int FLAG_FASTEST = 2;
+        public static final int FLAG_TIMEOUT = 3;
+        public static final int FLAG_ELIMINATED = 4;
+        public static final int FLAG_QUIT = 5;
+    }
+
+    // type of racer object info flag
+    public static class RACER_OBJECT_INFO_TYPE_FLAG {
+        public static final int TYPE_VICTORY = 0;
+        public static final int TYPE_POSITION = 1;
+        public static final int TYPE_STATUS = 2;
+    }
 }

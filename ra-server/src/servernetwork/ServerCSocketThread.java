@@ -9,6 +9,7 @@ import serverdatamodel.response.SResLoginError;
 import serverdatamodel.response.SResLoginSuccess;
 import serverdatamodel.response.SResOpponentInfo;
 
+import serverobject.ServerGameConfig;
 import serverobject.ServerGameMaster;
 import serverobject.ServerRacerObject;
 
@@ -33,8 +34,14 @@ public class ServerCSocketThread implements Runnable{
         this.isPermittedToRun = true;
 
         this.socketOfServer = _socketOfServer;
-        this.inStream = null;
-        this.outStream = null;
+        // Server socket I/O
+        try {
+            inStream = new DataInputStream(socketOfServer.getInputStream());
+            outStream = new DataOutputStream(socketOfServer.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         this.parentThread = _parentThread;
 
         this.sRacerName = null;
@@ -45,10 +52,6 @@ public class ServerCSocketThread implements Runnable{
     @Override
     public void run() {
         try {
-            // Server socket I/O
-            inStream = new DataInputStream(socketOfServer.getInputStream());
-            outStream = new DataOutputStream(socketOfServer.getOutputStream());
-
             while (this.isPermittedToRun) {
                 int cmd = inStream.readInt();
                 //if (cmd == ServerNetworkConfig.CMD.DISCONNECT) { break; }
@@ -64,7 +67,7 @@ public class ServerCSocketThread implements Runnable{
                         break;
 
                     case ServerNetworkConfig.CMD.DISCONNECT:
-                        finalizeOnClose ();
+                        finalizeOnClose();
                         break;
                     default:
                         break;
@@ -79,27 +82,29 @@ public class ServerCSocketThread implements Runnable{
     }
 
     public void finalizeOnClose () throws IOException {
-        // set isOnline status of this racer to 0
+        // set isOnline status of myself to 0
         String updateUser = "UPDATE " + ServerDBConfig.TABLE_RACER
                 + " SET " + ServerDBConfig.TABLE_RACER_isonline + " = 0 WHERE "
                 + ServerDBConfig.TABLE_RACER_username + " = '" + this.sRacerName + "'";
         ServerDBHelper.getInstance().exec(updateUser);
 
-        // tell master to remove myself
-        ServerGameMaster.getInstance().removeRacer(this.sRacerName);
+        // update myself with new status: disconnected to master array
+        ServerGameMaster.getInstance().updateRacerInfo(this.sRacerName, ServerGameConfig.RACER_OBJECT_INFO_TYPE_FLAG.TYPE_STATUS, ServerGameConfig.RACER_STATUS_FLAG.FLAG_QUIT);
+        // signal this info to other opponents
+        SResOpponentInfo sResOpponentInfo = new SResOpponentInfo(ServerNetworkConfig.CMD.CMD_INFO, ServerNetworkConfig.INFO_TYPE_FLAG.TYPE_NOTICE_UPDATE_OPPONENT, this.sRacerName, ServerGameMaster.getInstance());
+        this.parentThread.signalAllClients(sResOpponentInfo, this.cSocketID, true);
 
         // close all streams
         inStream.close();
         outStream.close();
-
         // close the given socket
         socketOfServer.close();
-
         // remove this client socket from the array of network's client sockets
         this.parentThread.unSubscribeClientSocket(this.cSocketID);
-
         // break loop in run()
         this.isPermittedToRun = false;
+        // tell master to remove myself
+        ServerGameMaster.getInstance().removeRacer(this.sRacerName);
 
         System.out.println(getClass().getSimpleName() + ": Client "+ this.getsRacerName() +" disconnected");
     }

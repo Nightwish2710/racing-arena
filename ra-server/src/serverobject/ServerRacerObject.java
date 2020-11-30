@@ -12,7 +12,7 @@ public class ServerRacerObject {
         this.password = _password;
         this.numOfVictory = _numOfVictory;
         this.position = ServerGameConfig.INIT_RACER_POSITION;
-        this.status = ServerGameConfig.FLAG_READY;
+        this.status = ServerGameConfig.RACER_STATUS_FLAG.FLAG_READY;
     }
 
     public ServerRacerObject() {

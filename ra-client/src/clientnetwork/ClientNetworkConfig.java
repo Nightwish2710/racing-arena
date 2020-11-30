@@ -22,5 +22,6 @@ public class ClientNetworkConfig {
 
     public static class INFO_TYPE_FLAG {
         public static final int TYPE_NOTICE_NEW_OPPONENT = 0;
+        public static final int TYPE_NOTICE_UPDATE_OPPONENT = 1;
     }
 }
