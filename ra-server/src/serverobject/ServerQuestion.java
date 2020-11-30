@@ -4,6 +4,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class ServerQuestion {
     private int firstNum, secondNum, operator;
+    private long startingTimeOfQuestion;
 
     public ServerQuestion() {
         firstNum = ThreadLocalRandom.current().nextInt(ServerGameConfig.MIN_NUMBER, ServerGameConfig.MAX_NUMBER + 1);
@@ -15,11 +16,15 @@ public class ServerQuestion {
             secondNum = ThreadLocalRandom.current().nextInt(ServerGameConfig.MIN_NUMBER, ServerGameConfig.MAX_NUMBER + 1);
             operator = ThreadLocalRandom.current().nextInt(0, ServerGameConfig.OPERATORS.length);
         }
+        this.startingTimeOfQuestion = 0;
     }
 
     public int getFirstNum() { return this.firstNum; }
     public int getSecondNum() { return this.secondNum; }
     public int getOperator() { return this.operator; }
+
+    public long getStartingTimeOfQuestion() { return this.startingTimeOfQuestion; }
+    public void setStartingTimeOfQuestion(long startTimeOfQuestion) { this.startingTimeOfQuestion = startTimeOfQuestion; }
 
     public int getAnswer() {
         switch (operator) {

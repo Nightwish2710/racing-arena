@@ -659,10 +659,14 @@ public class ClientGUI extends JFrame {
 
         try {
             lock.await();
-        } catch (InterruptedException ex) {
-            ex.printStackTrace();
+        } catch (InterruptedException ie) {
+            ie.printStackTrace();
         }
     }
+
+    public void setFirstNum(int firstNum) { this.firstNum.setText(Integer.toString(firstNum)); }
+    public void setOperator(int operator) { this.operator.setText(ClientGameConfig.OPERATORS[operator]); }
+    public void setSecondNum(int secondNum) { this.secondNum.setText(Integer.toString(secondNum)); }
 
     public void stopAnswering() {
         System.out.println("STOP ANSWERING");

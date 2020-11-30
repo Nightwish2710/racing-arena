@@ -191,6 +191,7 @@ public class ServerGUI extends JFrame {
         startGameButton.setBackground(ServerGUIConfig.LIGHT_GREEN);
         startGameButton.setBorder(new LineBorder(ServerGUIConfig.LIGHT_GREEN));
         startGameButton.setEnabled(false);
+        startGameButton.addActionListener(e -> { ServerGameMaster.getInstance().giveQuestion(); });
     }
 
     private void setSeparatorUI() {
@@ -312,7 +313,7 @@ public class ServerGUI extends JFrame {
 
     public void removeSRacerFromUI(String racerName) {
         for (int i = 0; i < ServerGameMaster.getInstance().getNumOfRacers(); ++i) {
-            if (dtm.getValueAt(i, 1).equals(racerName)) {
+            if (dtm.getValueAt(i, 0).equals(racerName)) {
                 dtm.removeRow(i);
                 break;
             }

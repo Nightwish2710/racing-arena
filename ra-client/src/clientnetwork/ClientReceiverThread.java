@@ -8,6 +8,7 @@ import clientdatamodel.receive.CRecOpponentInfo;
 import clientdatamodel.receive.CRecQuestion;
 import clientobject.ClientGameMaster;
 import clientobject.ClientOpponent;
+import clientobject.ClientQuestion;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -73,6 +74,14 @@ public class ClientReceiverThread implements Runnable {
         cRecQuestion.unpack(bytes);
 
         // update UI
+        ClientQuestion currentQuestion = new ClientQuestion(
+                cRecQuestion.getCQuestionID(),
+                cRecQuestion.getCNum1(),
+                cRecQuestion.getCOp(),
+                cRecQuestion.getCNum2(),
+                cRecQuestion.getTimeOffset()
+        );
+        ClientGameMaster.getInstance().setCurrentQuestion(currentQuestion);
     }
 
     private void receiveLogin(byte[] bytes) throws InterruptedException {
@@ -104,9 +113,6 @@ public class ClientReceiverThread implements Runnable {
                 // record his opponent array
                 ClientGameMaster.getInstance().setNumOfRacers(cRecLogin.getNumOfRacers());
                 ClientGameMaster.getInstance().setInitCOpponents(cRecLogin.getcOpponents());
-
-//                ClientGUI.getInstance().startAnswering();
-//                ClientGUI.getInstance().stopAnswering();
 
                 // lock connection button and text area for nickname and password
                 ClientGUI.getInstance().disableComponentAfterJoinServer();
