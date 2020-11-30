@@ -169,7 +169,7 @@ public class ClientGUI extends JFrame {
 
     private void setSeparatorUI() {
         List<JSeparator> sep = Arrays.asList(separator1, separator2, separator3);
-        
+
         for (int i = 0; i < sep.size(); ++i) {
             sep.get(i).setBackground(ClientGUIConfig.BORDER_COLOR);
             sep.get(i).setForeground(ClientGUIConfig.BORDER_COLOR);
@@ -577,6 +577,14 @@ public class ClientGUI extends JFrame {
 
     private static boolean checkNicknameValidity(String nickname) {
         return nickname.matches("^[a-zA-Z0-9_]+$");
+    }
+
+    public void setNumOfVictory(int numOfVictory) {
+        updateNumOfVictory.setText(Integer.toString(numOfVictory));
+    }
+
+    public void setJoinServerNoti(String str) {
+        joinServerNoti.setText(str);
     }
 
     public void disableComponentAfterJoinServer() {

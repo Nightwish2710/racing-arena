@@ -82,13 +82,16 @@ public class ClientReceiverThread implements Runnable {
                 System.out.println(getClass().getSimpleName() + ": ERROR");
                 break;
             case ClientNetworkConfig.LOGIN_FLAG.SUCCESS:
-                // confirm this racer, record his opponent array
-                ClientGameMaster.getInstance().getcRacer().setNumOfVictory(cRecLogin.getRacerVictory());
+                // confirm this racer ==> means local input username and password are accepted
+                ClientGameMaster.getInstance().confirmRacerPostLogin(cRecLogin.getRacerVictory());
+                ClientGUI.getInstance().setJoinServerNoti("Success");
+
+                // record his opponent array
                 ClientGameMaster.getInstance().setNumOfRacers(cRecLogin.getNumOfRacers());
                 ClientGameMaster.getInstance().setCurentNumOfRacers(cRecLogin.getCurrentNumOfRacers());
                 ClientGameMaster.getInstance().setInitCOpponents(cRecLogin.getcOpponents());
 
-                // update UI
+                // lock connection button and text area for nickname and password
                 ClientGUI.getInstance().disableComponentAfterJoinServer();
                 break;
             
