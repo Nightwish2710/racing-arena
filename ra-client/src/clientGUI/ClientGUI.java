@@ -576,8 +576,8 @@ public class ClientGUI extends JFrame {
         ((JLabel)racerStatusList.get(0)).setText(nickname);
     }
 
-    public void setJoinServerNoti(String str) {
-        joinServerNoti.setForeground(ClientGUIConfig.COLOR_LIST.get(9));
+    public void setJoinServerNoti(String str, int color) {
+        joinServerNoti.setForeground(ClientGUIConfig.COLOR_LIST.get(color));
         joinServerNoti.setText(str);
     }
 

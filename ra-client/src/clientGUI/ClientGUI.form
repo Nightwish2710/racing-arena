@@ -471,19 +471,17 @@
       <vspacer id="dde34">
         <constraints>
           <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="1" use-parent-layout="false">
-            <preferred-size width="-1" height="10"/>
+            <preferred-size width="-1" height="13"/>
+            <maximum-size width="-1" height="10"/>
           </grid>
         </constraints>
       </vspacer>
       <component id="d8865" class="javax.swing.JLabel" binding="joinServerNoti">
         <constraints>
-          <grid row="8" column="1" row-span="1" col-span="15" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
-            <preferred-size width="-1" height="10"/>
-            <maximum-size width="-1" height="10"/>
-          </grid>
+          <grid row="8" column="1" row-span="1" col-span="15" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value=""/>
+          <text value="Not Connected "/>
         </properties>
       </component>
       <component id="6b277" class="javax.swing.JLabel" binding="questionWarn">

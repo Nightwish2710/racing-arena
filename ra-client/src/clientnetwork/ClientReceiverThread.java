@@ -2,6 +2,7 @@ package clientnetwork;
 
 import clientGUI.ClientGUI;
 
+import clientGUI.ClientGUIConfig;
 import clientdatamodel.receive.CRecLogin;
 import clientdatamodel.receive.CRecOpponentInfo;
 
@@ -44,15 +45,12 @@ public class ClientReceiverThread implements Runnable {
                     case ClientNetworkConfig.CMD.CMD_LOGIN:
                         receiveLogin(bytes);
                         break;
-
                     case ClientNetworkConfig.CMD.CMD_INFO:
                         receiveOpponentInfo(bytes);
                         break;
-
                     case ClientNetworkConfig.CMD.CMD_QUESTION:
                         receiveQuestion(bytes);
                         break;
-
                     default:
                         break;
                 }
@@ -90,25 +88,28 @@ public class ClientReceiverThread implements Runnable {
 
         switch (cRecLogin.getEventFlag()) {
             case ClientNetworkConfig.LOGIN_FLAG.NO_MORE_SLOTS:
-                // update UI
                 System.out.println(getClass().getSimpleName() + ": NO_MORE_SLOTS");
+                // update UI
                 break;
             case ClientNetworkConfig.LOGIN_FLAG.USERNAME_TAKEN:
-                // update UI
                 System.out.println(getClass().getSimpleName() + ": USERNAME_TAKEN");
+                // update UI
                 break;
             case ClientNetworkConfig.LOGIN_FLAG.DUPLICATED_LOGIN:
-                // update UI
                 System.out.println(getClass().getSimpleName() + ": DUPLICATED_LOGIN");
+                // update UI
+                ClientGUI.getInstance().setJoinServerNoti("Duplicated Login ", 0);
                 break;
             case ClientNetworkConfig.LOGIN_FLAG.ERROR:
-                // update UI
                 System.out.println(getClass().getSimpleName() + ": ERROR");
+                // update UI
                 break;
             case ClientNetworkConfig.LOGIN_FLAG.SUCCESS:
+                System.out.println(getClass().getSimpleName() + ": SUCCESS");
+
                 // confirm this racer ==> means local input username and password are accepted
                 ClientGameMaster.getInstance().confirmRacerPostLogin(cRecLogin.getRacerVictory());
-                ClientGUI.getInstance().setJoinServerNoti("Success");
+                ClientGUI.getInstance().setJoinServerNoti("Success Login ", 9);
 
                 // record his opponent array
                 ClientGameMaster.getInstance().setNumOfRacers(cRecLogin.getNumOfRacers());
