@@ -389,7 +389,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="INCORRECT"/>
+          <text value="Answer status"/>
           <verticalTextPosition value="3"/>
         </properties>
       </component>
@@ -401,7 +401,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="You have 2 chances left."/>
+          <text value="Extra status"/>
           <verticalTextPosition value="1"/>
         </properties>
       </component>
