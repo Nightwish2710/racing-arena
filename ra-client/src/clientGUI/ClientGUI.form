@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="clientGUI.ClientGUI">
-  <grid id="27dc6" binding="ClientPanel" layout-manager="GridLayoutManager" row-count="19" column-count="21" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="ClientPanel" layout-manager="GridLayoutManager" row-count="21" column-count="19" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
       <xy x="20" y="20" width="2305" height="619"/>
@@ -10,7 +10,7 @@
     <children>
       <component id="fa12c" class="javax.swing.JLabel" binding="nicknameLabel">
         <constraints>
-          <grid row="3" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+          <grid row="3" column="1" row-span="2" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <maximum-size width="60" height="-1"/>
           </grid>
         </constraints>
@@ -20,7 +20,7 @@
       </component>
       <component id="ae763" class="javax.swing.JLabel" binding="passwordLabel">
         <constraints>
-          <grid row="4" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+          <grid row="5" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <maximum-size width="60" height="-1"/>
           </grid>
         </constraints>
@@ -30,7 +30,7 @@
       </component>
       <component id="fb2ca" class="javax.swing.JLabel" binding="questionLabel">
         <constraints>
-          <grid row="11" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+          <grid row="12" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <maximum-size width="60" height="-1"/>
           </grid>
         </constraints>
@@ -40,7 +40,7 @@
       </component>
       <component id="366a3" class="javax.swing.JButton" binding="sendAnswerButton">
         <constraints>
-          <grid row="15" column="1" row-span="1" col-span="15" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+          <grid row="17" column="1" row-span="1" col-span="15" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="-1" height="30"/>
           </grid>
         </constraints>
@@ -50,9 +50,9 @@
       </component>
       <component id="b50d9" class="javax.swing.JTextField" binding="enterAnswer">
         <constraints>
-          <grid row="12" column="1" row-span="2" col-span="10" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="-1" height="25"/>
-            <maximum-size width="-1" height="25"/>
+          <grid row="14" column="1" row-span="2" col-span="10" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="-1" height="32"/>
+            <maximum-size width="-1" height="32"/>
           </grid>
         </constraints>
         <properties>
@@ -69,7 +69,7 @@
       </hspacer>
       <component id="7bda1" class="javax.swing.JLabel" binding="timerLabel">
         <constraints>
-          <grid row="9" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+          <grid row="10" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <maximum-size width="60" height="-1"/>
           </grid>
         </constraints>
@@ -77,17 +77,9 @@
           <text value="Timer"/>
         </properties>
       </component>
-      <hspacer id="32329">
-        <constraints>
-          <grid row="0" column="19" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
-            <minimum-size width="-1" height="10"/>
-            <preferred-size width="-1" height="10"/>
-          </grid>
-        </constraints>
-      </hspacer>
       <component id="98830" class="javax.swing.JButton" binding="joinServerButton">
         <constraints>
-          <grid row="6" column="1" row-span="1" col-span="15" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+          <grid row="7" column="1" row-span="1" col-span="15" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="-1" height="30"/>
           </grid>
         </constraints>
@@ -99,7 +91,7 @@
       </component>
       <component id="45d5e" class="javax.swing.JSeparator" binding="separator1">
         <constraints>
-          <grid row="8" column="0" row-span="1" col-span="16" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="1" use-parent-layout="false">
+          <grid row="9" column="0" row-span="1" col-span="16" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="1" use-parent-layout="false">
             <preferred-size width="-1" height="15"/>
           </grid>
         </constraints>
@@ -107,10 +99,10 @@
       </component>
       <vspacer id="32aaf">
         <constraints>
-          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
-            <minimum-size width="-1" height="8"/>
-            <preferred-size width="-1" height="8"/>
-            <maximum-size width="-1" height="8"/>
+          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+            <minimum-size width="-1" height="5"/>
+            <preferred-size width="-1" height="5"/>
+            <maximum-size width="-1" height="5"/>
           </grid>
         </constraints>
       </vspacer>
@@ -125,15 +117,15 @@
       </vspacer>
       <vspacer id="89b24">
         <constraints>
-          <grid row="3" column="16" row-span="15" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+          <grid row="3" column="16" row-span="17" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
         </constraints>
       </vspacer>
       <vspacer id="4abae">
         <constraints>
-          <grid row="14" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
-            <minimum-size width="-1" height="10"/>
-            <preferred-size width="-1" height="10"/>
-            <maximum-size width="-1" height="10"/>
+          <grid row="16" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+            <minimum-size width="-1" height="5"/>
+            <preferred-size width="-1" height="5"/>
+            <maximum-size width="-1" height="5"/>
           </grid>
         </constraints>
       </vspacer>
@@ -304,7 +296,7 @@
       </component>
       <component id="78bc6" class="javax.swing.JProgressBar" binding="timerBar">
         <constraints>
-          <grid row="9" column="4" row-span="1" col-span="12" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+          <grid row="10" column="4" row-span="1" col-span="12" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="240" height="10"/>
           </grid>
         </constraints>
@@ -315,9 +307,9 @@
       </component>
       <component id="38ec" class="javax.swing.JTextField" binding="enterNickname">
         <constraints>
-          <grid row="3" column="4" row-span="1" col-span="7" vsize-policy="0" hsize-policy="0" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="-1" height="30"/>
-            <maximum-size width="-1" height="30"/>
+          <grid row="3" column="4" row-span="2" col-span="7" vsize-policy="0" hsize-policy="0" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="-1" height="32"/>
+            <maximum-size width="-1" height="32"/>
           </grid>
         </constraints>
         <properties>
@@ -337,77 +329,41 @@
       <component id="af163" class="javax.swing.JSeparator" binding="separator2">
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="16" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="1" use-parent-layout="false">
-            <preferred-size width="-1" height="15"/>
+            <preferred-size width="-1" height="10"/>
           </grid>
         </constraints>
         <properties/>
       </component>
-      <component id="cae94" class="javax.swing.JLabel" binding="serverResponsePanelLabel">
-        <constraints>
-          <grid row="1" column="19" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="SERVER RESPONSES"/>
-        </properties>
-      </component>
       <component id="4752e" class="javax.swing.JSeparator" binding="separator3">
         <constraints>
-          <grid row="17" column="0" row-span="1" col-span="16" vsize-policy="0" hsize-policy="6" anchor="2" fill="1" indent="1" use-parent-layout="false">
-            <preferred-size width="-1" height="3"/>
+          <grid row="19" column="0" row-span="1" col-span="16" vsize-policy="0" hsize-policy="6" anchor="2" fill="1" indent="1" use-parent-layout="false">
+            <preferred-size width="-1" height="4"/>
           </grid>
         </constraints>
         <properties/>
       </component>
       <vspacer id="2deed">
         <constraints>
-          <grid row="16" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="1" use-parent-layout="false">
+          <grid row="18" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="1" use-parent-layout="false">
             <preferred-size width="-1" height="10"/>
           </grid>
         </constraints>
       </vspacer>
       <component id="3152a" class="javax.swing.JPasswordField" binding="enterPassword">
         <constraints>
-          <grid row="4" column="4" row-span="1" col-span="7" vsize-policy="0" hsize-policy="0" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="-1" height="30"/>
-            <maximum-size width="-1" height="30"/>
+          <grid row="5" column="4" row-span="1" col-span="7" vsize-policy="0" hsize-policy="0" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="-1" height="32"/>
+            <maximum-size width="-1" height="32"/>
           </grid>
         </constraints>
         <properties>
           <text value="Enter your password"/>
         </properties>
       </component>
-      <scrollpane id="8dfdb" binding="serverResponsePane">
-        <constraints>
-          <grid row="2" column="19" row-span="16" col-span="1" vsize-policy="0" hsize-policy="0" anchor="1" fill="1" indent="0" use-parent-layout="false">
-            <minimum-size width="250" height="330"/>
-            <preferred-size width="250" height="330"/>
-          </grid>
-        </constraints>
-        <properties>
-          <background color="-1"/>
-          <foreground color="-1"/>
-          <horizontalScrollBarPolicy value="31"/>
-          <verticalScrollBarPolicy value="22"/>
-        </properties>
-        <border type="line"/>
-        <children>
-          <component id="c69ff" class="javax.swing.JTextArea" binding="consoleTextArea">
-            <constraints/>
-            <properties>
-              <lineWrap value="true"/>
-            </properties>
-          </component>
-        </children>
-      </scrollpane>
-      <vspacer id="d6d51">
-        <constraints>
-          <grid row="3" column="18" row-span="15" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-        </constraints>
-      </vspacer>
       <grid id="a07d6" binding="racerStatusPanel" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="1" left="1" bottom="1" right="1"/>
         <constraints>
-          <grid row="2" column="17" row-span="16" col-span="1" vsize-policy="0" hsize-policy="0" anchor="9" fill="0" indent="0" use-parent-layout="false">
+          <grid row="2" column="17" row-span="18" col-span="1" vsize-policy="0" hsize-policy="0" anchor="9" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="250" height="-1"/>
           </grid>
         </constraints>
@@ -419,7 +375,7 @@
       </grid>
       <component id="6fc74" class="javax.swing.JLabel" binding="racerStatusLabel">
         <constraints>
-          <grid row="1" column="17" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="1" column="17" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="RACER STATUS"/>
@@ -427,29 +383,31 @@
       </component>
       <component id="dd357" class="javax.swing.JLabel" binding="updateStatus">
         <constraints>
-          <grid row="12" column="11" row-span="1" col-span="5" vsize-policy="0" hsize-policy="0" anchor="10" fill="0" indent="0" use-parent-layout="false">
+          <grid row="14" column="11" row-span="1" col-span="5" vsize-policy="0" hsize-policy="0" anchor="10" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="-1" height="12"/>
             <maximum-size width="-1" height="12"/>
           </grid>
         </constraints>
         <properties>
           <text value="INCORRECT"/>
+          <verticalTextPosition value="3"/>
         </properties>
       </component>
       <component id="e1370" class="javax.swing.JLabel" binding="updateExtraStatus">
         <constraints>
-          <grid row="13" column="11" row-span="1" col-span="5" vsize-policy="0" hsize-policy="0" anchor="9" fill="0" indent="0" use-parent-layout="false">
+          <grid row="15" column="11" row-span="1" col-span="5" vsize-policy="0" hsize-policy="0" anchor="9" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="-1" height="12"/>
             <maximum-size width="-1" height="12"/>
           </grid>
         </constraints>
         <properties>
           <text value="You have 2 chances left."/>
+          <verticalTextPosition value="1"/>
         </properties>
       </component>
       <vspacer id="b4c35">
         <constraints>
-          <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+          <grid row="11" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
             <minimum-size width="-1" height="10"/>
             <preferred-size width="-1" height="10"/>
             <maximum-size width="-1" height="10"/>
@@ -458,7 +416,7 @@
       </vspacer>
       <component id="4761" class="javax.swing.JLabel" binding="firstNum">
         <constraints>
-          <grid row="11" column="4" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="12" column="4" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="1st num"/>
@@ -466,7 +424,7 @@
       </component>
       <component id="961cd" class="javax.swing.JLabel" binding="operator">
         <constraints>
-          <grid row="11" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="12" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="op"/>
@@ -474,7 +432,7 @@
       </component>
       <component id="6d495" class="javax.swing.JLabel" binding="secondNum">
         <constraints>
-          <grid row="11" column="8" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="12" column="8" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="2nd num"/>
@@ -482,7 +440,7 @@
       </component>
       <component id="70a4f" class="javax.swing.JSeparator" binding="verticalSeparator">
         <constraints>
-          <grid row="3" column="11" row-span="2" col-span="1" vsize-policy="0" hsize-policy="0" anchor="1" fill="0" indent="0" use-parent-layout="false">
+          <grid row="3" column="11" row-span="3" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="3" height="-1"/>
           </grid>
         </constraints>
@@ -490,7 +448,7 @@
       </component>
       <component id="ea654" class="javax.swing.JLabel" binding="victoryLabel">
         <constraints>
-          <grid row="3" column="12" row-span="1" col-span="4" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false">
+          <grid row="3" column="12" row-span="1" col-span="4" vsize-policy="0" hsize-policy="0" anchor="5" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="82" height="30"/>
             <maximum-size width="-1" height="30"/>
           </grid>
@@ -501,7 +459,7 @@
       </component>
       <component id="beb29" class="javax.swing.JLabel" binding="updateNumOfVictory">
         <constraints>
-          <grid row="4" column="12" row-span="1" col-span="4" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
+          <grid row="4" column="12" row-span="2" col-span="4" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="-1" height="30"/>
             <maximum-size width="-1" height="30"/>
           </grid>
@@ -512,14 +470,14 @@
       </component>
       <vspacer id="dde34">
         <constraints>
-          <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="1" use-parent-layout="false">
+          <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="1" use-parent-layout="false">
             <preferred-size width="-1" height="10"/>
           </grid>
         </constraints>
       </vspacer>
       <component id="d8865" class="javax.swing.JLabel" binding="joinServerNoti">
         <constraints>
-          <grid row="7" column="1" row-span="1" col-span="15" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
+          <grid row="8" column="1" row-span="1" col-span="15" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="-1" height="10"/>
             <maximum-size width="-1" height="10"/>
           </grid>
@@ -528,23 +486,32 @@
           <text value=""/>
         </properties>
       </component>
-      <hspacer id="d952a">
+      <component id="6b277" class="javax.swing.JLabel" binding="questionWarn">
         <constraints>
-          <grid row="18" column="20" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+          <grid row="11" column="11" row-span="2" col-span="5" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font name="Arial" size="9" style="2"/>
+          <text value="&lt;HTML&gt;  If op is &quot;/&quot;&lt;br&gt;  then only take quotient  &lt;/HTML&gt;"/>
+        </properties>
+      </component>
+      <hspacer id="c101">
+        <constraints>
+          <grid row="20" column="18" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
             <minimum-size width="10" height="10"/>
             <preferred-size width="10" height="10"/>
           </grid>
         </constraints>
       </hspacer>
-      <component id="6b277" class="javax.swing.JLabel" binding="questionWarn">
+      <vspacer id="b365b">
         <constraints>
-          <grid row="10" column="11" row-span="2" col-span="5" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="13" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+            <minimum-size width="-1" height="5"/>
+            <preferred-size width="-1" height="5"/>
+            <maximum-size width="-1" height="5"/>
+          </grid>
         </constraints>
-        <properties>
-          <font name="Arial" size="9" style="2"/>
-          <text value="&lt;HTML&gt;If op is &quot;/&quot;&lt;br&gt;then only take quotient  &lt;/HTML&gt;"/>
-        </properties>
-      </component>
+      </vspacer>
     </children>
   </grid>
 </form>

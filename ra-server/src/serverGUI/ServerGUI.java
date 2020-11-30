@@ -22,7 +22,7 @@ import java.util.regex.*;
 public class ServerGUI extends JFrame {
     private JPanel ServerPanel;
 
-    private JLabel serverLogsPanelLabel;
+    private JLabel questionSectionLabel;
 
     private JLabel gameConfigLabel;
     private JLabel numOfRacersLabel;
@@ -40,7 +40,7 @@ public class ServerGUI extends JFrame {
     private JLabel numOfPplJoiningLabel;
     private JLabel numOfPplJoining;
 
-    private JSeparator separator1, separator2;
+    private JSeparator separator1, separator2, separator3;
 
     public JTable racerStatTable;
     private JLabel racerStatLabel;
@@ -50,11 +50,14 @@ public class ServerGUI extends JFrame {
     private JLabel firstNum, operator, secondNum;
     private JLabel correctAnsLabel;
     private JLabel updateCorrectAns;
+    private JLabel timerLabel;
+    private JLabel updateTimer;
 
+    private JLabel serverLogsLabel;
     private JScrollPane serverLogsPane;
     private JTextArea consoleTextArea;
 
-    private JSeparator verticalSeparator1, verticalSeparator2, verticalSeparator3;
+    private JSeparator verticalSeparator1, verticalSeparator2, verticalSeparator3, verticalSeparator4;
 
     DefaultTableModel dtm;
 
@@ -123,12 +126,14 @@ public class ServerGUI extends JFrame {
         raceLengthLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         numOfPplJoiningLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
+        connectionNoti.setForeground(Color.RED);
         connectionNoti.setFont(new Font("Arial", Font.ITALIC, 10));
 
         gameConfigLabel.setFont(new Font("Britannic Bold", Font.PLAIN, 16));
         gameControlLabel.setFont(new Font("Britannic Bold", Font.PLAIN, 16));
+        serverLogsLabel.setFont(new Font("Britannic Bold", Font.PLAIN, 16));
 
-        serverLogsPanelLabel.setFont(new Font("Britannic Bold", Font.PLAIN, 20));
+        questionSectionLabel.setFont(new Font("Britannic Bold", Font.PLAIN, 20));
         racerStatLabel.setFont(new Font("Britannic Bold", Font.PLAIN, 20));
 
         openConnectionWarning.setFont(new Font("Arial", Font.ITALIC, 9));
@@ -180,10 +185,15 @@ public class ServerGUI extends JFrame {
     private void setButtonUI() {
         openConnectionButton.setBackground(ServerGUIConfig.LIGHT_GREEN);
         openConnectionButton.setBorder(new LineBorder(ServerGUIConfig.LIGHT_GREEN));
+
         openConnectionButton.addActionListener(e -> {
             openConnectionButton.setEnabled(false); // can no longer click the button
+
             ServerNetwork.getInstance().openServerSocket(); // open server socket and connect to database
+
+            connectionNoti.setForeground(ServerGUIConfig.LIGHT_GREEN);
             connectionNoti.setText("Connection Open "); // show text to notify that server has opened
+
             disableComponentAfterOpenConnection(); // disable changeability of configuration
             setTableUI();
         });
@@ -191,11 +201,12 @@ public class ServerGUI extends JFrame {
         startGameButton.setBackground(ServerGUIConfig.LIGHT_GREEN);
         startGameButton.setBorder(new LineBorder(ServerGUIConfig.LIGHT_GREEN));
         startGameButton.setEnabled(false);
+
         startGameButton.addActionListener(e -> { ServerGameMaster.getInstance().giveQuestion(); });
     }
 
     private void setSeparatorUI() {
-        List<JSeparator> hSep = Arrays.asList(separator1, separator2);
+        List<JSeparator> hSep = Arrays.asList(separator1, separator2, separator3);
 
         for (int i = 0; i < hSep.size(); ++i) {
             hSep.get(i).setBackground(ServerGUIConfig.BORDER_COLOR);
@@ -203,7 +214,7 @@ public class ServerGUI extends JFrame {
             hSep.get(i).setBorder(BorderFactory.createMatteBorder(3, 0, 0, 0, ServerGUIConfig.BORDER_COLOR));
         }
 
-        List<JSeparator> vSep = Arrays.asList(verticalSeparator1, verticalSeparator2, verticalSeparator3);
+        List<JSeparator> vSep = Arrays.asList(verticalSeparator1, verticalSeparator2, verticalSeparator3, verticalSeparator4);
 
         for (int i = 0; i < vSep.size(); ++i) {
             vSep.get(i).setOrientation(SwingConstants.VERTICAL);
@@ -332,6 +343,8 @@ public class ServerGUI extends JFrame {
     public void setFirstNum(int firstNum) { this.firstNum.setText(Integer.toString(firstNum)); }
     public void setSecondNum(int secondNum) { this.secondNum.setText(Integer.toString(secondNum)); }
     public void setOperator(int operator) { this.operator.setText(ServerGameConfig.OPERATORS[operator]); }
+
+    public void setUpdateTimer(int time) { this.updateTimer.setText(Integer.toString(time)); }
 
     public void setConsoleTextArea(String str) {
         if (EventQueue.isDispatchThread()) {

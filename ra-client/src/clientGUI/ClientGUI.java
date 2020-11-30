@@ -55,14 +55,9 @@ public class ClientGUI extends JFrame {
     private JSeparator separator1, separator2, separator3;
     private JSeparator verticalSeparator;
 
-    private JLabel serverResponsePanelLabel;
-
     private JLabel racerStatusLabel;
     private JPanel racerStatusPanel;
     private List<Component> racerStatusList;
-
-    private JScrollPane serverResponsePane;
-    private JTextArea consoleTextArea;
 
     private JButton c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15;
     private JLabel questionWarn;
@@ -111,9 +106,6 @@ public class ClientGUI extends JFrame {
         timerLabel.setForeground(ACCENT_COLOR);
         questionLabel.setForeground(ACCENT_COLOR);
 
-        serverResponsePanelLabel.setForeground(ACCENT_COLOR);
-        serverResponsePanelLabel.setFont(new Font("Britannic Bold", Font.PLAIN, 20));
-
         racerStatusLabel.setForeground(ACCENT_COLOR);
         racerStatusLabel.setFont(new Font("Britannic Bold", Font.PLAIN, 20));
 
@@ -149,7 +141,7 @@ public class ClientGUI extends JFrame {
 
         // set label
         victoryLabel.setFont(new Font("Britannic Bold", Font.PLAIN, 20));
-        updateNumOfVictory.setFont(new Font("Britannic Bold", Font.PLAIN, 35));
+        updateNumOfVictory.setFont(new Font("Britannic Bold", Font.PLAIN, 40));
         joinServerNoti.setFont(new Font("Arial", Font.ITALIC, 9));
 
         // set separator
@@ -162,9 +154,6 @@ public class ClientGUI extends JFrame {
         // set answer status
         updateStatus.setFont(new Font("Arial", Font.BOLD, 9));
         updateExtraStatus.setFont(new Font("Arial", Font.ITALIC, 9));
-
-        // set server response scroll pane
-        setServerResponsePaneUI();
 
         // create racer status bar
         setRacerStatusPanelUI();
@@ -183,7 +172,7 @@ public class ClientGUI extends JFrame {
         }
 
         verticalSeparator.setOrientation(SwingConstants.VERTICAL);
-        verticalSeparator.setPreferredSize(new Dimension(3, 67));
+        verticalSeparator.setPreferredSize(new Dimension(3, 74));
         verticalSeparator.setBackground(ClientGUIConfig.BORDER_COLOR);
         verticalSeparator.setForeground(ClientGUIConfig.BORDER_COLOR);
         verticalSeparator.setBorder(BorderFactory.createMatteBorder(0, 3, 0, 0, ClientGUIConfig.BORDER_COLOR));
@@ -261,6 +250,7 @@ public class ClientGUI extends JFrame {
         });
 
         enterAnswer.setBorder(ClientGUIConfig.BORDER);
+        enterAnswer.setToolTipText("Only accept INTEGER   ");
     }
 
     private void setEventWithTextBox() {
@@ -347,34 +337,6 @@ public class ClientGUI extends JFrame {
                 changeRacerStatusBarTheme();
             });
         }
-    }
-
-    private void setServerResponsePaneUI() {
-        serverResponsePane.setBorder(BorderFactory.createLineBorder(ClientGUIConfig.BORDER_COLOR, 5));
-        serverResponsePane.getViewport().setBackground(ClientGUIConfig.BORDER_COLOR);
-        serverResponsePane.setOpaque(true);
-
-        serverResponsePane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
-            @Override
-            protected JButton createDecreaseButton(int orientation) {
-                JButton button = super.createDecreaseButton(orientation);
-                button.setBackground(ClientGUIConfig.BACKGROUND_COLOR);
-                button.setBorder(BorderFactory.createLineBorder(ClientGUIConfig.BACKGROUND_COLOR, 1));
-                return button;
-            }
-            @Override
-            protected JButton createIncreaseButton(int orientation) {
-                JButton button = super.createIncreaseButton(orientation);
-                button.setBackground(ClientGUIConfig.BACKGROUND_COLOR);
-                button.setBorder(BorderFactory.createLineBorder(ClientGUIConfig.BACKGROUND_COLOR, 1));
-                return button;
-            }
-        });
-
-        consoleTextArea.setEnabled(false);
-        consoleTextArea.setBackground(ClientGUIConfig.BORDER_COLOR);
-        consoleTextArea.setFont(new Font("Consolas", Font.PLAIN, 12));
-        consoleTextArea.setDisabledTextColor(Color.BLACK);
     }
 
     private void setButtonAction() {
@@ -615,6 +577,7 @@ public class ClientGUI extends JFrame {
     }
 
     public void setJoinServerNoti(String str) {
+        joinServerNoti.setForeground(ClientGUIConfig.COLOR_LIST.get(9));
         joinServerNoti.setText(str);
     }
 
@@ -676,20 +639,5 @@ public class ClientGUI extends JFrame {
 
         enterAnswer.setEnabled(false);
         sendAnswerButton.setEnabled(false);
-    }
-
-    public void setConsoleTextArea(String str) {
-        if (EventQueue.isDispatchThread()) {
-            consoleTextArea.setText(consoleTextArea.getText() + str);
-        }
-        else {
-            EventQueue.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    // nothing to add yet
-                }
-            });
-
-        }
     }
 }
