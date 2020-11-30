@@ -169,7 +169,7 @@ public class ClientGUI extends JFrame {
 
     private void setSeparatorUI() {
         List<JSeparator> sep = Arrays.asList(separator1, separator2, separator3);
-        
+
         for (int i = 0; i < sep.size(); ++i) {
             sep.get(i).setBackground(ClientGUIConfig.BORDER_COLOR);
             sep.get(i).setForeground(ClientGUIConfig.BORDER_COLOR);
@@ -183,6 +183,23 @@ public class ClientGUI extends JFrame {
         verticalSeparator.setBorder(BorderFactory.createMatteBorder(0, 3, 0, 0, ClientGUIConfig.BORDER_COLOR));
     }
 
+    private boolean checkNicknameValidity(String nickname) {
+        return nickname.matches("^[a-zA-Z0-9_]+$");
+    }
+
+    private boolean isNicknameAndPasswordValid() {
+        // if nickname is not empty, invalid, and "Enter your nickname" string and
+        // if password is not empty, and "Enter your password" string
+        // then return true else return false
+        String password = String.valueOf(enterPassword.getPassword());
+        if (checkNicknameValidity(enterNickname.getText()) &&
+                !enterNickname.equals("Enter your nickname") && !(enterNickname.getText().length() == 0) &&
+                !password.equals("Enter your password") && !(password.length() == 0)) {
+            return true;
+        }
+        return false;
+    }
+
     private void setTextBoxUI() {
         UIManager.put("ToolTip.background", Color.YELLOW);
         UIManager.put("ToolTip.foreground", Color.BLACK);
@@ -192,20 +209,25 @@ public class ClientGUI extends JFrame {
         enterNickname.setToolTipText("CASE-SENSITIVE, LENGTH <= 10, and ONLY CONTAINS [a-zA-Z0-9_]   ");
         enterNickname.addKeyListener(new KeyAdapter() {
             @Override
-            public void keyReleased(KeyEvent e) { // check nickname validity
-                if (!checkNicknameValidity(enterNickname.getText())) {
-                    enterNickname.setForeground((Color.RED));
-                    joinServerButton.setEnabled(false);
-                }
-                else {
-                    enterNickname.setForeground((Color.BLACK));
-                    joinServerButton.setEnabled(true);
+            public void keyTyped(KeyEvent e) { // if nickname exceeds MAX_NICKNAME_LENGTH then prevent racer to type more
+                if (enterNickname.getText().length() >= ClientGUIConfig.MAX_NICKNAME_LENGTH) {
+                    e.consume();
                 }
             }
             @Override
-            public void keyTyped(KeyEvent e) { // check nickname length
-                if (enterNickname.getText().length() >= ClientGUIConfig.MAX_NICKNAME_LENGTH) {
-                    e.consume();
+            public void keyReleased(KeyEvent e) { // check nickname validity
+                if (checkNicknameValidity(enterNickname.getText())) { // nickname is valid
+                    enterNickname.setForeground((Color.BLACK));
+                }
+                else {
+                    enterNickname.setForeground((Color.RED));
+                    joinServerButton.setEnabled(false);
+                }
+
+                if (isNicknameAndPasswordValid()) { // if both nickname and password valid
+                    joinServerButton.setEnabled(true);
+                }
+                else {
                     joinServerButton.setEnabled(false);
                 }
             }
@@ -215,10 +237,18 @@ public class ClientGUI extends JFrame {
         enterPassword.setToolTipText("CASE-SENSITIVE and LENGTH <= 16  ");
         enterPassword.addKeyListener(new KeyAdapter() {
             @Override
-            public void keyTyped(KeyEvent e) {
+            public void keyTyped(KeyEvent e) { // if password exceeds MAX_PASSWORD_LENGTH then prevent racer to type more
                 String password = String.valueOf(enterPassword.getPassword());
                 if (password.length() >= ClientGUIConfig.MAX_PASSWORD_LENGTH) {
                     e.consume();
+                }
+            }
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (isNicknameAndPasswordValid()) { // if both nickname and password valid
+                    joinServerButton.setEnabled(true);
+                }
+                else {
                     joinServerButton.setEnabled(false);
                 }
             }
@@ -233,14 +263,13 @@ public class ClientGUI extends JFrame {
             public void focusGained(FocusEvent e) { // if cursor is in the box
                 if (enterNickname.getText().equals("Enter your nickname")) {
                     enterNickname.setText(null);
-                    joinServerButton.setEnabled(true);
                 }
             }
             @Override
             public void focusLost(FocusEvent e) { // if cursor is not in the box
                 if (enterNickname.getText().equals("")) {
+                    enterNickname.setForeground((Color.BLACK));
                     enterNickname.setText("Enter your nickname");
-                    joinServerButton.setEnabled(false);
                 }
             }
         });
@@ -250,14 +279,12 @@ public class ClientGUI extends JFrame {
             public void focusGained(FocusEvent e) { // if cursor is in the box
                 if (String.valueOf(enterPassword.getPassword()).equals("Enter your password")) {
                     enterPassword.setText(null);
-                    joinServerButton.setEnabled(true);
                 }
             }
             @Override
             public void focusLost(FocusEvent e) { // if cursor is not in the box
                 if (String.valueOf(enterPassword.getPassword()).equals("")) {
                     enterPassword.setText("Enter your password");
-                    joinServerButton.setEnabled(false);
                 }
             }
         });
@@ -422,9 +449,10 @@ public class ClientGUI extends JFrame {
 
         JLabel tmpLabel = new JLabel();
         tmpLabel.setMinimumSize(new Dimension(ClientGUIConfig.RACER_STAT_PANEL_LABEL_WIDTH, 25));
-        tmpLabel.setText("<HTML>&#x2666; YOU &#x2666;</HTML>");
-        tmpLabel.setFont(new Font("Calibri", Font.BOLD, 14));
+        tmpLabel.setText("<HTML>&#x2666; ME &#x2666;</HTML>");
+        tmpLabel.setFont(new Font("Arial", Font.ITALIC, 9));
         tmpLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        tmpLabel.setVerticalAlignment(SwingConstants.CENTER);
         addComponent(tmpLabel, racerStatusPanel, gblayout, gbconstraints, 0, 0); // label on the left
 
         JProgressBar tmpBar = createRacerStatusBar(3);
@@ -474,6 +502,7 @@ public class ClientGUI extends JFrame {
             tmpLabel.setText("Opponent_" + Integer.toString(i+1));
             tmpLabel.setFont(new Font("Arial", Font.PLAIN, 9));
             tmpLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+            tmpLabel.setVerticalAlignment(SwingConstants.CENTER);
             tmpLabel.setVisible(false);
             addComponent(tmpLabel, racerStatusPanel, gblayout, gbconstraints, 0, i+2); // label on the left
 
@@ -495,7 +524,8 @@ public class ClientGUI extends JFrame {
         }
     }
 
-    private void updatePoint() {
+    // update racers' status bar and value
+    private void updateRacerPoints() {
         for (int i = 0; i < racerStatusList.size(); ++i) {
             ((JProgressBar)racerStatusList.get(i)).setValue(8);
             ((JProgressBar)racerStatusList.get(i)).setString(Integer.toString(8));
@@ -504,6 +534,7 @@ public class ClientGUI extends JFrame {
 
     // update the progress bar to show how far each racer has come
     public void updateOpponentProgress(int order, ClientOpponent opponent) {
+        System.out.println("NEW OPPOS order: ");
         ((JLabel)racerStatusList.get(order*2-1)).setText(opponent.getNickname()); // update opponent name
 
         ((JProgressBar)racerStatusList.get(order*2)).setValue(opponent.getPosition()); // update opponent progress
@@ -575,8 +606,16 @@ public class ClientGUI extends JFrame {
         noOpenConnectionDialog.setVisible(false);
     }
 
-    private static boolean checkNicknameValidity(String nickname) {
-        return nickname.matches("^[a-zA-Z0-9_]+$");
+    public void setNumOfVictory(int numOfVictory) {
+        updateNumOfVictory.setText(Integer.toString(numOfVictory));
+    }
+
+    public void setNickname(String nickname) {
+        ((JLabel)racerStatusList.get(0)).setText(nickname);
+    }
+
+    public void setJoinServerNoti(String str) {
+        joinServerNoti.setText(str);
     }
 
     public void disableComponentAfterJoinServer() {

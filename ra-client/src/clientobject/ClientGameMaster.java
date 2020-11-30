@@ -7,9 +7,8 @@ import java.util.Map;
 
 public class ClientGameMaster {
     private int numOfRacers;
-    private int curentNumOfRacers;
     private ClientRacer cRacer;
-    private HashMap<String, ClientOpponent> cOpponents;
+    private HashMap<String, ClientOpponent> cOpponents; // <username, opponentObject>
 
     // Singleton
     private static ClientGameMaster clientGameMaster = null;
@@ -35,8 +34,7 @@ public class ClientGameMaster {
     public int getNumOfRacers() { return this.numOfRacers; }
     public void setNumOfRacers(int numOfRacers) { this.numOfRacers = numOfRacers; }
 
-    public int getCurentNumOfRacers() { return this.curentNumOfRacers; }
-    public void setCurentNumOfRacers(int curentNumOfRacers) { this.curentNumOfRacers = curentNumOfRacers; }
+    public int getCurentNumOfRacers() { return this.cOpponents.size() + 1; }
 
     public void setInitCOpponents(HashMap<String, ClientOpponent> cOpponents) {
         this.cOpponents = cOpponents;
@@ -45,7 +43,7 @@ public class ClientGameMaster {
 
         int order = 2;
         for (Map.Entry<String, ClientOpponent> opps : this.cOpponents.entrySet()) {
-            System.out.println(getClass().getSimpleName() + " got: " + opps.getKey() + " - " + opps.getValue().getStatusFlag());
+            System.out.println("PREV OPPOs: " + opps.getKey());
 
             ClientGUI.getInstance().updateOpponentProgress(order, opps.getValue());
             order += 1;
@@ -53,6 +51,7 @@ public class ClientGameMaster {
     }
 
     public void addNewOpponent(ClientOpponent cNewOpponent) {
+        System.out.println("NEW OPPOs: " + cNewOpponent.getNickname());
         this.cOpponents.put(cNewOpponent.getNickname(), cNewOpponent);
         int order = this.getCurentNumOfRacers();
         ClientGUI.getInstance().updateOpponentProgress(order, cNewOpponent);
@@ -61,6 +60,13 @@ public class ClientGameMaster {
     public void updateAnOpponent(ClientOpponent cOpponent) {
         this.cOpponents.put(cOpponent.getNickname(), cOpponent);
         // might call UI here
-        System.out.println(getClass().getSimpleName() + ": "+ cOpponent.getNickname() +" status: " + this.cOpponents.get(cOpponent.getNickname()).getStatusFlag());
+        System.out.println(getClass().getSimpleName() + ": " + cOpponent.getNickname() + " status: " + this.cOpponents.get(cOpponent.getNickname()).getStatusFlag());
+    }
+    
+    public void confirmRacerPostLogin(int numOfVictory) {
+        this.cRacer.setNumOfVictory(numOfVictory);
+
+        ClientGUI.getInstance().setNickname(this.cRacer.getNickname());
+        ClientGUI.getInstance().setNumOfVictory(numOfVictory); // update victory count on UI
     }
 }
