@@ -11,6 +11,17 @@ public class ClientGameConfig {
     // number of incorrect answer that racer can make
     public static final int MAX_NUM_OF_INCORRECT = 3;
 
+    // question configurations
+    public static final int MAX_NUMBER = 10000, MIN_NUMBER = -10000;
+    public static class OPERATOR_FLAG {
+        public static final int ADD_OP = 0;
+        public static final int MINUS_OP = 1;
+        public static final int MULTIPLY_OP = 2;
+        public static final int DIVIDE_OP = 3;
+        public static final int MODULA_OP = 4;
+    }
+    public static final String[] OPERATORS = {"+", "-", "*", "/", "%"};
+
     // racer status
     public static class RACER_STATUS_FLAG {
         public static final int FLAG_READY = 0;
@@ -20,7 +31,6 @@ public class ClientGameConfig {
         public static final int FLAG_ELIMINATED = 4;
         public static final int FLAG_QUIT = 5;
     }
-
     public static final String[] STATUS_STRING = {
             "ClientRacer Ready",
             "Correct Answer",

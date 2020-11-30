@@ -328,6 +328,10 @@ public class ServerGUI extends JFrame {
         }
     }
 
+    public void setFirstNum(int firstNum) { this.firstNum.setText(Integer.toString(firstNum)); }
+    public void setSecondNum(int secondNum) { this.secondNum.setText(Integer.toString(secondNum)); }
+    public void setOperator(int operator) { this.operator.setText(ServerGameConfig.OPERATORS[operator]); }
+
     public void setConsoleTextArea(String str) {
         if (EventQueue.isDispatchThread()) {
             consoleTextArea.setText(consoleTextArea.getText() + str);
