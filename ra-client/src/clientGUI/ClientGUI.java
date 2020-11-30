@@ -18,14 +18,12 @@ import java.io.*;
 import java.util.*;
 import java.util.List;
 
-import static clientGUI.ClientGUIConfig.ACTION_ON_RACER_STATUS_PANEL_FLAG.*;
 import static clientGUI.ClientGUIConfig.ColorButtonConfig.*;
 
 public class ClientGUI extends JFrame {
     private static String userNickname, userPassword;
 
     private int colorIndex = 0;
-    private boolean create = true, changeThemeBool = false, updatePointBool = false, changeOpponentNameBool = false;
 
     private JPanel ClientPanel;
 
@@ -61,7 +59,6 @@ public class ClientGUI extends JFrame {
     private JLabel racerStatusLabel;
     private JPanel racerStatusPanel;
     private List<Component> racerStatusList;
-    private int racePanelFlag = -1;
 
     private JScrollPane serverResponsePane;
     private JTextArea consoleTextArea;
@@ -96,6 +93,11 @@ public class ClientGUI extends JFrame {
         this.setPermanentClientGUI();
         this.setButtonAction();
         this.setErrorPaneUI();
+    }
+
+    // dont't change the function name
+    private void createUIComponents() {
+        racerStatusPanel = new JPanel();
     }
 
     // set color for objects that change color after button click
@@ -164,10 +166,8 @@ public class ClientGUI extends JFrame {
         // set server response scroll pane
         setServerResponsePaneUI();
 
-//        // create racer status bar
-//        racePanelFlag = 0;
-//        createUIComponents();
-        createRacerStatusPanelUI();
+        // create racer status bar
+        setRacerStatusPanelUI();
     }
 
     private void setSeparatorUI() {
@@ -305,7 +305,6 @@ public class ClientGUI extends JFrame {
         for (int i = 0; i < NUMBER_OF_BUTTONS; ++i) {
             colorButtons.get(i).setMaximumSize(new Dimension(COLOR_BUTTON_SIZE, COLOR_BUTTON_SIZE));
             colorButtons.get(i).setPreferredSize(new Dimension(COLOR_BUTTON_SIZE, COLOR_BUTTON_SIZE));
-//            colorButtons.get(i).setMargin(new Insets(COLOR_BUTTON_MARGIN_TB, COLOR_BUTTON_MARGIN_LR, COLOR_BUTTON_MARGIN_TB, COLOR_BUTTON_MARGIN_LR));
             colorButtons.get(i).setHorizontalAlignment(SwingConstants.CENTER);
 
             colorButtons.get(i).setBackground(ClientGUIConfig.COLOR_LIST.get(i));
@@ -316,9 +315,8 @@ public class ClientGUI extends JFrame {
             int index = i;
             colorButtons.get(i).addActionListener(e -> {
                 colorIndex = index;
-                racePanelFlag = CHANGE_THEME_FLAG;
                 setChangeClientGUI();
-                createUIComponents();
+                changeRacerStatusBarTheme();
             });
         }
     }
@@ -447,47 +445,8 @@ public class ClientGUI extends JFrame {
         addComponent(separator4, racerStatusPanel, gblayout, gbconstraints, 0, 1);
     }
 
-    // dont't change the function name
-    public void createUIComponents() {
-        System.out.println("Race pane flag: " + racePanelFlag);
-        switch (racePanelFlag) {
-            case CREATE_FLAG: // create a grid bag layout to dynamically add racer progress bar
-                racerStatusPanel = new JPanel();
-                System.out.println("Create race status pane");
-                racePanelFlag = -1;
-                break;
-            case CHANGE_THEME_FLAG: // change racers' progress bar theme
-                System.out.println("Change color");
-                changeTheme();
-                racePanelFlag = -1;
-                break;
-            case UPDATE_POINT_FLAG: // update the progress bar to show how far each racer has come
-                System.out.println("Update point");
-                updatePoint();
-                racePanelFlag = -1;
-                break;
-            case INIT_OPPONENT_BAR_FLAG: // init opponents' bar when receive number of ppl joinning
-                System.out.println("Show opponent's bar");
-                initOpponentBarWhenReceiveNumOfPplJoinning();
-                racePanelFlag = -1;
-                break;
-            default:
-                break;
-        }
-    }
-
-    public void setRacerStatusPanelFlag(int flag) { this.racePanelFlag = flag; }
-
-//    public void showRacer() {
-//        SwingUtilities.invokeLater(new Runnable() {
-//            @Override
-//            public void run() {
-//                initOpponentBarWhenReceiveNumOfPplJoinning();
-//            }
-//        });
-//    }
-
-    private void createRacerStatusPanelUI() {
+    // create a grid bag layout to dynamically add racer progress bar
+    private void setRacerStatusPanelUI() {
         GridBagLayout gblayout = new GridBagLayout();
         GridBagConstraints gbconstraints = new GridBagConstraints();
         gbconstraints.fill = GridBagConstraints.HORIZONTAL;
@@ -524,9 +483,10 @@ public class ClientGUI extends JFrame {
         racerStatusList = Arrays.asList(racerStatusPanel.getComponents());
     }
 
-    private void changeTheme() {
+    // change racers' progress bar theme
+    private void changeRacerStatusBarTheme() {
         // change current racer's progress bar
-        ((JProgressBar)racerStatusList.get(1)).setForeground(ClientGUIConfig.COLOR_LIST.get(colorIndex));
+        racerStatusList.get(1).setForeground(ClientGUIConfig.COLOR_LIST.get(colorIndex));
 
         // change other racers' progress bar
         for (int i = 2; i < ClientGameMaster.getInstance().getNumOfRacers() + 1; ++i) {
@@ -541,12 +501,12 @@ public class ClientGUI extends JFrame {
         }
     }
 
-    public void updateWithOpponent(int order, ClientOpponent opponent) {
-        JLabel jl = (JLabel)racerStatusList.get(order*2-1); // show opponent name
-        jl.setText(opponent.getNickname());
+    // update the progress bar to show how far each racer has come
+    public void updateOpponentProgress(int order, ClientOpponent opponent) {
+        ((JLabel)racerStatusList.get(order*2-1)).setText(opponent.getNickname()); // update opponent name
 
-        JProgressBar jb = (JProgressBar)(racerStatusList.get(order*2));
-        jb.setValue(opponent.getPosition());
+        ((JProgressBar)racerStatusList.get(order*2)).setValue(opponent.getPosition()); // update opponent progress
+        ((JProgressBar)racerStatusList.get(order*2)).setString(Integer.toString(opponent.getPosition())); // update progress number
     }
 
     public void initOpponentBarWhenReceiveNumOfPplJoinning() {
@@ -555,11 +515,10 @@ public class ClientGUI extends JFrame {
         for (int i = 2; i < ClientGameMaster.getInstance().getNumOfRacers() + 1; ++i) {
             racerStatusList.get(i*2-1).setVisible(true); // show opponent name
 
-            JProgressBar jb = (JProgressBar)(racerStatusList.get(i*2));
-            jb.setValue(5);
-            racerStatusList.get(i*2).setForeground(ClientGUIConfig.COLOR_LIST.get(colorIndex)); // show opponent bar
-            ((JProgressBar)racerStatusList.get(i*2)).setStringPainted(true); // show opponent bar value
-            ((JProgressBar)racerStatusList.get(i*2)).setBorder(createProgressBarBorder(3)); // show finnish line
+            JProgressBar tmpBar = (JProgressBar)(racerStatusList.get(i*2));
+            tmpBar.setForeground(ClientGUIConfig.COLOR_LIST.get(colorIndex)); // show opponent bar
+            tmpBar.setStringPainted(true); // show opponent bar value
+            tmpBar.setBorder(createProgressBarBorder(3)); // show finnish line
         }
     }
 

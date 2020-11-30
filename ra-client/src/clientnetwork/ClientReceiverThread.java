@@ -1,15 +1,16 @@
 package clientnetwork;
 
 import clientGUI.ClientGUI;
+
 import clientdatamodel.receive.CRecLogin;
 import clientdatamodel.receive.CRecOpponentInfo;
+
 import clientobject.ClientGameMaster;
 import clientobject.ClientOpponent;
 
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.Socket;
-
 
 public class ClientReceiverThread implements Runnable {
     private boolean isPermittedToRun;
@@ -89,9 +90,6 @@ public class ClientReceiverThread implements Runnable {
 
                 // update UI
                 ClientGUI.getInstance().disableComponentAfterJoinServer();
-
-                // ClientGUI.getInstance().setRacerStatusPanelFlag(ClientGUIConfig.ACTION_ON_RACER_STATUS_PANEL_FLAG.INIT_OPPONENT_BAR_FLAG);
-                // ClientGUI.getInstance().createUIComponents();
                 break;
             
             default:

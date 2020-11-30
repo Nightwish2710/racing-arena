@@ -1,7 +1,6 @@
 package clientnetwork;
 
 import clientGUI.ClientGUI;
-
 import clientdatamodel.ClientDataModel;
 
 import java.io.*;

@@ -66,13 +66,6 @@ public class ClientGUIConfig {
             Palette.BLUE, Palette.CYAN, Palette.TEAL, Palette.GREEN, Palette.LIGHT_GREEN,
             Palette.LIME, Palette.AMBER, Palette.ORANGE, Palette.DEEP_ORANGE, Palette.BROWN
     );
-
-    public static class ACTION_ON_RACER_STATUS_PANEL_FLAG {
-        public static final int CREATE_FLAG = 0;
-        public static final int CHANGE_THEME_FLAG = 1;
-        public static final int UPDATE_POINT_FLAG = 2;
-        public static final int INIT_OPPONENT_BAR_FLAG = 3;
-    }
 }
 
 

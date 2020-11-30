@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ClientGameMaster {
-    private ClientRacer cRacer;
     private int numOfRacers;
     private int curentNumOfRacers;
+    private ClientRacer cRacer;
     private HashMap<String, ClientOpponent> cOpponents;
 
     // Singleton
@@ -32,6 +32,12 @@ public class ClientGameMaster {
 
     public HashMap<String, ClientOpponent> getcOpponents() { return this.cOpponents; }
 
+    public int getNumOfRacers() { return this.numOfRacers; }
+    public void setNumOfRacers(int numOfRacers) { this.numOfRacers = numOfRacers; }
+
+    public int getCurentNumOfRacers() { return this.curentNumOfRacers; }
+    public void setCurentNumOfRacers(int curentNumOfRacers) { this.curentNumOfRacers = curentNumOfRacers; }
+
     public void setInitCOpponents(HashMap<String, ClientOpponent> cOpponents) {
         this.cOpponents = cOpponents;
 
@@ -41,20 +47,14 @@ public class ClientGameMaster {
         for (Map.Entry<String, ClientOpponent> opps : this.cOpponents.entrySet()) {
             System.out.println(getClass().getSimpleName() + " got: " + opps.getKey() + " - " + opps.getValue().getStatusFlag());
 
-            ClientGUI.getInstance().updateWithOpponent(order, opps.getValue());
+            ClientGUI.getInstance().updateOpponentProgress(order, opps.getValue());
             order += 1;
         }
     }
 
-    public int getNumOfRacers() { return this.numOfRacers; }
-    public void setNumOfRacers(int numOfRacers) { this.numOfRacers = numOfRacers; }
-
-    public int getCurentNumOfRacers() { return this.curentNumOfRacers; }
-    public void setCurentNumOfRacers(int curentNumOfRacers) { this.curentNumOfRacers = curentNumOfRacers; }
-
     public void addNewOpponent(ClientOpponent cNewOpponent) {
         this.cOpponents.put(cNewOpponent.getNickname(), cNewOpponent);
         int order = this.getCurentNumOfRacers();
-        ClientGUI.getInstance().updateWithOpponent(order, cNewOpponent);
+        ClientGUI.getInstance().updateOpponentProgress(order, cNewOpponent);
     }
 }
