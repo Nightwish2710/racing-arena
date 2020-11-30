@@ -450,7 +450,7 @@ public class ClientGUI extends JFrame {
         JLabel tmpLabel = new JLabel();
         tmpLabel.setMinimumSize(new Dimension(ClientGUIConfig.RACER_STAT_PANEL_LABEL_WIDTH, 25));
         tmpLabel.setText("<HTML>&#x2666; ME &#x2666;</HTML>");
-        tmpLabel.setFont(new Font("Arial", Font.ITALIC, 9));
+        tmpLabel.setFont(new Font("Arial", Font.PLAIN, 9));
         tmpLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         tmpLabel.setVerticalAlignment(SwingConstants.CENTER);
         addComponent(tmpLabel, racerStatusPanel, gblayout, gbconstraints, 0, 0); // label on the left

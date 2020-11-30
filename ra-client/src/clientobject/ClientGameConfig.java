@@ -26,7 +26,7 @@ public class ClientGameConfig {
             "Correct and Fastest Answer",
             "Timeout",
             "Eliminated",
-            "Quit"
+            "Raged Quit"
     };
 
     // type of racer object info flag

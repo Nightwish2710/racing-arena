@@ -11,6 +11,7 @@ public class ServerGameConfig {
     public static final int INIT_NUM_OF_RACERS = 6;
     public static final int INIT_RACE_LENGTH = 15;
     public static final int INIT_RACER_POSITION = 1;
+    public static final int INIT_RACER_GAIN = 0;
 
     // number of incorrect answer that racer can make
     public static final int MAX_NUM_OF_INCORRECT = 3;
@@ -24,6 +25,15 @@ public class ServerGameConfig {
         public static final int FLAG_ELIMINATED = 4;
         public static final int FLAG_QUIT = 5;
     }
+
+    public static final String[] STATUS_STRING = {
+            "Racer Ready",
+            "Correct Answer",
+            "Correct and Fastest Answer",
+            "Timeout",
+            "Eliminated",
+            "Raged Quit"
+    };
 
     // type of racer object info flag
     public static class RACER_OBJECT_INFO_TYPE_FLAG {

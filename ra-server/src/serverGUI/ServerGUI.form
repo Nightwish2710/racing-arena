@@ -171,11 +171,13 @@
           </grid>
         </constraints>
       </vspacer>
-      <scrollpane id="3dd9f" binding="statTableScrollPane">
+      <scrollpane id="3dd9f" binding="statTableScrollPane" custom-create="true">
         <constraints>
           <grid row="2" column="3" row-span="13" col-span="1" vsize-policy="0" hsize-policy="0" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
-        <properties/>
+        <properties>
+          <verticalScrollBarPolicy value="21"/>
+        </properties>
         <border type="none"/>
         <children>
           <component id="34f6e" class="javax.swing.JTable" binding="racerStatTable" custom-create="true">

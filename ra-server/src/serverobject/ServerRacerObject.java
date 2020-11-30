@@ -1,5 +1,7 @@
 package serverobject;
 
+import serverGUI.ServerGUIConfig;
+
 public class ServerRacerObject {
     private String username;
     private String password; // private to individual
@@ -7,12 +9,16 @@ public class ServerRacerObject {
     private int position;
     private int status;
 
+    private int gain;
+
     public ServerRacerObject(String _username, String _password, int _numOfVictory) {
         this.username = _username;
         this.password = _password;
         this.numOfVictory = _numOfVictory;
         this.position = ServerGameConfig.INIT_RACER_POSITION;
         this.status = ServerGameConfig.RACER_STATUS_FLAG.FLAG_READY;
+
+        this.gain = ServerGameConfig.INIT_RACER_GAIN;
     }
 
     public ServerRacerObject() {
@@ -32,4 +38,7 @@ public class ServerRacerObject {
 
     public int getPosition() { return position; }
     public void setPosition(int position) { this.position = position; }
+
+    public int getGain() { return gain; }
+    public void setGain(int gain) { this.gain = gain; }
 }
