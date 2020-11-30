@@ -105,9 +105,7 @@ public class ClientReceiverThread implements Runnable {
                 ClientGameMaster.getInstance().setNumOfRacers(cRecLogin.getNumOfRacers());
                 ClientGameMaster.getInstance().setInitCOpponents(cRecLogin.getcOpponents());
 
-//                System.out.println("START ANSWERING");
 //                ClientGUI.getInstance().startAnswering();
-//                System.out.println("STOP ANSWERING");
 //                ClientGUI.getInstance().stopAnswering();
 
                 // lock connection button and text area for nickname and password

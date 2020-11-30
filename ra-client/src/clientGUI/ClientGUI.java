@@ -65,6 +65,7 @@ public class ClientGUI extends JFrame {
     private JTextArea consoleTextArea;
 
     private JButton c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15;
+    private JLabel questionWarn;
 
     // error pane components
     JOptionPane noOpenConnectionPane;
@@ -633,7 +634,7 @@ public class ClientGUI extends JFrame {
     }
 
     public void startAnswering() throws InterruptedException {
-        System.out.println("TIMER START COUNTING DOWN");
+        System.out.println("START ANSWERING");
 
         enterAnswer.setEnabled(true);
         sendAnswerButton.setEnabled(true);
@@ -664,7 +665,7 @@ public class ClientGUI extends JFrame {
     }
 
     public void stopAnswering() {
-        System.out.println("TIMER RESET");
+        System.out.println("STOP ANSWERING");
 
         timerBar.setValue(ClientGameConfig.MAX_TIMER);
         timerBar.setString(Integer.toString(ClientGameConfig.MAX_TIMER));

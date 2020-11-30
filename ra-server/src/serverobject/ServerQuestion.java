@@ -19,7 +19,7 @@ public class ServerQuestion {
 
     public int getFirstNum() { return this.firstNum; }
     public int getSecondNum() { return this.secondNum; }
-    public int getOperator() { return operator; }
+    public int getOperator() { return this.operator; }
 
     public int getAnswer() {
         switch (operator) {
