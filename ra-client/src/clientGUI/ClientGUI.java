@@ -1,12 +1,12 @@
 package clientGUI;
 
-import clientdatamodel.send.CSendLogin;
+import clientdatamodel.send.CSenLogin;
 import clientobject.ClientGameConfig;
 import clientobject.ClientGameMaster;
 
 import clientnetwork.ClientNetwork;
 import clientnetwork.ClientNetworkConfig;
-import clientobject.ClientOpponent;
+import clientobject.ClientPlayer;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -345,10 +345,10 @@ public class ClientGUI extends JFrame {
             userNickname = enterNickname.getText();
             userPassword = String.valueOf(enterPassword.getPassword());
 
-            ClientGameMaster.getInstance().getcRacer().setNickname(userNickname);
-            ClientGameMaster.getInstance().getcRacer().setPassword(userPassword);
+            ClientGameMaster.getInstance().getCRacer().setNickname(userNickname);
+            ClientGameMaster.getInstance().getCRacer().setPassword(userPassword);
 
-            CSendLogin cdLogin = new CSendLogin(ClientNetworkConfig.CMD.CMD_LOGIN, userNickname, userPassword);
+            CSenLogin cdLogin = new CSenLogin(ClientNetworkConfig.CMD.CMD_LOGIN, userNickname, userPassword);
             ClientNetwork.getInstance().send(cdLogin);
         });
 
@@ -495,7 +495,7 @@ public class ClientGUI extends JFrame {
     }
 
     // update the progress bar to show how far each racer has come
-    public void updateOpponentProgress(int order, ClientOpponent opponent) {
+    public void updateOpponentProgress(int order, ClientPlayer opponent) {
         System.out.println("NEW OPPOS order: ");
         ((JLabel)racerStatusList.get(order*2-1)).setText(opponent.getNickname()); // update opponent name
 

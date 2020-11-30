@@ -10,6 +10,8 @@ public class ClientNetworkConfig {
         public static final int CMD_LOGIN = 0;
         public static final int CMD_INFO = 1;
         public static final int CMD_QUESTION = 2;
+        public static final int CMD_ANSWER = 3;
+        public static final int CMD_RESULT = 4;
     }
 
     public static class LOGIN_FLAG {
@@ -23,5 +25,6 @@ public class ClientNetworkConfig {
     public static class INFO_TYPE_FLAG {
         public static final int TYPE_NOTICE_NEW_OPPONENT = 0;
         public static final int TYPE_NOTICE_UPDATE_OPPONENT = 1;
+        public static final int TYPE_NOTICE_UPDATE_ALL_RACERS = 2;
     }
 }

@@ -14,11 +14,6 @@ public class SReqAccount extends ServerDataModel {
     }
 
     @Override
-    public byte[] pack() {
-        return super.pack();
-    }
-
-    @Override
     public void unpack(byte[] bytes) {
         ByteBuffer byteBuffer = ByteBuffer.wrap(bytes);
         byteBuffer.rewind();

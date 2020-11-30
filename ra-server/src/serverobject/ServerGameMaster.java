@@ -1,10 +1,12 @@
 package serverobject;
 
 import serverGUI.ServerGUI;
+import serverdatamodel.response.SResAllRacersInfo;
 import serverdatamodel.response.SResQuestion;
 import servernetwork.ServerNetwork;
 import servernetwork.ServerNetworkConfig;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -127,21 +129,10 @@ public class ServerGameMaster {
         return capacity;
     }
 
-    public void updateRacerInfo (String rUsername, int infoType, Object info) {
-        switch (infoType) {
-            case ServerGameConfig.RACER_OBJECT_INFO_TYPE_FLAG.TYPE_VICTORY:
-                this.sRacers.get(rUsername).setNumOfVictory((int) info);
-                break;
-            case ServerGameConfig.RACER_OBJECT_INFO_TYPE_FLAG.TYPE_POSITION:
-                this.sRacers.get(rUsername).setPosition((int) info);
-                break;
-            case ServerGameConfig.RACER_OBJECT_INFO_TYPE_FLAG.TYPE_STATUS:
-                this.sRacers.get(rUsername).setStatus((int) info);
-                break;
-            default:
-                break;
-        }
+    public ServerRacerObject getRacerByUsername(String rUsername) {
+        return this.sRacers.get(rUsername);
     }
+
     public ServerRacerObject getRacerInfo(String rUsername) {
         return sRacers.get(rUsername);
     }
@@ -173,5 +164,56 @@ public class ServerGameMaster {
                 serverQuestion.getStartingTimeOfQuestion()
         );
         ServerNetwork.getInstance().sendToAllClient(sResQuestion, -1, false);
+    }
+
+    public ServerQuestion getQuestion(int questionID) {
+        return this.sQuestions.get(questionID);
+    }
+
+    public void finalEvaluateAfterAnAnswer() {
+        long _minDeltaSAansweringTime = Long.MAX_VALUE;
+        int losePointsOfFuckedUpRacers = 0;
+
+        for (Map.Entry<String, ServerRacerObject> racerEntry : this.sRacers.entrySet()) {
+            ServerRacerObject currRacer = racerEntry.getValue();
+            // ignore previous eliminated or disconnected racer
+            if (currRacer.getStatus() == ServerGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED || currRacer.getStatus() == ServerGameConfig.RACER_STATUS_FLAG.FLAG_QUIT) {
+                // prepare shortest answering time
+                if (currRacer.getCurrDeltaSAnsweringTime() < _minDeltaSAansweringTime) {
+                    _minDeltaSAansweringTime = currRacer.getCurrDeltaSAnsweringTime();
+                }
+
+                //prepare total lose points of fucked up racers
+                if (currRacer.getGain() < 0) {
+                    losePointsOfFuckedUpRacers -= currRacer.getGain();
+                }
+
+                // eliminate
+                if (currRacer.getNumOfWrong() == ServerGameConfig.GAME_BALANCE.MAX_NUM_OF_WRONG) {
+                    currRacer.setStatus(ServerGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED);
+                }
+            }
+        }
+
+        // reward the fastest
+        for (Map.Entry<String, ServerRacerObject> racerEntry : this.sRacers.entrySet()) {
+            ServerRacerObject currRacer = racerEntry.getValue();
+            // ignore eliminated or disconnected racer
+            if (currRacer.getStatus() == ServerGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED || currRacer.getStatus() == ServerGameConfig.RACER_STATUS_FLAG.FLAG_QUIT) {
+                // prepare shortest answering time
+                if (currRacer.getCurrDeltaSAnsweringTime() == _minDeltaSAansweringTime) {
+                    // the fastest
+                    currRacer.setStatus(ServerGameConfig.RACER_STATUS_FLAG.FLAG_FASTEST);
+                    currRacer.updatePositionBy(losePointsOfFuckedUpRacers);
+                }
+            }
+        }
+
+        // send to clients
+        SResAllRacersInfo sResAllRacersInfo = new SResAllRacersInfo(
+                ServerNetworkConfig.CMD.CMD_RESULT,
+                ServerNetworkConfig.INFO_TYPE_FLAG.TYPE_NOTICE_UPDATE_ALL_RACERS,
+                ServerGameMaster.getInstance());
+        ServerNetwork.getInstance().sendToAllClient(sResAllRacersInfo, -1, false);
     }
 }
