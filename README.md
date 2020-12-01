@@ -15,3 +15,5 @@ https://stackoverflow.com/questions/18124276/java-making-the-code-wait-until-swi
 https://docs.oracle.com/javase/tutorial/uiswing/components/dialog.html
 * Bring output stream from system to JTextArea: <br>
 https://stackoverflow.com/questions/13893655/java-redirecting-system-out-println-to-a-jlabel/13893719
+* Allow to press [Enter] to submit answer: <br>
+https://stackoverflow.com/questions/13731710/allowing-the-enter-key-to-press-the-submit-button-as-opposed-to-only-using-mo

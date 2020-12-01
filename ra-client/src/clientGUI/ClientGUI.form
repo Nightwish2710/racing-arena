@@ -38,14 +38,14 @@
           <text value="Question"/>
         </properties>
       </component>
-      <component id="366a3" class="javax.swing.JButton" binding="sendAnswerButton">
+      <component id="366a3" class="javax.swing.JButton" binding="submitAnswerButton">
         <constraints>
           <grid row="17" column="1" row-span="1" col-span="15" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="-1" height="30"/>
           </grid>
         </constraints>
         <properties>
-          <text value="SEND ANSWER"/>
+          <text value="SUBMIT ANSWER"/>
         </properties>
       </component>
       <component id="b50d9" class="javax.swing.JTextField" binding="enterAnswer">

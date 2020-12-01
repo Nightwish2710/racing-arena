@@ -39,7 +39,7 @@ public class ServerQuestion {
             case ServerGameConfig.OPERATOR_FLAG.MODULA_OP:
                 return firstNum % secondNum;
             default:
-                return 100000001;
+                return Integer.MAX_VALUE;
         }
     }
 }

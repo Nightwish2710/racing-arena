@@ -20,7 +20,7 @@ public class ClientGameConfig {
         public static final int DIVIDE_OP = 3;
         public static final int MODULA_OP = 4;
     }
-    public static final String[] OPERATORS = {"+", "-", "*", "/", "%"};
+    public static final String[] OPERATORS = {"+", "-", "*", "/ ", "%"};
 
     // racer status
     public static class RACER_STATUS_FLAG {
@@ -35,7 +35,7 @@ public class ClientGameConfig {
     public static final String[] STATUS_STRING = {
             "ClientRacer Ready",
             "Correct Answer",
-            "Correct and Fastest Answer",
+            "Correct & Fastest Answer",
             "Timeout",
             "Eliminated",
             "Raged Quit"
