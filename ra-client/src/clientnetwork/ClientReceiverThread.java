@@ -167,17 +167,21 @@ public class ClientReceiverThread implements Runnable {
 
     private void _RR_updateThisRacer (CRecAllRacersInfo cRecAllRacersInfo) {
         // update this racer info
-        ClientRacer thisRacer = ClientGameMaster.getInstance().getCRacer();
-        ClientPlayer thisPlayer = cRecAllRacersInfo.getThisRacer(thisRacer.getNickname());
+        ClientRacer thisCRacer = ClientGameMaster.getInstance().getCRacer();
+        ClientPlayer thisPlayer = cRecAllRacersInfo.getThisRacer(thisCRacer.getNickname());
 
-        thisRacer.setStatusFlag(thisPlayer.getStatusFlag());
+        // update status flag received from server
+        thisCRacer.setStatusFlag(thisPlayer.getStatusFlag());
 
+        // player's position on server
         int newPositionOfThisRacer = thisPlayer.getPosition();
-        thisRacer.setGain(newPositionOfThisRacer - thisRacer.getPosition());
-        thisRacer.setPosition(newPositionOfThisRacer);
+        System.out.println(getClass().getSimpleName() + ": new pos " + newPositionOfThisRacer);
+        System.out.println(getClass().getSimpleName() + ": old pos " + thisCRacer.getPosition());
+        thisCRacer.setGain(newPositionOfThisRacer - thisCRacer.getPosition());
+        thisCRacer.setPosition(newPositionOfThisRacer);
 
         // signal the master to update its racer with these info
-        ClientGameMaster.getInstance().updateThisRacer(thisRacer);
+        ClientGameMaster.getInstance().updateThisRacer();
     }
 
     private void _RR_updateOpponentsInfo(CRecAllRacersInfo cRecAllRacersInfo) {

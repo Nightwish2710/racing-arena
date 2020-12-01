@@ -317,9 +317,9 @@ public class ClientGUI extends JFrame {
         });
 
         timerBar.setMaximum(ClientGUIConfig.TIMER_MAX);
-        timerBar.setValue(ClientGameConfig.MAX_TIMER);
+        timerBar.setValue(ClientGameConfig.MAX_TIMER_SEC);
 
-        timerBar.setString(Integer.toString(ClientGameConfig.MAX_TIMER));
+        timerBar.setString(Integer.toString(ClientGameConfig.MAX_TIMER_SEC));
     }
 
     private void setColorButtonUI() {
@@ -608,13 +608,15 @@ public class ClientGUI extends JFrame {
     }
 
     public void startAnswering() throws InterruptedException {
-        enterAnswer.setEnabled(true);
-        submitAnswerButton.setEnabled(true);
+        if (ClientGameMaster.getInstance().getCRacer().getStatusFlag() != ClientGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED) {
+            enterAnswer.setEnabled(true);
+            submitAnswerButton.setEnabled(true);
+        }
 
-        CountDownLatch lock = new CountDownLatch(ClientGameConfig.MAX_TIMER);
+        CountDownLatch lock = new CountDownLatch(ClientGameConfig.MAX_TIMER_SEC);
 
         timer = new Timer(1000, new ActionListener() {
-            int counter = ClientGameConfig.MAX_TIMER;
+            int counter = ClientGameConfig.MAX_TIMER_SEC;
 
             public void actionPerformed(ActionEvent ae) {
                 --counter;
@@ -647,6 +649,7 @@ public class ClientGUI extends JFrame {
         } catch (NumberFormatException e) {
             answer = Integer.MAX_VALUE;
         }
+        System.out.println("HOPE FOR OUTOFTIME: " + answer);
         ClientGameMaster.getInstance().giveAnswer(answer);
     }
 
@@ -661,8 +664,8 @@ public class ClientGUI extends JFrame {
     public void stopAnswering() {
         System.out.println("STOP ANSWERING");
 
-        timerBar.setValue(ClientGameConfig.MAX_TIMER);
-        timerBar.setString(Integer.toString(ClientGameConfig.MAX_TIMER));
+        timerBar.setValue(ClientGameConfig.MAX_TIMER_SEC);
+        timerBar.setString(Integer.toString(ClientGameConfig.MAX_TIMER_SEC));
 
         enterAnswer.setEnabled(false);
         submitAnswerButton.setEnabled(false);

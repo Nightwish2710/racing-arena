@@ -6,15 +6,15 @@ import serverdatamodel.response.SResQuestion;
 import servernetwork.ServerNetwork;
 import servernetwork.ServerNetworkConfig;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.ObjectInputFilter;
+import java.util.*;
 
 public class ServerGameMaster {
     private int numOfRacers;
     private int raceLength;
     private HashMap<String, ServerRacerObject> sRacers;
     private HashMap<Integer, ServerQuestion> sQuestions;
+    private Timer questionTimer;
 
     // Singleton
     private static ServerGameMaster serverGameMaster = null;
@@ -164,6 +164,26 @@ public class ServerGameMaster {
                 serverQuestion.getStartingTimeOfQuestion()
         );
         ServerNetwork.getInstance().sendToAllClient(sResQuestion, -1, false);
+
+        // start timer
+        this._startTimer();
+    }
+
+    private void _startTimer() {
+        this.questionTimer = new Timer();
+        questionTimer.scheduleAtFixedRate(new TimerTask() {
+            int time = ServerGameConfig.MAX_TIMER_SEC;
+            @Override
+            public void run() {
+                if (time >= 0) {
+                    time -= 1;
+                    ServerGUI.getInstance().setUpdateTimer(time);
+                } else {
+                    finalEvaluateAfterAnAnswer();
+                    questionTimer.cancel();
+                }
+            }
+        }, 0, 1000);
     }
 
     public ServerQuestion getQuestion(int questionID) {
@@ -171,21 +191,29 @@ public class ServerGameMaster {
     }
 
     public void finalEvaluateAfterAnAnswer() {
-        long _minDeltaSAansweringTime = Long.MAX_VALUE;
-        int losePointsOfFuckedUpRacers = 0;
+        long _minDeltaSAnsweringTime = Long.MAX_VALUE - 1;
+        int lostPointsOfFuckedUpRacers = ServerGameConfig.GAME_BALANCE.GAIN_FASTEST;
 
         for (Map.Entry<String, ServerRacerObject> racerEntry : this.sRacers.entrySet()) {
             ServerRacerObject currRacer = racerEntry.getValue();
             // ignore previous eliminated or disconnected racer
-            if (currRacer.getStatus() == ServerGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED || currRacer.getStatus() == ServerGameConfig.RACER_STATUS_FLAG.FLAG_QUIT) {
-                // prepare shortest answering time
-                if (currRacer.getCurrDeltaSAnsweringTime() < _minDeltaSAansweringTime) {
-                    _minDeltaSAansweringTime = currRacer.getCurrDeltaSAnsweringTime();
+            if (currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED && currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_QUIT) {
+                // prepare shortest answering time, ignore wrong answers
+                if (currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_WRONG && currRacer.getCurrDeltaSAnsweringTime() < _minDeltaSAnsweringTime) {
+                    _minDeltaSAnsweringTime = currRacer.getCurrDeltaSAnsweringTime();
                 }
 
-                // prepare total lose points of fucked up racers
-                if (currRacer.getGain() < 0) {
-                    losePointsOfFuckedUpRacers -= currRacer.getGain();
+                // timeout
+                if (currRacer.getCurrDeltaSAnsweringTime() == ServerGameConfig.INIT_RACER_DELTA_ANSWERING_TIME) {
+                    currRacer.setStatus(ServerGameConfig.RACER_STATUS_FLAG.FLAG_TIMEOUT);
+                }
+
+                //prepare total lose points of fucked up racers
+                if (currRacer.getStatus() == ServerGameConfig.RACER_STATUS_FLAG.FLAG_TIMEOUT) {
+                    lostPointsOfFuckedUpRacers += (-1) * ServerGameConfig.GAME_BALANCE.GAIN_TIMEOUT;
+                }
+                if (currRacer.getStatus() == ServerGameConfig.RACER_STATUS_FLAG.FLAG_WRONG) {
+                    lostPointsOfFuckedUpRacers += (-1) * ServerGameConfig.GAME_BALANCE.GAIN_WRONG;
                 }
 
                 // eliminate
@@ -199,12 +227,12 @@ public class ServerGameMaster {
         for (Map.Entry<String, ServerRacerObject> racerEntry : this.sRacers.entrySet()) {
             ServerRacerObject currRacer = racerEntry.getValue();
             // ignore eliminated or disconnected racer
-            if (currRacer.getStatus() == ServerGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED || currRacer.getStatus() == ServerGameConfig.RACER_STATUS_FLAG.FLAG_QUIT) {
+            if (currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED && currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_QUIT) {
                 // prepare shortest answering time
-                if (currRacer.getCurrDeltaSAnsweringTime() == _minDeltaSAansweringTime) {
+                if (currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_WRONG && currRacer.getCurrDeltaSAnsweringTime() <= _minDeltaSAnsweringTime) {
                     // the fastest
                     currRacer.setStatus(ServerGameConfig.RACER_STATUS_FLAG.FLAG_FASTEST);
-                    currRacer.updatePositionBy(losePointsOfFuckedUpRacers);
+                    currRacer.updatePositionBy(lostPointsOfFuckedUpRacers);
                 }
             }
         }
@@ -215,5 +243,17 @@ public class ServerGameMaster {
                 ServerNetworkConfig.INFO_TYPE_FLAG.TYPE_NOTICE_UPDATE_ALL_RACERS,
                 ServerGameMaster.getInstance());
         ServerNetwork.getInstance().sendToAllClient(sResAllRacersInfo, -1, false);
+
+        // show UI and reset flags
+        for (Map.Entry<String, ServerRacerObject> racerEntry : this.sRacers.entrySet()) {
+            ServerRacerObject currRacer = racerEntry.getValue();
+            // show UI
+            ServerGUI.getInstance().updateSRacerToUI(currRacer.getUsername(), currRacer.getGain(), currRacer.getStatus(), currRacer.getPosition());
+
+            // reset flags, ignore eliminated or disconnected racer
+            if (currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED && currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_QUIT) {
+                currRacer.resetRacerForNewQuestion();
+            }
+        }
     }
 }

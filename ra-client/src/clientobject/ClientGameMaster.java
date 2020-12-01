@@ -24,7 +24,12 @@ public class ClientGameMaster {
     }
 
     public ClientGameMaster() {
-        this.cRacer = new ClientRacer("", 0, 0, -1, "");
+        this.cRacer = new ClientRacer(
+                "",
+                ClientGameConfig.INIT_RACER_POSITION,
+                0,
+                ClientGameConfig.RACER_STATUS_FLAG.FLAG_READY,
+                ClientGameConfig.STATUS_STRING[ClientGameConfig.RACER_STATUS_FLAG.FLAG_READY]);
         this.numOfRacers = 0;
         this.cOpponents = null;
         this.currentQuestion = null;
@@ -55,15 +60,16 @@ public class ClientGameMaster {
     public void addNewOpponent(ClientPlayer cNewOpponent) {
         System.out.println("NEW OPPOs: " + cNewOpponent.getNickname());
         this.cOpponents.put(cNewOpponent.getNickname(), cNewOpponent);
+        // order is the first available slots
+        // for list of status components --> chỗ nào vẫn còn trống getText của label == 
         int order = this.getCurrentNumOfRacers();
         ClientGUI.getInstance().updateOpponentProgress(order, cNewOpponent);
     }
 
     public void updateAnOpponent(ClientPlayer cOpponent) {
+        // replace old info
         this.cOpponents.put(cOpponent.getNickname(), cOpponent);
-        // might call UI here
 
-        System.out.println(getClass().getSimpleName() + ": " + cOpponent.getNickname() + " status: " + this.cOpponents.get(cOpponent.getNickname()).getStatusFlag());
     }
 
     public void confirmRacerPostLogin(int numOfVictory) {
@@ -102,15 +108,14 @@ public class ClientGameMaster {
         ClientNetwork.getInstance().send(cSenAnswer);
     }
 
-    public void updateThisRacer(ClientRacer updatedThisRacer) {
+    public void updateThisRacer() {
         // new position, new status on UI
-        this.cRacer = updatedThisRacer;
         ClientGUI.getInstance().updateYouPoint(this.cRacer.getPosition());
         ClientGUI.getInstance().setUpdateStatus(ClientGameConfig.STATUS_STRING[this.cRacer.getStatusFlag()]);
 
         String gainStr = this.cRacer.getGain() >= 0 ? ("+"+String.valueOf(this.cRacer.getGain())) : String.valueOf(this.cRacer.getGain());
         ClientGUI.getInstance().setUpdateExtraStatus("Gain: " + gainStr + " ");
-
+        System.out.println(getClass().getSimpleName() + ": racer status flag: " + this.cRacer.getStatusFlag());
         switch (this.cRacer.getStatusFlag()) {
             case ClientGameConfig.RACER_STATUS_FLAG.FLAG_WRONG:
                 this.cRacer.updateNumOfIncorrectBy(1);
