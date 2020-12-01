@@ -183,7 +183,7 @@ public class ServerGameMaster {
                     _minDeltaSAansweringTime = currRacer.getCurrDeltaSAnsweringTime();
                 }
 
-                //prepare total lose points of fucked up racers
+                // prepare total lose points of fucked up racers
                 if (currRacer.getGain() < 0) {
                     losePointsOfFuckedUpRacers -= currRacer.getGain();
                 }
