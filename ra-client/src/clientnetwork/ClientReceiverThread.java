@@ -92,6 +92,7 @@ public class ClientReceiverThread implements Runnable {
             case ClientNetworkConfig.LOGIN_FLAG.NO_MORE_SLOTS:
                 System.out.println(getClass().getSimpleName() + ": NO_MORE_SLOTS");
                 // update UI
+                ClientGUI.getInstance().setJoinServerNoti("No More Slots :( ", 0);
                 break;
             case ClientNetworkConfig.LOGIN_FLAG.USERNAME_TAKEN:
                 System.out.println(getClass().getSimpleName() + ": USERNAME_TAKEN");

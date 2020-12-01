@@ -39,9 +39,10 @@ public class ServerGameConfig {
         public static final int FLAG_QUIT = 6;
     }
     public static final String[] STATUS_STRING = {
-            "ClientRacer Ready",
+            "Racer Ready",
             "Correct",
-            "Correct + Fastest",
+            "Correct & Fastest Answer",
+            "Incorrect",
             "Timeout",
             "Eliminated",
             "Raged Quit"
