@@ -98,7 +98,6 @@ public class ClientGameMaster {
         }
     }
 
-    // khúc này chỗ nhấn nút submit answer bên UI, tui cần get được cái int value answer á
     public void giveAnswer(int cAnswer) {
         CSenAnswer cSenAnswer = new CSenAnswer(
                 ClientNetworkConfig.CMD.CMD_ANSWER,
@@ -120,13 +119,14 @@ public class ClientGameMaster {
         switch (this.cRacer.getStatusFlag()) {
             case ClientGameConfig.RACER_STATUS_FLAG.FLAG_WRONG:
                 this.cRacer.updateNumOfIncorrectBy(1);
-                ClientGUI.getInstance().setUpdateExtraStatus("You have been wrong " + this.cRacer.getNumOfIncorrect() + " times ");
+                ClientGUI.getInstance().setUpdateExtraStatus("Wrong: " + this.cRacer.getNumOfIncorrect() + " times ");
                 break;
             case ClientGameConfig.RACER_STATUS_FLAG.FLAG_TIMEOUT:
                 break;
             case ClientGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED:
                 // block answer box and send-answer button
-                ClientGUI.getInstance().setUpdateExtraStatus("You have been ejected :>> ");
+
+                ClientGUI.getInstance().setUpdateExtraStatus("You were ejected :>> ");
                 break;
             default:
                 break;

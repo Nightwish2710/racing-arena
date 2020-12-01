@@ -38,9 +38,9 @@ public class ClientGameConfig {
     }
     public static final String[] STATUS_STRING = {
             "ClientRacer Ready",
-            "Correct Answer",
-            "Correct and Fastest Answer",
-            "Wrong",
+            "Correct",
+            "Correct & Fastest",
+            "Incorrect",
             "Timeout",
             "Eliminated",
             "Rage Quit"
