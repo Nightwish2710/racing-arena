@@ -24,7 +24,12 @@ public class ClientGameMaster {
     }
 
     public ClientGameMaster() {
-        this.cRacer = new ClientRacer("", 0, 0, -1, "");
+        this.cRacer = new ClientRacer(
+                "",
+                ClientGameConfig.INIT_RACER_POSITION,
+                0,
+                ClientGameConfig.RACER_STATUS_FLAG.FLAG_READY,
+                ClientGameConfig.STATUS_STRING[ClientGameConfig.RACER_STATUS_FLAG.FLAG_READY]);
         this.numOfRacers = 0;
         this.cOpponents = null;
         this.currentQuestion = null;
@@ -55,15 +60,16 @@ public class ClientGameMaster {
     public void addNewOpponent(ClientPlayer cNewOpponent) {
         System.out.println("NEW OPPOs: " + cNewOpponent.getNickname());
         this.cOpponents.put(cNewOpponent.getNickname(), cNewOpponent);
+        // order is the first available slots
+        // for list of status components --> chỗ nào vẫn còn trống getText của label == 
         int order = this.getCurrentNumOfRacers();
         ClientGUI.getInstance().updateOpponentProgress(order, cNewOpponent);
     }
 
     public void updateAnOpponent(ClientPlayer cOpponent) {
+        // replace old info
         this.cOpponents.put(cOpponent.getNickname(), cOpponent);
-        // might call UI here
 
-        System.out.println(getClass().getSimpleName() + ": " + cOpponent.getNickname() + " status: " + this.cOpponents.get(cOpponent.getNickname()).getStatusFlag());
     }
 
     public void confirmRacerPostLogin(int numOfVictory) {
@@ -120,7 +126,6 @@ public class ClientGameMaster {
                 break;
             case ClientGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED:
                 // block answer box and send-answer button
-
                 ClientGUI.getInstance().setUpdateExtraStatus("You have been ejected :>> ");
                 break;
             default:

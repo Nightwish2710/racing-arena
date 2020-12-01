@@ -13,7 +13,7 @@ public class ServerGameConfig {
     public static final int INIT_NUM_OF_RACERS = 6;
     public static final int INIT_RACE_LENGTH = 15;
     public static final int INIT_RACER_POSITION = 1;
-    public static final int INIT_RACER_GAIN = 0;
+    public static final long INIT_RACER_DELTA_ANSWERING_TIME = Long.MAX_VALUE;
 
     // number of incorrect answer that racer can make
     public static final int MAX_NUM_OF_INCORRECT = 3;
@@ -28,7 +28,7 @@ public class ServerGameConfig {
         public static final int DIVIDE_OP = 3;
         public static final int MODULA_OP = 4;
     }
-    public static final String[] OPERATORS = {"+", "-", "*", "/", "%"};
+    public static final String[] OPERATORS = {"+", "-", "*", "/ ", "%"};
 
     // racer status
     public static class RACER_STATUS_FLAG {
@@ -43,7 +43,7 @@ public class ServerGameConfig {
     public static final String[] STATUS_STRING = {
             "Racer Ready",
             "Correct Answer",
-            "Correct and Fastest Answer",
+            "Correct & Fastest Answer",
             "Timeout",
             "Eliminated",
             "Raged Quit"
@@ -53,7 +53,7 @@ public class ServerGameConfig {
         public static final int GAIN_NORMAL = 1;
         public static final int GAIN_WRONG = -1;
         public static final int GAIN_TIMEOUT = -1;
-
+        public static final int GAIN_FASTEST = 1;
         public static final int MAX_NUM_OF_WRONG = 3;
     }
 }

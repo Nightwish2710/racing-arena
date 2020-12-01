@@ -98,7 +98,11 @@ public class ServerCSocketThread implements Runnable{
         // update myself with new status: disconnected to master array
         ServerGameMaster.getInstance().getRacerByUsername(this.sRacerName).setStatus(ServerGameConfig.RACER_STATUS_FLAG.FLAG_QUIT);
         // signal this info to other opponents
-        SResOpponentInfo sResOpponentInfo = new SResOpponentInfo(ServerNetworkConfig.CMD.CMD_INFO, ServerNetworkConfig.INFO_TYPE_FLAG.TYPE_NOTICE_UPDATE_OPPONENT, this.sRacerName, ServerGameMaster.getInstance());
+        SResOpponentInfo sResOpponentInfo = new SResOpponentInfo(
+                ServerNetworkConfig.CMD.CMD_INFO,
+                ServerNetworkConfig.INFO_TYPE_FLAG.TYPE_NOTICE_UPDATE_OPPONENT,
+                this.sRacerName,
+                ServerGameMaster.getInstance());
         this.parentThread.signalAllClients(sResOpponentInfo, this.cSocketID, true);
 
         // close all streams
@@ -234,23 +238,28 @@ public class ServerCSocketThread implements Runnable{
         // check for time-out first
         long sDeltaAnsweringTime = sReqAnswer.getCAnsweringTime() - currentSQuestion.getStartingTimeOfQuestion();
         thisRacer.setCurrDeltaSAnsweringTime(sDeltaAnsweringTime);
-
+        System.out.println(getClass().getSimpleName() + "this racer init pos: " + thisRacer.getPosition());
         System.out.println(getClass().getSimpleName() + ": " + sReqAnswer.getCAnswer() + " " + sReqAnswer.getCQuestionID() + " " + sDeltaAnsweringTime);
 
         if (sDeltaAnsweringTime <= ServerGameConfig.MAX_TIMER_MILIS) {
+            System.out.println(thisRacer.getUsername() + ": IN TIME");
             // not timeout, go check for correctness
             // get actual answer from server
             int sAnswer = currentSQuestion.getAnswer();
             if (sAnswer == sReqAnswer.getCAnswer()) {
+                System.out.println(thisRacer.getUsername() + ": NORMAL");
                 // correct answer, get 1 point, status normal
                 thisRacer.updatePositionBy(ServerGameConfig.GAME_BALANCE.GAIN_NORMAL);
                 thisRacer.setStatus(ServerGameConfig.RACER_STATUS_FLAG.FLAG_NORMAL);
             } else {
+                System.out.println(thisRacer.getUsername() + ": WRONG");
+                // incorrect answer, get -1 point, status wrong
                 thisRacer.updatePositionBy(ServerGameConfig.GAME_BALANCE.GAIN_WRONG);
                 thisRacer.setStatus(ServerGameConfig.RACER_STATUS_FLAG.FLAG_WRONG);
                 thisRacer.updateNumOfWrongBy(1);
             }
         } else {
+            System.out.println(thisRacer.getUsername() + ": TIME OUT");
             // timeout
             thisRacer.updatePositionBy(ServerGameConfig.GAME_BALANCE.GAIN_TIMEOUT);
             thisRacer.setStatus(ServerGameConfig.RACER_STATUS_FLAG.FLAG_TIMEOUT);

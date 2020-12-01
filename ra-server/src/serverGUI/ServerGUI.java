@@ -318,8 +318,18 @@ public class ServerGUI extends JFrame {
 
     public void addSRacerToUI(String racerName, int gain, int status, int position) {
         String gainStr = gain >= 0 ? ("+"+String.valueOf(gain)) : String.valueOf(gain);
-        System.out.println(0 + racerName + gainStr + ServerGameConfig.STATUS_STRING[status] + position);
         dtm.addRow(new Object[]{racerName, gainStr, ServerGameConfig.STATUS_STRING[status], position});
+    }
+
+    public void updateSRacerToUI(String racerName, int gain, int status, int position) {
+        String gainStr = gain >= 0 ? ("+"+String.valueOf(gain)) : String.valueOf(gain);
+        for (int i = 0; i < ServerGameMaster.getInstance().getNumOfRacers(); ++i) {
+            if (dtm.getValueAt(i, 0) == racerName) {
+                dtm.setValueAt(gainStr, i, 1);
+                dtm.setValueAt(ServerGameConfig.STATUS_STRING[status], i, 2);
+                dtm.setValueAt(position, i, 3);
+            }
+        }
     }
 
     public void removeSRacerFromUI(String racerName) {
@@ -337,6 +347,9 @@ public class ServerGUI extends JFrame {
         // if number of ppl join equal number of racers config then enable start game button
         if (numOfPplJoining.getText().equals(numOfRacersSpinner.getValue().toString())) {
             startGameButton.setEnabled(true);
+        }
+        else {
+            startGameButton.setEnabled(false);
         }
     }
 

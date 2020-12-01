@@ -39,7 +39,7 @@ public class ClientGUI extends JFrame {
 
     private JButton joinServerButton;
     private JLabel joinServerNoti;
-    private JButton sendAnswerButton;
+    private JButton submitAnswerButton;
 
     private JLabel questionLabel;
     private JLabel firstNum, operator, secondNum;
@@ -91,6 +91,12 @@ public class ClientGUI extends JFrame {
         this.setErrorPaneUI();
     }
 
+    @Override
+    public void addNotify() {
+        super.addNotify();
+        SwingUtilities.getRootPane(submitAnswerButton).setDefaultButton(submitAnswerButton);
+    }
+
     // dont't change the function name
     private void createUIComponents() {
         racerStatusPanel = new JPanel();
@@ -117,11 +123,10 @@ public class ClientGUI extends JFrame {
         joinServerButton.setBorder(new LineBorder(ACCENT_COLOR));
         joinServerButton.setEnabled(false);
 
-        sendAnswerButton.setBackground(ACCENT_COLOR);
-        sendAnswerButton.setForeground(ClientGUIConfig.BACKGROUND_COLOR);
-        sendAnswerButton.setBorder(new LineBorder(ACCENT_COLOR));
-        sendAnswerButton.setEnabled(false);
-        sendAnswerButton.addActionListener(e -> { sendAnswerButton.setEnabled(false); });
+        submitAnswerButton.setBackground(ACCENT_COLOR);
+        submitAnswerButton.setForeground(ClientGUIConfig.BACKGROUND_COLOR);
+        submitAnswerButton.setBorder(new LineBorder(ACCENT_COLOR));
+        submitAnswerButton.setEnabled(false);
     }
 
     private void setPermanentClientGUI() {
@@ -312,9 +317,9 @@ public class ClientGUI extends JFrame {
         });
 
         timerBar.setMaximum(ClientGUIConfig.TIMER_MAX);
-        timerBar.setValue(ClientGameConfig.MAX_TIMER);
+        timerBar.setValue(ClientGameConfig.MAX_TIMER_SEC);
 
-        timerBar.setString(Integer.toString(ClientGameConfig.MAX_TIMER));
+        timerBar.setString(Integer.toString(ClientGameConfig.MAX_TIMER_SEC));
     }
 
     private void setColorButtonUI() {
@@ -350,12 +355,24 @@ public class ClientGUI extends JFrame {
 
             CSenLogin cdLogin = new CSenLogin(ClientNetworkConfig.CMD.CMD_LOGIN, userNickname, userPassword);
             ClientNetwork.getInstance().send(cdLogin);
+
+            submitAnswerButton.setEnabled(false); // not allow racers to resubmit their answer
         });
 
-        // click send answer button
-        sendAnswerButton.addActionListener(e -> {
-            sendAnswerButton.setEnabled(false);
+        // click to submit answer
+        submitAnswerButton.addActionListener(e -> {
+            submitAnswerButton.setEnabled(false);
             submitAnswer();
+        });
+        // press [Enter] to submit answer
+        submitAnswerButton.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if(e.getKeyChar() == KeyEvent.VK_ENTER && submitAnswerButton.isEnabled()) {
+                    submitAnswerButton.setEnabled(false);
+                    submitAnswer();
+                }
+            }
         });
     }
 
@@ -489,17 +506,8 @@ public class ClientGUI extends JFrame {
         }
     }
 
-    // update racers' status bar and value
-    private void updateRacerPoints() {
-        for (int i = 0; i < racerStatusList.size(); ++i) {
-            ((JProgressBar)racerStatusList.get(i)).setValue(8);
-            ((JProgressBar)racerStatusList.get(i)).setString(Integer.toString(8));
-        }
-    }
-
     // update the progress bar to show how far each racer has come
     public void updateOpponentProgress(int order, ClientPlayer opponent) {
-        System.out.println("NEW OPPOS order: ");
         ((JLabel)racerStatusList.get(order*2-1)).setText(opponent.getNickname()); // update opponent name
 
         ((JProgressBar)racerStatusList.get(order*2)).setValue(opponent.getPosition()); // update opponent progress
@@ -600,15 +608,15 @@ public class ClientGUI extends JFrame {
     }
 
     public void startAnswering() throws InterruptedException {
-        System.out.println("START ANSWERING");
+        if (ClientGameMaster.getInstance().getCRacer().getStatusFlag() != ClientGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED) {
+            enterAnswer.setEnabled(true);
+            submitAnswerButton.setEnabled(true);
+        }
 
-        enterAnswer.setEnabled(true);
-        sendAnswerButton.setEnabled(true);
-
-        CountDownLatch lock = new CountDownLatch(ClientGameConfig.MAX_TIMER);
+        CountDownLatch lock = new CountDownLatch(ClientGameConfig.MAX_TIMER_SEC);
 
         timer = new Timer(1000, new ActionListener() {
-            int counter = ClientGameConfig.MAX_TIMER;
+            int counter = ClientGameConfig.MAX_TIMER_SEC;
 
             public void actionPerformed(ActionEvent ae) {
                 --counter;
@@ -638,10 +646,11 @@ public class ClientGUI extends JFrame {
         int answer;
         try {
             answer = Integer.parseInt(this.enterAnswer.getText());
-            ClientGameMaster.getInstance().giveAnswer(answer);
         } catch (NumberFormatException e) {
-            answer = 100000001;
+            answer = Integer.MAX_VALUE;
         }
+        System.out.println("HOPE FOR OUTOFTIME: " + answer);
+        ClientGameMaster.getInstance().giveAnswer(answer);
     }
 
     public void updateYouPoint(int point) {
@@ -655,10 +664,10 @@ public class ClientGUI extends JFrame {
     public void stopAnswering() {
         System.out.println("STOP ANSWERING");
 
-        timerBar.setValue(ClientGameConfig.MAX_TIMER);
-        timerBar.setString(Integer.toString(ClientGameConfig.MAX_TIMER));
+        timerBar.setValue(ClientGameConfig.MAX_TIMER_SEC);
+        timerBar.setString(Integer.toString(ClientGameConfig.MAX_TIMER_SEC));
 
         enterAnswer.setEnabled(false);
-        sendAnswerButton.setEnabled(false);
+        submitAnswerButton.setEnabled(false);
     }
 }

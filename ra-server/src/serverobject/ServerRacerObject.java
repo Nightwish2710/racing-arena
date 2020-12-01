@@ -7,7 +7,7 @@ public class ServerRacerObject {
     private int position;
     private int status;
 
-    private int gain;
+    private int prevPosition;
     private int numOfWrong;
     private long currDeltaSAnsweringTime;
 
@@ -18,9 +18,9 @@ public class ServerRacerObject {
         this.position = ServerGameConfig.INIT_RACER_POSITION;
         this.status = ServerGameConfig.RACER_STATUS_FLAG.FLAG_READY;
 
-        this.gain = ServerGameConfig.INIT_RACER_GAIN;
+        this.prevPosition = ServerGameConfig.INIT_RACER_POSITION;
         this.numOfWrong = 0;
-        this.currDeltaSAnsweringTime = 0;
+        this.currDeltaSAnsweringTime = ServerGameConfig.INIT_RACER_DELTA_ANSWERING_TIME;
     }
 
     public ServerRacerObject() {
@@ -41,15 +41,14 @@ public class ServerRacerObject {
     public int getPosition() { return position; }
     public void setPosition(int position) { this.position = position; }
     public void updatePositionBy(int delta) {
-        this.gain = delta;
         this.position += delta;
+        System.out.println("updatePositionBy: " + this.position);
         if (this.position < ServerGameConfig.INIT_RACER_POSITION) {
             this.position = ServerGameConfig.INIT_RACER_POSITION;
         }
     }
 
-    public int getGain() { return gain; }
-    public void setGain(int gain) { this.gain = gain; }
+    public int getGain() { return this.position - prevPosition; }
 
     public int getNumOfWrong() {
         return numOfWrong;
@@ -69,5 +68,11 @@ public class ServerRacerObject {
 
     public void setCurrDeltaSAnsweringTime(long currDeltaSAnsweringTime) {
         this.currDeltaSAnsweringTime = currDeltaSAnsweringTime;
+    }
+
+    public void resetRacerForNewQuestion() {
+        this.status = ServerGameConfig.RACER_STATUS_FLAG.FLAG_READY;
+        this.prevPosition = this.position;
+        this.currDeltaSAnsweringTime = ServerGameConfig.INIT_RACER_DELTA_ANSWERING_TIME;
     }
 }
