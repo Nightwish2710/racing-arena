@@ -103,15 +103,14 @@ public class ClientGameMaster {
         ClientNetwork.getInstance().send(cSenAnswer);
     }
 
-    public void updateThisRacer(ClientRacer updatedThisRacer) {
+    public void updateThisRacer() {
         // new position, new status on UI
-        this.cRacer = updatedThisRacer;
         ClientGUI.getInstance().updateYouPoint(this.cRacer.getPosition());
         ClientGUI.getInstance().setUpdateStatus(ClientGameConfig.STATUS_STRING[this.cRacer.getStatusFlag()]);
 
         String gainStr = this.cRacer.getGain() >= 0 ? ("+"+String.valueOf(this.cRacer.getGain())) : String.valueOf(this.cRacer.getGain());
         ClientGUI.getInstance().setUpdateExtraStatus("Gain: " + gainStr + " ");
-
+        System.out.println(getClass().getSimpleName() + ": racer status flag: " + this.cRacer.getStatusFlag());
         switch (this.cRacer.getStatusFlag()) {
             case ClientGameConfig.RACER_STATUS_FLAG.FLAG_WRONG:
                 this.cRacer.updateNumOfIncorrectBy(1);

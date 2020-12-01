@@ -6,15 +6,15 @@ import serverdatamodel.response.SResQuestion;
 import servernetwork.ServerNetwork;
 import servernetwork.ServerNetworkConfig;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.ObjectInputFilter;
+import java.util.*;
 
 public class ServerGameMaster {
     private int numOfRacers;
     private int raceLength;
     private HashMap<String, ServerRacerObject> sRacers;
     private HashMap<Integer, ServerQuestion> sQuestions;
+    private Timer questionTimer;
 
     // Singleton
     private static ServerGameMaster serverGameMaster = null;
@@ -164,6 +164,26 @@ public class ServerGameMaster {
                 serverQuestion.getStartingTimeOfQuestion()
         );
         ServerNetwork.getInstance().sendToAllClient(sResQuestion, -1, false);
+
+        // start timer
+        this._startTimer();
+    }
+
+    private void _startTimer() {
+        this.questionTimer = new Timer();
+        questionTimer.scheduleAtFixedRate(new TimerTask() {
+            int time = ServerGameConfig.MAX_TIMER_SEC;
+            @Override
+            public void run() {
+                if (time >= 0) {
+                    time -= 1;
+                    ServerGUI.getInstance().setUpdateTimer(time);
+                } else {
+                    finalEvaluateAfterAnAnswer();
+                    questionTimer.cancel();
+                }
+            }
+        }, 0, 1000);
     }
 
     public ServerQuestion getQuestion(int questionID) {
@@ -184,8 +204,11 @@ public class ServerGameMaster {
                 }
 
                 //prepare total lose points of fucked up racers
-                if (currRacer.getGain() < 0) {
-                    losePointsOfFuckedUpRacers -= currRacer.getGain();
+                if (currRacer.getStatus() == ServerGameConfig.RACER_STATUS_FLAG.FLAG_TIMEOUT) {
+                    losePointsOfFuckedUpRacers -= ServerGameConfig.GAME_BALANCE.GAIN_TIMEOUT;
+                }
+                if (currRacer.getStatus() == ServerGameConfig.RACER_STATUS_FLAG.FLAG_WRONG) {
+                    losePointsOfFuckedUpRacers -= ServerGameConfig.GAME_BALANCE.GAIN_WRONG;
                 }
 
                 // eliminate
@@ -207,6 +230,8 @@ public class ServerGameMaster {
                     currRacer.updatePositionBy(losePointsOfFuckedUpRacers);
                 }
             }
+
+            System.out.println(getClass().getSimpleName() + ": "+ currRacer.getUsername() + ", new pos: " + currRacer.getPosition());
         }
 
         // send to clients

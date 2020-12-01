@@ -232,10 +232,12 @@ public class ServerCSocketThread implements Runnable{
         ServerQuestion currentSQuestion = ServerGameMaster.getInstance().getQuestion(sReqAnswer.getCQuestionID());
 
         // check for time-out first
-        long sDeltaAnsweringTime =  sReqAnswer.getCAnsweringTime() - currentSQuestion.getStartingTimeOfQuestion();
+        long sDeltaAnsweringTime = sReqAnswer.getCAnsweringTime() - currentSQuestion.getStartingTimeOfQuestion();
         thisRacer.setCurrDeltaSAnsweringTime(sDeltaAnsweringTime);
 
-        if (sDeltaAnsweringTime <= ServerGameConfig.MAX_TIMER) {
+        System.out.println(getClass().getSimpleName() + ": " + sReqAnswer.getCAnswer() + " " + sReqAnswer.getCQuestionID() + " " + sDeltaAnsweringTime);
+
+        if (sDeltaAnsweringTime <= ServerGameConfig.MAX_TIMER_MILIS) {
             // not timeout, go check for correctness
             // get actual answer from server
             int sAnswer = currentSQuestion.getAnswer();

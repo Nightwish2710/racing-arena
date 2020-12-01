@@ -36,8 +36,9 @@ public class ClientGameConfig {
             "ClientRacer Ready",
             "Correct Answer",
             "Correct and Fastest Answer",
+            "Wrong",
             "Timeout",
             "Eliminated",
-            "Raged Quit"
+            "Rage Quit"
     };
 }
