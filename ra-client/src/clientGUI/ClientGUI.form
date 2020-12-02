@@ -481,15 +481,6 @@
           <text value="Not Connected "/>
         </properties>
       </component>
-      <component id="6b277" class="javax.swing.JLabel" binding="questionWarn">
-        <constraints>
-          <grid row="12" column="11" row-span="2" col-span="5" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <font name="Arial" size="9" style="2"/>
-          <text value="&lt;HTML&gt;  If op is &quot;/&quot;&lt;br&gt;  then only take quotient  &lt;/HTML&gt;"/>
-        </properties>
-      </component>
       <hspacer id="c101">
         <constraints>
           <grid row="21" column="19" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
@@ -568,6 +559,22 @@
           </grid>
         </constraints>
       </hspacer>
+      <component id="20068" class="javax.swing.JLabel" binding="equalSign">
+        <constraints>
+          <grid row="13" column="11" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="="/>
+        </properties>
+      </component>
+      <component id="6d1c0" class="javax.swing.JLabel" binding="correctAnswer">
+        <constraints>
+          <grid row="13" column="12" row-span="1" col-span="4" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="correct answer"/>
+        </properties>
+      </component>
     </children>
   </grid>
 </form>

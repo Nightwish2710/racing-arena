@@ -42,7 +42,7 @@ public class ClientGUI extends JFrame {
     private JButton submitAnswerButton;
 
     private JLabel questionLabel;
-    private JLabel firstNum, operator, secondNum;
+    private JLabel firstNum, operator, secondNum, equalSign, correctAnswer;
     private JTextField enterAnswer;
 
     private JLabel updateStatus;
@@ -62,7 +62,6 @@ public class ClientGUI extends JFrame {
     private JLabel winner;
 
     private JButton c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15;
-    private JLabel questionWarn;
 
     // error pane components
     JOptionPane noOpenConnectionPane;
@@ -152,8 +151,8 @@ public class ClientGUI extends JFrame {
         joinServerNoti.setFont(new Font("Arial", Font.ITALIC, 9));
 
         winnerLabel.setFont(new Font("Britannic Bold", Font.PLAIN, 15));
-
-        winner.setHorizontalTextPosition(SwingConstants.LEFT);
+        winner.setFont(new Font("Arial", Font.ITALIC, 9));
+        winner.setText("Unknown.");
 
         // set separator
         setSeparatorUI();
@@ -598,6 +597,8 @@ public class ClientGUI extends JFrame {
             submitAnswerButton.setEnabled(true);
         }
 
+        correctAnswer.setText("correct answer");
+
         CountDownLatch lock = new CountDownLatch(ClientGameConfig.MAX_TIMER_SEC);
 
         timer = new Timer(1000, new ActionListener() {
@@ -636,6 +637,7 @@ public class ClientGUI extends JFrame {
     public void setFirstNum(int firstNum) { this.firstNum.setText(Integer.toString(firstNum)); }
     public void setOperator(int operator) { this.operator.setText(ClientGameConfig.OPERATORS[operator]); }
     public void setSecondNum(int secondNum) { this.secondNum.setText(Integer.toString(secondNum)); }
+    public void setCorrectAnswer(int correctAnswer) { this.correctAnswer.setText(Integer.toString(correctAnswer)); }
 
     private void submitAnswer() {
         int answer;
@@ -740,6 +742,7 @@ public class ClientGUI extends JFrame {
         firstNum.setText("1st no.");
         operator.setText("op");
         secondNum.setText("2nd no.");
+        correctAnswer.setText("correct answer");
 
         // reset answer status
         updateStatus.setText("Answer status");
@@ -757,7 +760,7 @@ public class ClientGUI extends JFrame {
 
     public void announceNoWinner() {
         winner.setFont(new Font("Arial", Font.ITALIC, 9));
-        winner.setText("Ppl in this server are not so smart.");
+        winner.setText("Ppl in this server are not so smart :> ");
     }
 
     public void renewRacerNickname(ClientPlayer racer) {

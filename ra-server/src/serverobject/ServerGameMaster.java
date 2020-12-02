@@ -260,10 +260,12 @@ public class ServerGameMaster {
                     currRacer.setStatus(ServerGameConfig.RACER_STATUS_FLAG.FLAG_FASTEST);
                     currRacer.updatePositionBy(lostPointsOfFuckedUpRacers);
 
-                    // may also be the victor
+                    // the racer may also be the victor
                     if (currRacer.getPosition() >= raceLength) {
                         currRacer.updateNumOfVictoryBy(1);
                         currRacer.setStatus(ServerGameConfig.RACER_STATUS_FLAG.FLAG_VICTORY);
+
+                        ServerGUI.getInstance().announceWinner(currRacer.getUsername()); // announce winner on UI
 
                         // write updated number of victory to database
                         String updateUser = "UPDATE " + ServerDBConfig.TABLE_RACER
@@ -279,9 +281,11 @@ public class ServerGameMaster {
             }
         }
 
+        // if no racers wins the race
         if (numOfRemainRacers <= 0) {
             isEndgame = true;
             ServerGUI.getInstance().changeStateOfControllButton();
+            ServerGUI.getInstance().announceNoWinner();
         }
 
         // send to clients
@@ -306,9 +310,9 @@ public class ServerGameMaster {
 
     public void replay() {
         isEndgame = false;
-        this.sQuestions.clear();
+        this.sQuestions.clear(); // clear question array
         resetAllRacersForNewMatch(); // reset table
-        ServerGUI.getInstance().resetUIForReplay();
+        ServerGUI.getInstance().resetUIForReplay(); // reset UI
 
         SResAllRacersInfo sResAllRacersInfo = new SResAllRacersInfo(ServerNetworkConfig.CMD.CMD_REPLAY, this);
         ServerNetwork.getInstance().sendToAllClient(sResAllRacersInfo, -1, false);
