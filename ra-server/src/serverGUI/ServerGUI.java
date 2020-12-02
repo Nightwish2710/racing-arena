@@ -3,6 +3,7 @@ package serverGUI;
 import servernetwork.ServerNetwork;
 import serverobject.ServerGameConfig;
 import serverobject.ServerGameMaster;
+import serverobject.ServerRacerObject;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -11,7 +12,8 @@ import javax.swing.border.*;
 
 import javax.imageio.ImageIO;
 
-import java.awt.image.BufferedImage;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.awt.*;
@@ -223,8 +225,11 @@ public class ServerGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 ServerGameMaster.getInstance().replay();
                 startGameButton.setText("GIVE QUESTION");
+
+                startGameButton.setBorder(new LineBorder(ServerGUIConfig.LIGHT_GREEN));
                 startGameButton.setBackground(ServerGUIConfig.LIGHT_GREEN);
                 startGameButton.setForeground(Color.WHITE);
+
                 startGameButton.removeActionListener(startGameButtonlisteners.get(1));
                 startGameButton.addActionListener(startGameButtonlisteners.get(0));
             }
@@ -312,16 +317,29 @@ public class ServerGUI extends JFrame {
 
     public void addSRacerToUI(String racerName, int gain, int status, int position) {
         String gainStr = gain >= 0 ? ("+"+gain) : String.valueOf(gain);
-        dtm.addRow(new Object[]{racerName, gainStr, ServerGameConfig.STATUS_STRING[status], position});
+        dtm.addRow(new Object[]{racerName, "Empty", gainStr, ServerGameConfig.STATUS_STRING[status], position});
     }
 
     public void updateSRacerToUI(String racerName, int gain, int status, int position) {
         String gainStr = gain >= 0 ? ("+"+String.valueOf(gain)) : String.valueOf(gain);
         for (int i = 0; i < ServerGameMaster.getInstance().getNumOfRacers(); ++i) {
             if (dtm.getValueAt(i, 0) == racerName) {
-                dtm.setValueAt(gainStr, i, 1);
-                dtm.setValueAt(ServerGameConfig.STATUS_STRING[status], i, 2);
-                dtm.setValueAt(position, i, 3);
+                dtm.setValueAt(gainStr, i, 2);
+                dtm.setValueAt(ServerGameConfig.STATUS_STRING[status], i, 3);
+                dtm.setValueAt(position, i, 4);
+            }
+        }
+    }
+
+    public void updateSRacerAnswerToUI(String racerName, int answer) {
+        for (int i = 0; i < ServerGameMaster.getInstance().getNumOfRacers(); ++i) {
+            if (dtm.getValueAt(i, 0) == racerName) {
+                if (answer == Integer.MAX_VALUE) {
+                    dtm.setValueAt("Empty", i, 1);
+                }
+                else {
+                    dtm.setValueAt(answer, i, 1);
+                }
             }
         }
     }
@@ -383,5 +401,16 @@ public class ServerGUI extends JFrame {
         // reset winner
         winner.setFont(new Font("Arial", Font.ITALIC, 9));
         winner.setText("Unknown.");
+    }
+
+    public void renewRacerNickname(ServerRacerObject racer) {
+        if (racer.getUsername().contains("<HTML><STRIKE>")) {
+            racer.setUsername(racer.getUsername().replace("<HTML><STRIKE>", ""));
+            racer.setUsername(racer.getUsername().replace("</STRIKE></HTML>", ""));
+        }
+    }
+
+    public void setGiveQuestionButton(boolean bool) {
+        startGameButton.setEnabled(bool);
     }
 }

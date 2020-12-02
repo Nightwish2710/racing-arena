@@ -234,11 +234,12 @@ public class ServerCSocketThread implements Runnable{
         System.out.println(getClass().getSimpleName() + "this racer init pos: " + thisRacer.getPosition());
         System.out.println(getClass().getSimpleName() + ": " + sReqAnswer.getCAnswer() + " " + sReqAnswer.getCQuestionID() + " " + sDeltaAnsweringTime);
 
-        if (sDeltaAnsweringTime <= ServerGameConfig.MAX_TIMER_MILIS) { // if not timeout, then check for correctness
-            System.out.println(thisRacer.getUsername() + ": IN TIME");
+        // if not timeout, then check for correctness
+        if (sDeltaAnsweringTime <= ServerGameConfig.MAX_TIMER_MILIS) {
+            // signal master to show racer's answer on UI
+            ServerGameMaster.getInstance().receiveAnswerFromARacer(thisRacer.getUsername(), sReqAnswer.getCAnswer());
 
-            // get actual answer from server
-            int sAnswer = currentSQuestion.getAnswer();
+            int sAnswer = currentSQuestion.getAnswer(); // get actual answer from server
 
             if (sAnswer == sReqAnswer.getCAnswer()) {
                 System.out.println(thisRacer.getUsername() + ": NORMAL");

@@ -17,6 +17,7 @@ public class ServerGameMaster {
     private HashMap<Integer, ServerQuestion> sQuestions;
     private Timer questionTimer;
     private boolean isEndgame;
+    private int numOfRemainRacers;
 
     // Singleton
     private static ServerGameMaster serverGameMaster = null;
@@ -31,6 +32,7 @@ public class ServerGameMaster {
         this.sRacers = new HashMap<>();
         this.sQuestions = new HashMap<>();
         this.numOfRacers = ServerGameConfig.INIT_NUM_OF_RACERS;
+        this.numOfRemainRacers = this.numOfRacers;
         this.raceLength = ServerGameConfig.INIT_RACE_LENGTH;
         this.isEndgame = false;
         serverGameMaster = this;
@@ -39,14 +41,11 @@ public class ServerGameMaster {
     public int getNumOfRacers() { return this.numOfRacers; }
     public void setNumOfRacers(int numOfRacers) {
         this.numOfRacers = numOfRacers;
+        this.numOfRemainRacers = numOfRacers;
     }
 
-    public int getRaceLength() {
-        return this.raceLength;
-    }
-    public void setRaceLength(int raceLength) {
-        this.raceLength = raceLength;
-    }
+    public int getRaceLength() { return this.raceLength; }
+    public void setRaceLength(int raceLength) { this.raceLength = raceLength; }
 
     public void addSRacer (ServerRacerObject sRacer) {
         sRacers.put(sRacer.getUsername(), sRacer);
@@ -55,6 +54,7 @@ public class ServerGameMaster {
         ServerGUI.getInstance().updateNumOfPplJoiningValue(this.getCurrentNumOfRacers());
         ServerGUI.getInstance().addSRacerToUI(sRacer.getUsername(), sRacer.getGain(), sRacer.getStatus(), sRacer.getPosition());
     }
+
     public void removeRacer(String racerName) {
         sRacers.remove(racerName);
         ServerGUI.getInstance().updateNumOfPplJoiningValue(this.getCurrentNumOfRacers());
@@ -64,6 +64,7 @@ public class ServerGameMaster {
     public HashMap<String, ServerRacerObject> getsRacers() {
         return sRacers;
     }
+
     public int getCurrentNumOfRacers() {
         return sRacers.size();
     }
@@ -153,13 +154,7 @@ public class ServerGameMaster {
         int sCurrentQuestionID = getNumberOfPrevQuestions() + 1;
         this.sQuestions.put(sCurrentQuestionID, serverQuestion);
 
-        // if it is the first question, then send default racers info first
-//        if (sCurrentQuestionID == 1) {
-//            SResAllRacersInfo sResAllRacersInfo = new SResAllRacersInfo(
-//                    ServerNetworkConfig.CMD.CMD_RESULT,
-//                    ServerGameMaster.getInstance());
-//            ServerNetwork.getInstance().sendToAllClient(sResAllRacersInfo, -1, false);
-//        }
+        ServerGUI.getInstance().setGiveQuestionButton(true);
 
         // update question on UI
         ServerGUI.getInstance().setFirstNum(serverQuestion.getFirstNum());
@@ -183,6 +178,8 @@ public class ServerGameMaster {
     }
 
     private void _startTimer() {
+        ServerGUI.getInstance().setGiveQuestionButton(false);
+
         this.questionTimer = new Timer();
         questionTimer.scheduleAtFixedRate(new TimerTask() {
             int time = ServerGameConfig.MAX_TIMER_SEC;
@@ -195,6 +192,7 @@ public class ServerGameMaster {
                 }
                 else {
                     finalEvaluateAfterAnAnswer();
+                    ServerGUI.getInstance().setGiveQuestionButton(true);
                     questionTimer.cancel();
                 }
             }
@@ -208,7 +206,6 @@ public class ServerGameMaster {
     public void finalEvaluateAfterAnAnswer() {
         long _minDeltaSAnsweringTime = Long.MAX_VALUE - 1;
         int lostPointsOfFuckedUpRacers = ServerGameConfig.GAME_BALANCE.GAIN_FASTEST;
-        int numOfRemainRacers = getCurrentNumOfRacers();
 
         for (Map.Entry<String, ServerRacerObject> racerEntry : this.sRacers.entrySet()) {
             ServerRacerObject currRacer = racerEntry.getValue();
@@ -237,15 +234,11 @@ public class ServerGameMaster {
                 }
 
                 // eliminate
-                System.out.println("NUMBER OF WRONG " + currRacer.getNumOfWrong());
                 if (currRacer.getNumOfWrong() == ServerGameConfig.GAME_BALANCE.MAX_NUM_OF_WRONG) {
                     currRacer.setStatus(ServerGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED);
-                    System.out.println("ELIMINATE " + currRacer.getUsername());
-                    // decrease number of remaining racers
-                    numOfRemainRacers -= 1;
+                    numOfRemainRacers -= 1; // decrease number of remaining racers
 
-                    // update table UI
-                    ServerGUI.getInstance().strikeThroughEliminatedRacer(currRacer.getUsername());
+                    ServerGUI.getInstance().strikeThroughEliminatedRacer(currRacer.getUsername()); // update table UI
                 }
             }
         }
@@ -292,9 +285,12 @@ public class ServerGameMaster {
             ServerGUI.getInstance().announceNoWinner();
         }
 
+        int sCorrectAnswer = getQuestion(sQuestions.size()).getAnswer();
+
         // send to clients
         SResAllRacersInfo sResAllRacersInfo = new SResAllRacersInfo(
                 ServerNetworkConfig.CMD.CMD_RESULT,
+                sCorrectAnswer,
                 ServerGameMaster.getInstance());
         ServerNetwork.getInstance().sendToAllClient(sResAllRacersInfo, -1, false);
 
@@ -314,12 +310,16 @@ public class ServerGameMaster {
 
     public void replay() {
         isEndgame = false;
-        this.sQuestions.clear();
-        this.sQuestions = new HashMap<>();
+
+        numOfRemainRacers = numOfRacers;
+
+        sQuestions.clear();
+        sQuestions = new HashMap<>();
+
         resetAllRacersForNewMatch(); // reset table
         ServerGUI.getInstance().resetUIForReplay(); // reset UI
 
-        SResAllRacersInfo sResAllRacersInfo = new SResAllRacersInfo(ServerNetworkConfig.CMD.CMD_REPLAY, this);
+        SResAllRacersInfo sResAllRacersInfo = new SResAllRacersInfo(ServerNetworkConfig.CMD.CMD_REPLAY, Integer.MAX_VALUE, this);
         ServerNetwork.getInstance().sendToAllClient(sResAllRacersInfo, -1, false);
     }
 
@@ -330,6 +330,12 @@ public class ServerGameMaster {
 
             // update values on UI
             ServerGUI.getInstance().updateSRacerToUI(currRacer.getUsername(), currRacer.getGain(), currRacer.getStatus(), currRacer.getPosition());
+            ServerGUI.getInstance().updateSRacerAnswerToUI(currRacer.getUsername(), Integer.MAX_VALUE);
+            ServerGUI.getInstance().renewRacerNickname(currRacer);
         }
+    }
+
+    public void receiveAnswerFromARacer(String racerName, int racerAnswer) {
+        ServerGUI.getInstance().updateSRacerAnswerToUI(racerName, racerAnswer);
     }
 }

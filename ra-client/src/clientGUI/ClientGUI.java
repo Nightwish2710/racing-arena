@@ -92,11 +92,11 @@ public class ClientGUI extends JFrame {
         this.setErrorPaneUI();
     }
 
-//    @Override
-//    public void addNotify() {
-//        super.addNotify();
-//        SwingUtilities.getRootPane(submitAnswerButton).setDefaultButton(submitAnswerButton);
-//    }
+    @Override
+    public void addNotify() {
+        super.addNotify();
+        SwingUtilities.getRootPane(submitAnswerButton).setDefaultButton(submitAnswerButton);
+    }
 
     // dont't change the function name
     private void createUIComponents() {
@@ -370,15 +370,15 @@ public class ClientGUI extends JFrame {
             submitAnswer();
         });
         // press [Enter] to submit answer
-//        submitAnswerButton.addKeyListener(new KeyAdapter() {
-//            @Override
-//            public void keyReleased(KeyEvent e) {
-//                if(e.getKeyChar() == KeyEvent.VK_ENTER && submitAnswerButton.isEnabled()) {
-//                    submitAnswerButton.setEnabled(false);
-//                    submitAnswer();
-//                }
-//            }
-//        });
+        submitAnswerButton.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if(e.getKeyChar() == KeyEvent.VK_ENTER && submitAnswerButton.isEnabled()) {
+                    submitAnswerButton.setEnabled(false);
+                    submitAnswer();
+                }
+            }
+        });
     }
 
     private CompoundBorder createProgressBarBorder(int rightThickness) {
@@ -720,6 +720,10 @@ public class ClientGUI extends JFrame {
                 break;
             }
         }
+    }
+
+    public void updateCorrectAnswer(int answer) {
+        correctAnswer.setText(Integer.toString(answer));
     }
 
     public void strikeThroughEliminatedRacer(ClientPlayer opponent) {

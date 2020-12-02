@@ -9,10 +9,12 @@ import java.util.HashMap;
 
 public class CRecAllRacersInfo extends ClientDataModel {
     private int currentNumOfRacers;
+    private int correctAnswer;
     private HashMap<String, ClientPlayer> cPlayers;
 
     public CRecAllRacersInfo() {
         this.currentNumOfRacers = -1;
+        this.correctAnswer = Integer.MAX_VALUE;
         this.cPlayers = null;
     }
 
@@ -21,6 +23,7 @@ public class CRecAllRacersInfo extends ClientDataModel {
         ByteBuffer byteBuffer = ByteBuffer.wrap(bytes);
         byteBuffer.rewind();
 
+        this.correctAnswer = byteBuffer.getInt();
         this.currentNumOfRacers = byteBuffer.getInt();
 
         cPlayers = new HashMap<>();
@@ -40,12 +43,14 @@ public class CRecAllRacersInfo extends ClientDataModel {
         }
     }
 
+    public int getCorrectAnswer() { return this.correctAnswer; }
+
     public int getCurrentNumOfRacers() {
-        return currentNumOfRacers;
+        return this.currentNumOfRacers;
     }
 
     public HashMap<String, ClientPlayer> getAllRacers() {
-        return cPlayers;
+        return this.cPlayers;
     }
 
     public ClientPlayer getThisRacer(String cRacerUsername) {

@@ -9,16 +9,19 @@ import java.util.Map;
 
 public class SResAllRacersInfo extends ServerDataModel {
     private int cmd;
+    private int sAnswer;
     private ServerGameMaster sGameMaster;
 
-    public SResAllRacersInfo(int _cmd, ServerGameMaster _sGameMaster) {
+    public SResAllRacersInfo(int _cmd, int _sAnswer, ServerGameMaster _sGameMaster) {
         this.cmd = _cmd;
+        this.sAnswer = _sAnswer;
         this.sGameMaster = _sGameMaster;
     }
 
     @Override
     public byte[] pack() {
         int capacity = Integer.BYTES // cmd
+                + Integer.BYTES // storing answer
                 + Integer.BYTES // storing numOfRacers
 
                 + this.sGameMaster.getSizeInBytes(false, null);
@@ -28,6 +31,7 @@ public class SResAllRacersInfo extends ServerDataModel {
         // Always put cmd first
         byteBuffer.putInt(this.cmd);
         // Then put data sequentially
+        byteBuffer.putInt(this.sAnswer);
         byteBuffer.putInt(this.sGameMaster.getCurrentNumOfRacers());
 
         for (Map.Entry<String, ServerRacerObject> entry : this.sGameMaster.getsRacers().entrySet()) {

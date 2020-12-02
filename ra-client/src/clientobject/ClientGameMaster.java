@@ -84,6 +84,7 @@ public class ClientGameMaster {
                 break;
             case ClientGameConfig.RACER_STATUS_FLAG.FLAG_VICTORY:
                 ClientGUI.getInstance().announceWinner(cOpponent.getNickname());
+                ClientGUI.getInstance().updateOpponentProgress(cOpponent);
                 break;
             default:
                 break;
@@ -202,5 +203,9 @@ public class ClientGameMaster {
                 updateAnOpponent(clientPlayer);
             }
         }
+    }
+
+    public void updateCorrectAnswer(int answer) {
+        ClientGUI.getInstance().updateCorrectAnswer(answer);
     }
 }

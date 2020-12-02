@@ -170,6 +170,7 @@ public class ClientReceiverThread implements Runnable {
 
         _RR_updateThisRacer(cRecAllRacersInfo);
         _RR_updateOpponentsInfo(cRecAllRacersInfo);
+        _RR_updateCorrectAnswer(cRecAllRacersInfo);
     }
 
     private void _RR_updateThisRacer (CRecAllRacersInfo cRecAllRacersInfo) {
@@ -192,6 +193,10 @@ public class ClientReceiverThread implements Runnable {
     private void _RR_updateOpponentsInfo(CRecAllRacersInfo cRecAllRacersInfo) {
         // signal the master to update the racer opponents with these info
         ClientGameMaster.getInstance().updateAllOpponents(cRecAllRacersInfo.getAllRacers());
+    }
+
+    private void _RR_updateCorrectAnswer(CRecAllRacersInfo cRecAllRacersInfo) {
+        ClientGameMaster.getInstance().updateCorrectAnswer(cRecAllRacersInfo.getCorrectAnswer());
     }
 
     private void receiveReplay(byte[] bytes) {
