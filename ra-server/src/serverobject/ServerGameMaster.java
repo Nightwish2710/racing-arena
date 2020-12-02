@@ -204,12 +204,14 @@ public class ServerGameMaster {
             if (currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED &&
                     currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_QUIT) {
                 // prepare shortest answering time, ignore wrong answers
-                if (currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_WRONG && currRacer.getCurrDeltaSAnsweringTime() < _minDeltaSAnsweringTime) {
+                if (currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_WRONG &&
+                        currRacer.getCurrDeltaSAnsweringTime() < _minDeltaSAnsweringTime) {
                     _minDeltaSAnsweringTime = currRacer.getCurrDeltaSAnsweringTime();
                 }
 
                 // timeout
                 if (currRacer.getCurrDeltaSAnsweringTime() == ServerGameConfig.INIT_RACER_DELTA_ANSWERING_TIME) {
+                    currRacer.updatePositionBy(ServerGameConfig.GAME_BALANCE.GAIN_TIMEOUT);
                     currRacer.setStatus(ServerGameConfig.RACER_STATUS_FLAG.FLAG_TIMEOUT);
                 }
 
