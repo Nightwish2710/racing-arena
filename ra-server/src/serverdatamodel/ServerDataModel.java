@@ -10,7 +10,8 @@ public class ServerDataModel {
     }
 
     public byte[] pack() {
-        return byteBuffer.array();
+        return this.byteBuffer.array();
     };
+
     public void unpack(byte[] bytes) {};
 }

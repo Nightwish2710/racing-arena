@@ -30,6 +30,7 @@ public class ClientGameMaster {
                 0,
                 ClientGameConfig.RACER_STATUS_FLAG.FLAG_READY,
                 ClientGameConfig.STATUS_STRING[ClientGameConfig.RACER_STATUS_FLAG.FLAG_READY]);
+
         this.numOfRacers = 0;
         this.cOpponents = null;
         this.currentQuestion = null;
@@ -64,6 +65,7 @@ public class ClientGameMaster {
     public void updateAnOpponent(ClientPlayer cOpponent) {
         // replace old info
         this.cOpponents.put(cOpponent.getNickname(), cOpponent);
+
         switch (cOpponent.getStatusFlag()) {
             case ClientGameConfig.RACER_STATUS_FLAG.FLAG_READY:
                 ClientGUI.getInstance().resetProgressBarForReplay(cOpponent);
@@ -89,12 +91,17 @@ public class ClientGameMaster {
     public void confirmRacerPostLogin(int numOfVictory) {
         this.cRacer.setNumOfVictory(numOfVictory);
 
-        ClientGUI.getInstance().setNickname(this.cRacer.getNickname());
-        ClientGUI.getInstance().setNumOfVictory(numOfVictory); // update victory count on UI
+        ClientGUI.getInstance().updateYouNickname(this.cRacer.getNickname()); // update racer name in status panel on UI
+        ClientGUI.getInstance().updateYouNumOfVictory(numOfVictory); // update reacer's victory count on UI
     }
 
     public void setCurrentQuestion(ClientQuestion currentQuestion) {
         this.currentQuestion = currentQuestion;
+
+//        if (this.currentQuestion.getQuestionId() == ClientGameConfig.INIT_QUESTION_ID) {
+//            // put all racers back to the start
+//            prepareRacersToStartTheRace();
+//        }
 
         ClientGUI.getInstance().setFirstNum(currentQuestion.getFirstNum());
         ClientGUI.getInstance().setOperator(currentQuestion.getOperator());
@@ -108,6 +115,29 @@ public class ClientGameMaster {
         }
     }
 
+    private void prepareRacersToStartTheRace() {
+        _prepareRacer();
+        _prepareOpponents();
+    }
+
+    private void _prepareRacer() {
+        cRacer.setPosition(ClientGameConfig.INIT_RACER_POSITION);
+        cRacer.setStatusFlag(ClientGameConfig.RACER_STATUS_FLAG.FLAG_READY);
+        cRacer.setStatusStr(ClientGameConfig.STATUS_STRING[ClientGameConfig.RACER_STATUS_FLAG.FLAG_READY]);
+        cRacer.setNumOfIncorrect(0);
+        cRacer.setGain(0);
+
+        // update UI
+        ClientGUI.getInstance().resetYouProgressBar();
+    }
+
+    private void _prepareOpponents() {
+        for (Map.Entry<String, ClientPlayer> opps : cOpponents.entrySet()) {
+            ClientGUI.getInstance().updateOpponentNameWhenJoin(opps.getValue());
+            //
+        }
+    }
+
     public void giveAnswer(int cAnswer) {
         CSenAnswer cSenAnswer = new CSenAnswer(
                 ClientNetworkConfig.CMD.CMD_ANSWER,
@@ -115,24 +145,25 @@ public class ClientGameMaster {
                 cAnswer,
                 System.currentTimeMillis() - this.currentQuestion.getTimeOffset()
         );
+
         ClientNetwork.getInstance().send(cSenAnswer);
     }
 
     public void updateThisRacer() {
         // new position, new status on UI
-        ClientGUI.getInstance().updateYouPoint(this.cRacer.getPosition());
-        ClientGUI.getInstance().setUpdateStatus(ClientGameConfig.STATUS_STRING[this.cRacer.getStatusFlag()]);
+        ClientGUI.getInstance().updateYouPoint(cRacer.getPosition());
+        ClientGUI.getInstance().setUpdateStatus(ClientGameConfig.STATUS_STRING[cRacer.getStatusFlag()]);
 
-        String gainStr = this.cRacer.getGain() >= 0 ? ("+"+String.valueOf(this.cRacer.getGain())) : String.valueOf(this.cRacer.getGain());
+        String gainStr = cRacer.getGain() >= 0 ? ("+"+String.valueOf(cRacer.getGain())) : String.valueOf(cRacer.getGain());
         ClientGUI.getInstance().setUpdateExtraStatus("Gain: " + gainStr + " ");
-        System.out.println(getClass().getSimpleName() + ": racer status flag: " + this.cRacer.getStatusFlag());
+        System.out.println(getClass().getSimpleName() + ": racer status flag: " + cRacer.getStatusFlag());
 
-        switch (this.cRacer.getStatusFlag()) {
+        switch (cRacer.getStatusFlag()) {
             case ClientGameConfig.RACER_STATUS_FLAG.FLAG_READY:
                 ClientGUI.getInstance().resetYouProgressBar();
                 break;
             case ClientGameConfig.RACER_STATUS_FLAG.FLAG_WRONG:
-                this.cRacer.updateNumOfIncorrectBy(1);
+                cRacer.updateNumOfIncorrectBy(1);
                 ClientGUI.getInstance().setUpdateExtraStatus("Wrong: " + this.cRacer.getNumOfIncorrect() + " times ");
                 break;
             case ClientGameConfig.RACER_STATUS_FLAG.FLAG_TIMEOUT:
@@ -149,8 +180,8 @@ public class ClientGameMaster {
     public void updateAllOpponents(HashMap<String, ClientPlayer> allRacers) {
         for (Map.Entry<String, ClientPlayer> racer : allRacers.entrySet()) {
             ClientPlayer clientPlayer = racer.getValue();
-            if (clientPlayer.getNickname() != this.cRacer.getNickname()) {
-                this.updateAnOpponent(clientPlayer);
+            if (clientPlayer.getNickname() != cRacer.getNickname()) {
+                updateAnOpponent(clientPlayer);
             }
         }
     }

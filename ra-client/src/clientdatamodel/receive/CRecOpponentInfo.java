@@ -39,17 +39,15 @@ public class CRecOpponentInfo extends ClientDataModel {
     }
 
     public int getEventFlag() {
-        return eventFlag;
+        return this.eventFlag;
     }
-
     public void setEventFlag(int eventFlag) {
         this.eventFlag = eventFlag;
     }
 
     public String getOpponentUsername() {
-        return opponentUsername;
+        return this.opponentUsername;
     }
-
     public void setOpponentUsername(String opponentUsername) {
         this.opponentUsername = opponentUsername;
     }
@@ -57,23 +55,20 @@ public class CRecOpponentInfo extends ClientDataModel {
     public int getOpponentPosition() {
         return opponentPosition;
     }
-
     public void setOpponentPosition(int opponentPosition) {
         this.opponentPosition = opponentPosition;
     }
 
     public int getOpponentStatus() {
-        return opponentStatus;
+        return this.opponentStatus;
     }
-
     public void setOpponentStatus(int opponentStatus) {
         this.opponentStatus = opponentStatus;
     }
 
     public int getCurrentNumOfRacers() {
-        return currentNumOfRacers;
+        return this.currentNumOfRacers;
     }
-
     public void setCurrentNumOfRacers(int currentNumOfRacers) {
         this.currentNumOfRacers = currentNumOfRacers;
     }

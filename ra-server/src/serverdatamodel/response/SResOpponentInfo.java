@@ -9,6 +9,7 @@ import java.nio.ByteBuffer;
 public class SResOpponentInfo extends ServerDataModel {
     private int cmd;
     private int eventFlag;
+
     private String newRacerUsername;
     private ServerGameMaster sGameMaster;
 

@@ -52,12 +52,14 @@ public class ClientGUI extends JFrame {
     private JProgressBar timerBar;
     private Timer timer;
 
-    private JSeparator separator1, separator2, separator3;
+    private JSeparator separator1, separator2, separator3, separator4, separator5;
     private JSeparator verticalSeparator;
 
     private JLabel racerStatusLabel;
     private JPanel racerStatusPanel;
     private List<Component> racerStatusList;
+    private JLabel winnerLabel;
+    private JLabel updateWinner;
 
     private JButton c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15;
     private JLabel questionWarn;
@@ -149,6 +151,15 @@ public class ClientGUI extends JFrame {
         updateNumOfVictory.setFont(new Font("Britannic Bold", Font.PLAIN, 40));
         joinServerNoti.setFont(new Font("Arial", Font.ITALIC, 9));
 
+        winnerLabel.setFont(new Font("Britannic Bold", Font.PLAIN, 15));
+
+        updateWinner.setHorizontalTextPosition(SwingConstants.LEFT);
+//        updateWinner.setFont(new Font("Arial", Font.ITALIC, 9));
+//        updateWinner.setText("Ppl in this server are not so smart.");
+        updateWinner.setFont(new Font("Britannic Bold", Font.PLAIN, 18));
+        updateWinner.setText("QQQQQQQQQQ");
+
+
         // set separator
         setSeparatorUI();
 
@@ -168,7 +179,7 @@ public class ClientGUI extends JFrame {
     }
 
     private void setSeparatorUI() {
-        List<JSeparator> sep = Arrays.asList(separator1, separator2, separator3);
+        List<JSeparator> sep = Arrays.asList(separator1, separator2, separator3, separator4, separator5);
 
         for (int i = 0; i < sep.size(); ++i) {
             sep.get(i).setBackground(ClientGUIConfig.BORDER_COLOR);
@@ -391,7 +402,7 @@ public class ClientGUI extends JFrame {
         tmpBar.setStringPainted(false);
         tmpBar.setVisible(true);
 
-        tmpBar.setMinimumSize(new Dimension(40, 25));
+        tmpBar.setMinimumSize(new Dimension(180, 20));
         tmpBar.setBorder(createProgressBarBorder(rightThickness));
         tmpBar.setForeground(ClientGUIConfig.BACKGROUND_COLOR);
         tmpBar.setBackground(ClientGUIConfig.BACKGROUND_COLOR);
@@ -446,12 +457,12 @@ public class ClientGUI extends JFrame {
     // create a line to separate between current racer and other racers
     private void createSeparatorBetweenYouAndOtherRacers(GridBagLayout gblayout, GridBagConstraints gbconstraints) {
         JSeparator separator4 = new JSeparator();
-        separator4.setBorder(BorderFactory.createMatteBorder(3, 0, 0, 0, ClientGUIConfig.BACKGROUND_COLOR));
+        separator4.setBorder(BorderFactory.createMatteBorder(2, 0, 0, 0, ClientGUIConfig.BACKGROUND_COLOR));
         separator4.setAlignmentY(Component.TOP_ALIGNMENT);
 
         gbconstraints.gridwidth = 2; // separator will go across 2 cells
         gbconstraints.ipadx = ClientGUIConfig.RACER_STAT_PANEL_WIDTH; // padding width
-        gbconstraints.ipady = 1; // padding height
+        gbconstraints.ipady = 0; // padding height
 
         addComponent(separator4, racerStatusPanel, gblayout, gbconstraints, 0, 1);
     }
@@ -558,14 +569,6 @@ public class ClientGUI extends JFrame {
         noOpenConnectionDialog.setVisible(false);
     }
 
-    public void setNumOfVictory(int numOfVictory) {
-        updateNumOfVictory.setText(Integer.toString(numOfVictory));
-    }
-
-    public void setNickname(String nickname) {
-        ((JLabel)racerStatusList.get(0)).setText(nickname);
-    }
-
     public void setJoinServerNoti(String str, int color) {
         joinServerNoti.setForeground(ClientGUIConfig.COLOR_LIST.get(color));
         joinServerNoti.setText(str);
@@ -584,6 +587,14 @@ public class ClientGUI extends JFrame {
     public void turnOffNoOpenConnectionPane() {
         if (this.noOpenConnectionDialog == null) return;
         this.noOpenConnectionDialog.setVisible(false);
+    }
+
+    public void updateYouNumOfVictory(int numOfVictory) {
+        updateNumOfVictory.setText(Integer.toString(numOfVictory));
+    }
+
+    public void updateYouNickname(String nickname) {
+        ((JLabel)racerStatusList.get(0)).setText(nickname);
     }
 
     public void startAnswering() throws InterruptedException {
@@ -638,7 +649,6 @@ public class ClientGUI extends JFrame {
         } catch (NumberFormatException e) {
             answer = Integer.MAX_VALUE;
         }
-        System.out.println("HOPE FOR OUTOFTIME: " + answer);
         ClientGameMaster.getInstance().giveAnswer(answer);
     }
 
@@ -724,6 +734,21 @@ public class ClientGUI extends JFrame {
                 break;
             }
         }
+    }
+
+    public void resetUIForReplay() {
+        // reset winner announcement
+        updateWinner.setFont(new Font("Arial", Font.ITALIC, 9));
+        updateWinner.setText("Unknown.");
+
+        // reset question info
+        firstNum.setText("1st no.");
+        operator.setText("op");
+        secondNum.setText("2nd no.");
+
+        // reset answer status
+        updateStatus.setText("Answer status");
+        updateStatus.setText("Extra status");
     }
 
     public void resetProgressBarForReplay(ClientPlayer opponent) {

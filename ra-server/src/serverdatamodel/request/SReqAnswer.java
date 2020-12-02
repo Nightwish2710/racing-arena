@@ -26,14 +26,14 @@ public class SReqAnswer extends ServerDataModel {
     }
 
     public int getCQuestionID() {
-        return cQuestionID;
+        return this.cQuestionID;
     }
 
     public int getCAnswer() {
-        return cAnswer;
+        return this.cAnswer;
     }
 
     public long getCAnsweringTime() {
-        return cAnsweringTime;
+        return this.cAnsweringTime;
     }
 }

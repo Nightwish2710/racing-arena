@@ -34,6 +34,7 @@ public class ServerRacerObject {
 
     public int getNumOfVictory() { return numOfVictory; }
     public void setNumOfVictory(int numOfVictory) { this.numOfVictory = numOfVictory; }
+    public void updateNumOfVictoryBy(int delta) { this.numOfVictory += delta; }
 
     public int getStatus() { return status; }
     public void setStatus(int status) { this.status = status; }
@@ -53,7 +54,6 @@ public class ServerRacerObject {
     public int getNumOfWrong() {
         return numOfWrong;
     }
-
     public void setNumOfWrong(int numOfWrong) {
         this.numOfWrong = numOfWrong;
     }
@@ -73,6 +73,14 @@ public class ServerRacerObject {
     public void resetRacerForNewQuestion() {
         this.status = ServerGameConfig.RACER_STATUS_FLAG.FLAG_READY;
         this.prevPosition = this.position;
+        this.currDeltaSAnsweringTime = ServerGameConfig.INIT_RACER_DELTA_ANSWERING_TIME;
+    }
+
+    public void resetRacerForNewMatch() {
+        this.status = ServerGameConfig.RACER_STATUS_FLAG.FLAG_READY;
+        this.prevPosition = ServerGameConfig.INIT_RACER_POSITION;
+        this.position = ServerGameConfig.INIT_RACER_POSITION;
+        this.numOfWrong = 0;
         this.currDeltaSAnsweringTime = ServerGameConfig.INIT_RACER_DELTA_ANSWERING_TIME;
     }
 }

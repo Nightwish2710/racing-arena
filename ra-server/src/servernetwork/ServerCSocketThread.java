@@ -36,7 +36,7 @@ public class ServerCSocketThread implements Runnable{
         this.isPermittedToRun = true;
 
         this.socketOfServer = _socketOfServer;
-        // Server socket I/O
+        // server socket I/O
         try {
             inStream = new DataInputStream(socketOfServer.getInputStream());
             outStream = new DataOutputStream(socketOfServer.getOutputStream());
@@ -45,7 +45,6 @@ public class ServerCSocketThread implements Runnable{
         }
 
         this.parentThread = _parentThread;
-
         this.sRacerName = null;
 
         System.out.println(this.getClass().getSimpleName() + " new connection with client# " + this.cSocketID + " at " + socketOfServer);
@@ -56,13 +55,12 @@ public class ServerCSocketThread implements Runnable{
         try {
             while (this.isPermittedToRun) {
                 int cmd = inStream.readInt();
-                //if (cmd == ServerNetworkConfig.CMD.DISCONNECT) { break; }
 
                 int lData = inStream.available();
                 byte[] bytes = new byte[lData];
                 inStream.read(bytes);
 
-                // Switch on command id
+                // switch on command id
                 switch (cmd) {
                     case ServerNetworkConfig.CMD.CMD_LOGIN:
                         handleLogin(cmd, bytes, this.outStream, this.parentThread);
@@ -86,7 +84,7 @@ public class ServerCSocketThread implements Runnable{
     }
 
     public String getsRacerName() {
-        return sRacerName;
+        return this.sRacerName;
     }
 
     public void finalizeOnClose() throws IOException {

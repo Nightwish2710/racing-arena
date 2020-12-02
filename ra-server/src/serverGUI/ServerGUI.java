@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.*;
 
 public class ServerGUI extends JFrame {
     private JPanel ServerPanel;
@@ -122,6 +121,25 @@ public class ServerGUI extends JFrame {
         this.getContentPane().setBackground(ServerGUIConfig.BACKGROUND_COLOR);
 
         // set label
+        setLabelUI();
+
+        // set spinner
+        setSpinnerUI();
+
+        // set button
+        setButtonUI();
+
+        // set separator
+        setSeparatorUI();
+
+        // set table
+        setTableUI();
+
+        // set server logs scroll pane
+        setServerLogsPaneUI();
+    }
+
+    private void setLabelUI() {
         numOfRacersLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         raceLengthLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         numOfPplJoiningLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -138,21 +156,6 @@ public class ServerGUI extends JFrame {
 
         openConnectionWarning.setFont(new Font("Arial", Font.ITALIC, 9));
         openConnectionWarning.setForeground(Color.RED);
-
-        // set spinner
-        setSpinnerUI();
-
-        // set button
-        setButtonUI();
-
-        // set separator
-        setSeparatorUI();
-
-        // set table
-        setTableUI();
-
-        // set server logs scroll pane
-        setServerLogsPaneUI();
     }
 
     private void setSpinnerUI() {
@@ -341,7 +344,7 @@ public class ServerGUI extends JFrame {
     public void setUpdateTimer(int time) { this.updateTimer.setText(Integer.toString(time)); }
 
     // strike through name of whom is eliminated from the race
-    private void strikeThroughEliminatedRacer(String racerName) {
+    public void strikeThroughEliminatedRacer(String racerName) {
         for (int i = 0; i < ServerGameMaster.getInstance().getNumOfRacers(); ++i) {
             if (dtm.getValueAt(i, 0).equals(racerName)) {
                 dtm.setValueAt(strikeThroughText((String)dtm.getValueAt(i, 0)), i, 0);
