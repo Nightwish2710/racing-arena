@@ -649,7 +649,6 @@ public class ClientGUI extends JFrame {
         } catch (NumberFormatException e) {
             answer = Integer.MAX_VALUE;
         }
-        System.out.println("HOPE FOR OUTOFTIME: " + answer);
         ClientGameMaster.getInstance().giveAnswer(answer);
     }
 
