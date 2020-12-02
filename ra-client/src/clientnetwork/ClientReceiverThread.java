@@ -64,9 +64,9 @@ public class ClientReceiverThread implements Runnable {
     }
 
     public void stopReceiverThread() throws IOException {
-        this.isPermittedToRun = false;
-        this.inStream.close();
-        this.clientSocket.close();
+        isPermittedToRun = false;
+        inStream.close();
+        clientSocket.close();
     }
 
     private void receiveQuestion(byte[] bytes) {
@@ -143,13 +143,23 @@ public class ClientReceiverThread implements Runnable {
 
     private void _ROI_newOpponentInfo (CRecOpponentInfo info) {
         // added new racer
-        ClientPlayer clientOpponent = new ClientPlayer(info.getOpponentUsername(), info.getOpponentPosition(), 0, info.getOpponentStatus(), "");
+        ClientPlayer clientOpponent = new ClientPlayer(
+                info.getOpponentUsername(),
+                info.getOpponentPosition(),
+                0,
+                info.getOpponentStatus(),
+                "");
         ClientGameMaster.getInstance().addNewOpponent(clientOpponent);
     }
 
     private void _ROI_updateOpponentInfo (CRecOpponentInfo info) {
         // updated a racer
-        ClientPlayer clientOpponent = new ClientPlayer(info.getOpponentUsername(), info.getOpponentPosition(), 0, info.getOpponentStatus(), "");
+        ClientPlayer clientOpponent = new ClientPlayer(
+                info.getOpponentUsername(),
+                info.getOpponentPosition(),
+                0,
+                info.getOpponentStatus(),
+                "");
         ClientGameMaster.getInstance().updateAnOpponent(clientOpponent);
     }
 
@@ -157,9 +167,8 @@ public class ClientReceiverThread implements Runnable {
         CRecAllRacersInfo cRecAllRacersInfo = new CRecAllRacersInfo();
         cRecAllRacersInfo.unpack(bytes);
 
-        this._RR_updateThisRacer(cRecAllRacersInfo);
-
-        this._RR_updateOpponentsInfo(cRecAllRacersInfo);
+        _RR_updateThisRacer(cRecAllRacersInfo);
+        _RR_updateOpponentsInfo(cRecAllRacersInfo);
     }
 
     private void _RR_updateThisRacer (CRecAllRacersInfo cRecAllRacersInfo) {

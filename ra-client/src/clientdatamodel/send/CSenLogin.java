@@ -1,6 +1,7 @@
 package clientdatamodel.send;
 
 import clientdatamodel.ClientDataModel;
+
 import java.nio.ByteBuffer;
 
 public class CSenLogin extends ClientDataModel {

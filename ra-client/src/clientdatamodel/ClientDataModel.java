@@ -7,6 +7,6 @@ public class ClientDataModel {
 
     public ClientDataModel() { this.byteBuffer = null; }
 
-    public byte[] pack() { return byteBuffer.array(); };
+    public byte[] pack() { return this.byteBuffer.array(); };
     public void unpack(byte[] bytes) {};
 }

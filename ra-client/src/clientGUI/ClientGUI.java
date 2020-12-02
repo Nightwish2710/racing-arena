@@ -569,14 +569,6 @@ public class ClientGUI extends JFrame {
         noOpenConnectionDialog.setVisible(false);
     }
 
-    public void setNumOfVictory(int numOfVictory) {
-        updateNumOfVictory.setText(Integer.toString(numOfVictory));
-    }
-
-    public void setNickname(String nickname) {
-        ((JLabel)racerStatusList.get(0)).setText(nickname);
-    }
-
     public void setJoinServerNoti(String str, int color) {
         joinServerNoti.setForeground(ClientGUIConfig.COLOR_LIST.get(color));
         joinServerNoti.setText(str);
@@ -595,6 +587,14 @@ public class ClientGUI extends JFrame {
     public void turnOffNoOpenConnectionPane() {
         if (this.noOpenConnectionDialog == null) return;
         this.noOpenConnectionDialog.setVisible(false);
+    }
+
+    public void updateYouNumOfVictory(int numOfVictory) {
+        updateNumOfVictory.setText(Integer.toString(numOfVictory));
+    }
+
+    public void updateYouNickname(String nickname) {
+        ((JLabel)racerStatusList.get(0)).setText(nickname);
     }
 
     public void startAnswering() throws InterruptedException {

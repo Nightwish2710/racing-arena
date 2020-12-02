@@ -60,10 +60,8 @@ public class ClientNetwork {
         // notify of successful connection
         System.out.println(this.getClass().getSimpleName() + ": notification of successful connection");
 
-        // open client UI
-        ClientGUI.getInstance().setVisible(true);
-        // turn off error pane
-        ClientGUI.getInstance().turnOffNoOpenConnectionPane();
+        ClientGUI.getInstance().setVisible(true); // open client UI
+        ClientGUI.getInstance().turnOffNoOpenConnectionPane(); // turn off error message pane
 
         // Start receiver thread
         receiverThread = new ClientReceiverThread(this.clientSocket, this.inStream);
@@ -89,9 +87,9 @@ public class ClientNetwork {
     public void disconnect() {
         try {
             // send packet to server saying close connection
-            this.outStream.writeInt(ClientNetworkConfig.CMD.DISCONNECT);
-            this.receiverThread.stopReceiverThread();
-            this.executor.stop();
+            outStream.writeInt(ClientNetworkConfig.CMD.DISCONNECT);
+            receiverThread.stopReceiverThread();
+            executor.stop();
         } catch (IOException e) {
             e.printStackTrace();
         }
