@@ -267,10 +267,11 @@ public class ServerGUI extends JFrame {
         statTableScrollPane.getHorizontalScrollBar().setBorder(null);
         statTableScrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
-        int height, width = 0;
-        height = (ServerGameMaster.getInstance().getNumOfRacers() + 1) * ServerGUIConfig.ROW_HEIGHT;
+        int height = (ServerGameMaster.getInstance().getNumOfRacers() + 1) * ServerGUIConfig.ROW_HEIGHT;
+        int width = 0;
         for (int i = 0; i < ServerGUIConfig.PREFERRED_WIDTH.length; ++i) { width += ServerGUIConfig.PREFERRED_WIDTH[i]; }
         statTableScrollPane.setPreferredSize(new Dimension(width, height));
+        statTableScrollPane.setMaximumSize(new Dimension(width, height));
 
         // set table: row height, empty border, no horizontal line
         racerStatTable.setRowHeight(ServerGUIConfig.ROW_HEIGHT);
@@ -295,6 +296,12 @@ public class ServerGUI extends JFrame {
 
     private String strikeThroughText(String str) {
         return "<HTML><STRIKE>" + str + "</STRIKE></HTML>";
+    }
+
+    private String removeStrikeThrough(String str) {
+        str = str.replace("<HTML><STRIKE>", "");
+        str = str.replace("</STRIKE></HTML>", "");
+        return str;
     }
 
     private void disableComponentAfterOpenConnection() {
@@ -382,7 +389,7 @@ public class ServerGUI extends JFrame {
     }
 
     public void announceWinner(String winnerName) {
-        winner.setFont(new Font("Britannic Bold", Font.PLAIN, 18));
+        winner.setFont(new Font("Britannic Bold", Font.PLAIN, 25));
         winner.setText(winnerName);
     }
 
@@ -404,9 +411,11 @@ public class ServerGUI extends JFrame {
     }
 
     public void renewRacerNickname(ServerRacerObject racer) {
-        if (racer.getUsername().contains("<HTML><STRIKE>")) {
-            racer.setUsername(racer.getUsername().replace("<HTML><STRIKE>", ""));
-            racer.setUsername(racer.getUsername().replace("</STRIKE></HTML>", ""));
+        String racerName = racer.getUsername();
+        for (int i = 0; i < ServerGameMaster.getInstance().getNumOfRacers(); ++i) {
+            if (dtm.getValueAt(i, 0).equals("<HTML><STRIKE>" + racerName + "</STRIKE></HTML>")) {
+                dtm.setValueAt(removeStrikeThrough((String)dtm.getValueAt(i, 0)), i, 0);
+            }
         }
     }
 

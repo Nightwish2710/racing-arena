@@ -192,7 +192,12 @@ public class ServerGameMaster {
                 }
                 else {
                     finalEvaluateAfterAnAnswer();
-                    ServerGUI.getInstance().setGiveQuestionButton(true);
+                    if (getCurrentNumOfRacers() == numOfRacers) {
+                        ServerGUI.getInstance().setGiveQuestionButton(true);
+                    }
+                    else {
+                        ServerGUI.getInstance().setGiveQuestionButton(false);
+                    }
                     questionTimer.cancel();
                 }
             }
@@ -281,6 +286,8 @@ public class ServerGameMaster {
         // if no racers wins the race
         if (numOfRemainRacers <= 0) {
             isEndgame = true;
+
+            ServerGUI.getInstance().updateControllButtonToReplayButton();
             ServerGUI.getInstance().changeStateOfControllButton();
             ServerGUI.getInstance().announceNoWinner();
         }
@@ -329,9 +336,10 @@ public class ServerGameMaster {
             currRacer.resetRacerForNewMatch();
 
             // update values on UI
+            System.out.println(currRacer.getUsername());
+            ServerGUI.getInstance().renewRacerNickname(currRacer);
             ServerGUI.getInstance().updateSRacerToUI(currRacer.getUsername(), currRacer.getGain(), currRacer.getStatus(), currRacer.getPosition());
             ServerGUI.getInstance().updateSRacerAnswerToUI(currRacer.getUsername(), Integer.MAX_VALUE);
-            ServerGUI.getInstance().renewRacerNickname(currRacer);
         }
     }
 

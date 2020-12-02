@@ -130,7 +130,8 @@ public class ClientGameMaster {
     private void _prepareRacer() {
         // update UI
         cRacer.setNumOfIncorrect(0);
-        ClientGUI.getInstance().renewRacerNickname(cRacer);
+        cRacer.setGain(0);
+        ClientGUI.getInstance().renewRacerNickname();
         ClientGUI.getInstance().resetYouProgressBar();
     }
 
@@ -138,7 +139,7 @@ public class ClientGameMaster {
         for (Map.Entry<String, ClientPlayer> opps : cOpponents.entrySet()) {
             ClientGUI.getInstance().updateOpponentProgress(opps.getValue());
             ClientGUI.getInstance().updateOpponentNameWhenJoin(opps.getValue());
-            ClientGUI.getInstance().renewRacerNickname(opps.getValue());
+            ClientGUI.getInstance().renewRacerNickname();
         }
     }
 

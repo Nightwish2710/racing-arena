@@ -116,6 +116,9 @@ public class ClientGUI extends JFrame {
         racerStatusLabel.setForeground(ACCENT_COLOR);
         racerStatusLabel.setFont(new Font("Britannic Bold", Font.PLAIN, 20));
 
+        correctAnswer.setFont(new Font("Arial", Font.ITALIC, 11));
+        correctAnswer.setText("correct answer ");
+
         numOfVictory.setForeground(ACCENT_COLOR);
 
         // set buttons
@@ -587,6 +590,14 @@ public class ClientGUI extends JFrame {
         this.numOfVictory.setText(Integer.toString(numOfVictory));
     }
 
+    public void updateRacersProgressBarSize(int raceLength) {
+        ((JProgressBar)racerStatusList.get(1)).setMaximum(raceLength);
+
+        for (int i = 2; i < ClientGameMaster.getInstance().getNumOfRacers() + 1; ++i) {
+            ((JProgressBar)racerStatusList.get(i*2)).setMaximum(raceLength);
+        }
+    }
+
     public void updateYouNickname(String nickname) {
         ((JLabel)racerStatusList.get(0)).setText(nickname);
     }
@@ -597,7 +608,8 @@ public class ClientGUI extends JFrame {
             submitAnswerButton.setEnabled(true);
         }
 
-        correctAnswer.setText("correct answer");
+        correctAnswer.setFont(new Font("Arial", Font.ITALIC, 11));
+        correctAnswer.setText("correct answer ");
 
         CountDownLatch lock = new CountDownLatch(ClientGameConfig.MAX_TIMER_SEC);
 
@@ -637,7 +649,6 @@ public class ClientGUI extends JFrame {
     public void setFirstNum(int firstNum) { this.firstNum.setText(Integer.toString(firstNum)); }
     public void setOperator(int operator) { this.operator.setText(ClientGameConfig.OPERATORS[operator]); }
     public void setSecondNum(int secondNum) { this.secondNum.setText(Integer.toString(secondNum)); }
-    public void setCorrectAnswer(int correctAnswer) { this.correctAnswer.setText(Integer.toString(correctAnswer)); }
 
     private void submitAnswer() {
         int answer;
@@ -651,6 +662,12 @@ public class ClientGUI extends JFrame {
 
     private String strikeThroughText(String str) {
         return "<HTML><STRIKE>" + str + "</STRIKE></HTML>";
+    }
+
+    private String removeStrikeThrough(String str) {
+        str = str.replace("<HTML><STRIKE>", "");
+        str = str.replace("</STRIKE></HTML>", "");
+        return str;
     }
 
     public void updateYouPoint(int point) {
@@ -723,6 +740,7 @@ public class ClientGUI extends JFrame {
     }
 
     public void updateCorrectAnswer(int answer) {
+        correctAnswer.setFont(new Font("Arial", Font.PLAIN, 12));
         correctAnswer.setText(Integer.toString(answer));
     }
 
@@ -746,7 +764,9 @@ public class ClientGUI extends JFrame {
         firstNum.setText("1st no.");
         operator.setText("op");
         secondNum.setText("2nd no.");
-        correctAnswer.setText("correct answer");
+
+        correctAnswer.setFont(new Font("Arial", Font.ITALIC, 11));
+        correctAnswer.setText("correct answer ");
 
         // reset answer status
         updateStatus.setText("Answer status");
@@ -767,10 +787,13 @@ public class ClientGUI extends JFrame {
         winner.setText("Ppl in this server are not so smart :> ");
     }
 
-    public void renewRacerNickname(ClientPlayer racer) {
-        if (racer.getNickname().contains("<HTML><STRIKE>")) {
-            racer.setNickname(racer.getNickname().replace("<HTML><STRIKE>", ""));
-            racer.setNickname(racer.getNickname().replace("</STRIKE></HTML>", ""));
+    public void renewRacerNickname() {
+        JLabel tmpLabel = (JLabel)racerStatusList.get(0);
+        tmpLabel.setText(removeStrikeThrough(tmpLabel.getText()));
+
+        for (int i = 2; i < ClientGameMaster.getInstance().getNumOfRacers() + 1; ++i) {
+            tmpLabel = (JLabel)racerStatusList.get(i*2-1);
+            tmpLabel.setText(removeStrikeThrough(tmpLabel.getText()));
         }
     }
 }

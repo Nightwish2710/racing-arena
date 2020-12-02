@@ -67,30 +67,28 @@ public class CRecLogin extends ClientDataModel {
     }
 
     public int getRacerVictory() {
-        return racerVictory;
+        return this.racerVictory;
     }
     public void setRacerVictory(int racerVictory) {
         this.racerVictory = racerVictory;
     }
 
     public int getNumOfRacers() {
-        return numOfRacers;
+        return this.numOfRacers;
     }
-
     public void setNumOfRacers(int numOfRacers) {
         this.numOfRacers = numOfRacers;
     }
 
     public int getRaceLength() {
-        return raceLength;
+        return this.raceLength;
     }
-
     public void setRaceLength(int raceLength) {
         this.raceLength = raceLength;
     }
 
     public int getCurrentNumOfRacers() {
-        return currentNumOfRacers;
+        return this.currentNumOfRacers;
     }
     public void setCurrentNumOfRacers(int currentNumOfRacers) {
         this.currentNumOfRacers = currentNumOfRacers;

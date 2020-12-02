@@ -119,6 +119,9 @@ public class ClientReceiverThread implements Runnable {
 
                 // lock connection button and text area for nickname and password
                 ClientGUI.getInstance().disableComponentAfterJoinServer();
+
+                // resize racers' progress bar
+                ClientGUI.getInstance().updateRacersProgressBarSize(cRecLogin.getRaceLength());
                 break;
             
             default:
