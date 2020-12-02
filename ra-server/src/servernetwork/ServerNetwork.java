@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executor;
@@ -36,7 +35,7 @@ public class ServerNetwork {
     }
 
     public boolean isNetworkOpenning() {
-        return serverNetworkThread!=null && serverNetworkThread.isOpenning();
+        return this.serverNetworkThread != null && this.serverNetworkThread.isOpenning();
     }
 
     public void closeNetwork() {

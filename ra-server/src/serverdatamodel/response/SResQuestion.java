@@ -1,7 +1,6 @@
 package serverdatamodel.response;
 
 import serverdatamodel.ServerDataModel;
-import serverobject.ServerRacerObject;
 
 import java.nio.ByteBuffer;
 

@@ -54,7 +54,6 @@ public class ServerRacerObject {
     public int getNumOfWrong() {
         return numOfWrong;
     }
-
     public void setNumOfWrong(int numOfWrong) {
         this.numOfWrong = numOfWrong;
     }

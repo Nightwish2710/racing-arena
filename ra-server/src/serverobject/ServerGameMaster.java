@@ -133,7 +133,7 @@ public class ServerGameMaster {
     }
 
     public ServerRacerObject getRacerInfo(String rUsername) {
-        return sRacers.get(rUsername);
+        return this.sRacers.get(rUsername);
     }
 
     public int getNumberOfPrevQuestions () {
@@ -144,24 +144,24 @@ public class ServerGameMaster {
         ServerQuestion serverQuestion = new ServerQuestion();
         serverQuestion.setStartingTimeOfQuestion(System.currentTimeMillis());
 
-        // Keep a record of this question in game master
+        // keep a record of this question in game master
         int sCurrentQuestionID = getNumberOfPrevQuestions() + 1;
         this.sQuestions.put(sCurrentQuestionID, serverQuestion);
 
-        // If it is the first question, then send default racers info first
+        // if it is the first question, then send default racers info first
         SResAllRacersInfo sResAllRacersInfo = new SResAllRacersInfo(
                 ServerNetworkConfig.CMD.CMD_RESULT,
                 ServerNetworkConfig.INFO_TYPE_FLAG.TYPE_NOTICE_UPDATE_ALL_RACERS,
                 ServerGameMaster.getInstance());
         ServerNetwork.getInstance().sendToAllClient(sResAllRacersInfo, -1, false);
 
-        // Update question on UI
+        // update question on UI
         ServerGUI.getInstance().setFirstNum(serverQuestion.getFirstNum());
         ServerGUI.getInstance().setSecondNum(serverQuestion.getSecondNum());
         ServerGUI.getInstance().setOperator(serverQuestion.getOperator());
         ServerGUI.getInstance().setAnswer(serverQuestion.getAnswer());
 
-        // Send packet to all clients
+        // send packet to all clients
         SResQuestion sResQuestion = new SResQuestion(
                 ServerNetworkConfig.CMD.CMD_QUESTION,
                 sCurrentQuestionID,
