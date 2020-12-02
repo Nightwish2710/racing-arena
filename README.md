@@ -20,3 +20,5 @@ https://docs.oracle.com/javase/tutorial/uiswing/components/dialog.html
 https://stackoverflow.com/questions/13893655/java-redirecting-system-out-println-to-a-jlabel/13893719
 * Allow to press [Enter] to submit answer: <br>
 https://stackoverflow.com/questions/13731710/allowing-the-enter-key-to-press-the-submit-button-as-opposed-to-only-using-mo
+* Socket non-blocking programming: <br>
+https://vovanhai.wordpress.com/java/l%E1%BA%ADp-trinh-java-nang-cao/networking/chatroom-d%C6%A1n-gi%E1%BA%A3n/
