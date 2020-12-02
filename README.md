@@ -26,10 +26,10 @@ https://vovanhai.wordpress.com/java/l%E1%BA%ADp-trinh-java-nang-cao/networking/c
 **APPLICATION SNIPPET**:
 
 * Server GUI: 
-<img src='application-snippet/serverGUI.PNG'>
+<img src='application-snippet/serverGUI.PNG' width='700px'>
 
 * Client GUI: 
-<img src='application-snippet/clientGUI.PNG'>
+<img src='application-snippet/clientGUI.PNG' width='500px'>
 
 * Error Message: 
-<img src='application-snippet/errorMessage.PNG'>
+<img src='application-snippet/errorMessage.PNG' width='250px'>
