@@ -6,12 +6,12 @@ public class ServerGameConfig {
     public static final int MAX_NUM_OF_RACERS = 10;
     public static final int MIN_RACE_LENGTH = 3;
     public static final int MAX_RACE_LENGTH = 26;
-    public static final int MAX_TIMER_SEC = 10;
+    public static final int MAX_TIMER_SEC = 10 + 1;
     public static final long MAX_TIMER_MILIS = MAX_TIMER_SEC * 1000;
 
     // initial race value
     public static final int INIT_NUM_OF_RACERS = 2;
-    public static final int INIT_RACE_LENGTH = 3;
+    public static final int INIT_RACE_LENGTH = 6;
     public static final int INIT_RACER_POSITION = 1;
     public static final long INIT_RACER_DELTA_ANSWERING_TIME = Long.MAX_VALUE;
 

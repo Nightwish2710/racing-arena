@@ -43,7 +43,7 @@ public class ServerRacerObject {
     public void setPosition(int position) { this.position = position; }
     public void updatePositionBy(int delta) {
         this.position += delta;
-        System.out.println("updatePositionBy: " + this.position);
+        System.out.println("At Position: " + this.position);
         if (this.position < ServerGameConfig.INIT_RACER_POSITION) {
             this.position = ServerGameConfig.INIT_RACER_POSITION;
         }

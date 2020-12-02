@@ -31,6 +31,7 @@ public class ServerGameMaster {
         this.sRacers = new HashMap<>();
         this.sQuestions = new HashMap<>();
         this.numOfRacers = ServerGameConfig.INIT_NUM_OF_RACERS;
+        this.raceLength = ServerGameConfig.INIT_RACE_LENGTH;
         this.isEndgame = false;
         serverGameMaster = this;
     }
@@ -153,10 +154,12 @@ public class ServerGameMaster {
         this.sQuestions.put(sCurrentQuestionID, serverQuestion);
 
         // if it is the first question, then send default racers info first
-        SResAllRacersInfo sResAllRacersInfo = new SResAllRacersInfo(
-                ServerNetworkConfig.CMD.CMD_RESULT,
-                ServerGameMaster.getInstance());
-        ServerNetwork.getInstance().sendToAllClient(sResAllRacersInfo, -1, false);
+//        if (sCurrentQuestionID == 1) {
+//            SResAllRacersInfo sResAllRacersInfo = new SResAllRacersInfo(
+//                    ServerNetworkConfig.CMD.CMD_RESULT,
+//                    ServerGameMaster.getInstance());
+//            ServerNetwork.getInstance().sendToAllClient(sResAllRacersInfo, -1, false);
+//        }
 
         // update question on UI
         ServerGUI.getInstance().setFirstNum(serverQuestion.getFirstNum());
@@ -186,9 +189,9 @@ public class ServerGameMaster {
 
             @Override
             public void run() {
-                if (time >= 0) {
+                if (time > 0) {
                     time -= 1;
-                    ServerGUI.getInstance().setUpdateTimer(time+1);
+                    ServerGUI.getInstance().setUpdateTimer(time);
                 }
                 else {
                     finalEvaluateAfterAnAnswer();
@@ -234,9 +237,10 @@ public class ServerGameMaster {
                 }
 
                 // eliminate
+                System.out.println("NUMBER OF WRONG " + currRacer.getNumOfWrong());
                 if (currRacer.getNumOfWrong() == ServerGameConfig.GAME_BALANCE.MAX_NUM_OF_WRONG) {
                     currRacer.setStatus(ServerGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED);
-
+                    System.out.println("ELIMINATE " + currRacer.getUsername());
                     // decrease number of remaining racers
                     numOfRemainRacers -= 1;
 
@@ -310,7 +314,8 @@ public class ServerGameMaster {
 
     public void replay() {
         isEndgame = false;
-        this.sQuestions.clear(); // clear question array
+        this.sQuestions.clear();
+        this.sQuestions = new HashMap<>();
         resetAllRacersForNewMatch(); // reset table
         ServerGUI.getInstance().resetUIForReplay(); // reset UI
 
