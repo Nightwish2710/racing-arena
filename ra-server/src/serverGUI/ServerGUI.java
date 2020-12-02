@@ -6,14 +6,12 @@ import serverobject.ServerGameMaster;
 
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.*;
 import javax.swing.border.*;
 
 import javax.imageio.ImageIO;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.awt.*;
@@ -55,9 +53,9 @@ public class ServerGUI extends JFrame {
     private JLabel timerLabel;
     private JLabel updateTimer;
 
-    private JLabel serverLogsLabel;
-    private JScrollPane serverLogsPane;
-    private JTextArea consoleTextArea;
+    private JLabel winnerLabel;
+    private JLabel winner;
+    private JLabel image;
 
     private JSeparator verticalSeparator1, verticalSeparator2, verticalSeparator3, verticalSeparator4;
 
@@ -119,6 +117,7 @@ public class ServerGUI extends JFrame {
         // set icon
         try {
             ServerGUI.getInstance().setIconImage(ImageIO.read(new File("assets/dog-russel-grin-icon.png")));
+            image.setIcon(new ImageIcon(ImageIO.read(new File("assets/background.png")).getScaledInstance(216, 115, Image.SCALE_SMOOTH)));
         } catch (IOException e) {
             System.err.println("Cannot set icon for Server UI");
             e.printStackTrace();
@@ -141,9 +140,6 @@ public class ServerGUI extends JFrame {
 
         // set table
         setTableUI();
-
-        // set server logs scroll pane
-        setServerLogsPaneUI();
     }
 
     private void setLabelUI() {
@@ -156,7 +152,10 @@ public class ServerGUI extends JFrame {
 
         gameConfigLabel.setFont(new Font("Britannic Bold", Font.PLAIN, 16));
         gameControlLabel.setFont(new Font("Britannic Bold", Font.PLAIN, 16));
-        serverLogsLabel.setFont(new Font("Britannic Bold", Font.PLAIN, 16));
+
+        winnerLabel.setFont(new Font("Britannic Bold", Font.PLAIN, 16));
+        winner.setFont(new Font("Arial", Font.ITALIC, 9));
+        winner.setText("Unknown.");
 
         questionSectionLabel.setFont(new Font("Britannic Bold", Font.PLAIN, 20));
         racerStatLabel.setFont(new Font("Britannic Bold", Font.PLAIN, 20));
@@ -256,34 +255,6 @@ public class ServerGUI extends JFrame {
         }
     }
 
-    private void setServerLogsPaneUI() {
-        serverLogsPane.setBorder(BorderFactory.createLineBorder(ServerGUIConfig.BORDER_COLOR, 5));
-        serverLogsPane.getViewport().setBackground(ServerGUIConfig.BORDER_COLOR);
-        serverLogsPane.setOpaque(true);
-
-        serverLogsPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
-            @Override
-            protected JButton createDecreaseButton(int orientation) {
-                JButton button = super.createDecreaseButton(orientation);
-                button.setBackground(ServerGUIConfig.BACKGROUND_COLOR);
-                button.setBorder(BorderFactory.createLineBorder(ServerGUIConfig.BACKGROUND_COLOR, 1));
-                return button;
-            }
-            @Override
-            protected JButton createIncreaseButton(int orientation) {
-                JButton button = super.createIncreaseButton(orientation);
-                button.setBackground(ServerGUIConfig.BACKGROUND_COLOR);
-                button.setBorder(BorderFactory.createLineBorder(ServerGUIConfig.BACKGROUND_COLOR, 1));
-                return button;
-            }
-        });
-
-        consoleTextArea.setEnabled(false);
-        consoleTextArea.setBackground(ServerGUIConfig.BORDER_COLOR);
-        consoleTextArea.setFont(new Font("Consolas", Font.PLAIN, 12));
-        consoleTextArea.setDisabledTextColor(Color.BLACK);
-    }
-
     private void setTableUI() {
         // set scroll pane
         statTableScrollPane.setViewportBorder(null);
@@ -331,6 +302,7 @@ public class ServerGUI extends JFrame {
         startGameButton.setText("REPLAY");
         startGameButton.setBackground(Color.RED);
         startGameButton.setForeground(Color.WHITE);
+        startGameButton.setBorder(new LineBorder(Color.RED));
     }
 
     public void changeStateOfControllButton() {
@@ -391,23 +363,25 @@ public class ServerGUI extends JFrame {
         }
     }
 
+    public void announceWinner(String winnerName) {
+        winner.setFont(new Font("Britannic Bold", Font.PLAIN, 18));
+        winner.setText(winnerName);
+    }
+
+    public void announceNoWinner() {
+        winner.setFont(new Font("Arial", Font.ITALIC, 9));
+        winner.setText("Ppl in this server are not so smart :> ");
+    }
+
     public void resetUIForReplay() {
         // reset question info
         firstNum.setText("1st no.");
         operator.setText("op");
         secondNum.setText("2nd no.");
         setAnswer(0);
-    }
 
-    public void setConsoleTextArea(String str) {
-        if (EventQueue.isDispatchThread()) {
-            consoleTextArea.setText(consoleTextArea.getText() + str);
-        }
-        else {
-            EventQueue.invokeLater(() -> {
-                // nothing to add yet
-            });
-
-        }
+        // reset winner
+        winner.setFont(new Font("Arial", Font.ITALIC, 9));
+        winner.setText("Unknown.");
     }
 }

@@ -1,4 +1,3 @@
-import serverGUI.ServerConsoleOutput;
 import serverGUI.ServerGUI;
 import serverGUI.ServerGUIConfig;
 
@@ -8,7 +7,6 @@ import serverdatabase.ServerDBHelper;
 import servernetwork.ServerNetwork;
 
 import serverobject.ServerGameMaster;
-import serverobject.ServerQuestion;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
@@ -22,15 +20,11 @@ public class ServerMain {
     private static ServerGameMaster serverGameMaster;
     private static JFrame serverGUI;
 
-    public static void main(String args[]) throws IOException {
-        System.setOut(new PrintStream(ServerConsoleOutput.getInstance()));
-
+    public static void main(String args[]) {
         initServerDB();
         initServerGameMaster();
         initServerGUI();
         initServerNetwork();
-
-        System.out.println("HELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLO");
     }
 
     private static void initServerGameMaster() {
