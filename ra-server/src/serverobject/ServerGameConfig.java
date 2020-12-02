@@ -43,7 +43,7 @@ public class ServerGameConfig {
     public static final String[] STATUS_STRING = {
             "Racer Ready",
             "Correct",
-            "Correct & Fastest Answer",
+            "Correct & Fastest",
             "Incorrect",
             "Timeout",
             "Eliminated",
