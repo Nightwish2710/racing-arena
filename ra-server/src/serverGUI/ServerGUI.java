@@ -297,7 +297,7 @@ public class ServerGUI extends JFrame {
     }
 
     public void addSRacerToUI(String racerName, int gain, int status, int position) {
-        String gainStr = gain >= 0 ? ("+"+String.valueOf(gain)) : String.valueOf(gain);
+        String gainStr = gain >= 0 ? ("+"+gain) : String.valueOf(gain);
         dtm.addRow(new Object[]{racerName, gainStr, ServerGameConfig.STATUS_STRING[status], position});
     }
 

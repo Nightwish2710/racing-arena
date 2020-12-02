@@ -50,20 +50,40 @@ public class ClientGameMaster {
 
         for (Map.Entry<String, ClientPlayer> opps : this.cOpponents.entrySet()) {
             System.out.println("PREV OPPOs: " + opps.getKey());
-            ClientGUI.getInstance().updateOpponentProgress(opps.getValue());
+            ClientGUI.getInstance().updateOpponentNameWhenJoin(opps.getValue());
         }
     }
 
     public void addNewOpponent(ClientPlayer cNewOpponent) {
         System.out.println("NEW OPPOs: " + cNewOpponent.getNickname());
         this.cOpponents.put(cNewOpponent.getNickname(), cNewOpponent);
-        ClientGUI.getInstance().updateOpponentProgress(cNewOpponent);
-        ClientGUI.getInstance().updateOpponentProgress(cNewOpponent);
+        ClientGUI.getInstance().updateOpponentNameWhenJoin(cNewOpponent);
+        ClientGUI.getInstance().updateOpponentNameWhenJoin(cNewOpponent);
     }
 
     public void updateAnOpponent(ClientPlayer cOpponent) {
         // replace old info
         this.cOpponents.put(cOpponent.getNickname(), cOpponent);
+        switch (cOpponent.getStatusFlag()) {
+            case ClientGameConfig.RACER_STATUS_FLAG.FLAG_READY:
+                ClientGUI.getInstance().resetProgressBarForReplay(cOpponent);
+                break;
+            case ClientGameConfig.RACER_STATUS_FLAG.FLAG_NORMAL:
+            case ClientGameConfig.RACER_STATUS_FLAG.FLAG_FASTEST:
+            case ClientGameConfig.RACER_STATUS_FLAG.FLAG_WRONG:
+            case ClientGameConfig.RACER_STATUS_FLAG.FLAG_TIMEOUT:
+                ClientGUI.getInstance().updateOpponentProgress(cOpponent);
+                break;
+            case ClientGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED:
+                ClientGUI.getInstance().strikeThroughEliminatedRacer(cOpponent);
+                break;
+            case ClientGameConfig.RACER_STATUS_FLAG.FLAG_QUIT:
+                ClientGUI.getInstance().updateOpponentProgressWhenARacerQuit(cOpponent);
+                this.cOpponents.remove(cOpponent.getNickname());
+                break;
+            default:
+                break;
+        }
     }
 
     public void confirmRacerPostLogin(int numOfVictory) {
@@ -71,10 +91,6 @@ public class ClientGameMaster {
 
         ClientGUI.getInstance().setNickname(this.cRacer.getNickname());
         ClientGUI.getInstance().setNumOfVictory(numOfVictory); // update victory count on UI
-    }
-
-    public ClientQuestion getCurrentQuestion() {
-        return currentQuestion;
     }
 
     public void setCurrentQuestion(ClientQuestion currentQuestion) {
@@ -112,6 +128,9 @@ public class ClientGameMaster {
         System.out.println(getClass().getSimpleName() + ": racer status flag: " + this.cRacer.getStatusFlag());
 
         switch (this.cRacer.getStatusFlag()) {
+            case ClientGameConfig.RACER_STATUS_FLAG.FLAG_READY:
+                ClientGUI.getInstance().resetYouProgressBar();
+                break;
             case ClientGameConfig.RACER_STATUS_FLAG.FLAG_WRONG:
                 this.cRacer.updateNumOfIncorrectBy(1);
                 ClientGUI.getInstance().setUpdateExtraStatus("Wrong: " + this.cRacer.getNumOfIncorrect() + " times ");
@@ -119,6 +138,7 @@ public class ClientGameMaster {
             case ClientGameConfig.RACER_STATUS_FLAG.FLAG_TIMEOUT:
                 break;
             case ClientGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED:
+                ClientGUI.getInstance().strikeThroughYouNickname();
                 ClientGUI.getInstance().setUpdateExtraStatus("You were ejected :>> ");
                 break;
             default:

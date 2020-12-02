@@ -642,9 +642,23 @@ public class ClientGUI extends JFrame {
         ClientGameMaster.getInstance().giveAnswer(answer);
     }
 
+    private String strikeThroughText(String str) {
+        return "<HTML><STRIKE>" + str + "</STRIKE></HTML>";
+    }
+
     public void updateYouPoint(int point) {
         ((JProgressBar)racerStatusList.get(1)).setValue(point);
         ((JProgressBar)racerStatusList.get(1)).setString(String.valueOf(point));
+    }
+
+    public void resetYouProgressBar() {
+        ((JProgressBar)racerStatusList.get(1)).setValue(ClientGameConfig.INIT_RACER_POSITION); // reset progress
+        ((JProgressBar)racerStatusList.get(1)).setString(Integer.toString(ClientGameConfig.INIT_RACER_POSITION)); // reset progress number
+    }
+
+    public void strikeThroughYouNickname() {
+        String str = ((JLabel)racerStatusList.get(0)).getText();
+        ((JLabel)racerStatusList.get(0)).setText(strikeThroughText(str));
     }
 
     public void setUpdateStatus(String status) { updateStatus.setText(status); }
@@ -665,11 +679,19 @@ public class ClientGUI extends JFrame {
 
     // update the progress bar to show how far each racer has come
     // first label to contain "ImpostorNo" will be the empty slot
-    public void updateOpponentProgress(ClientPlayer opponent) {
+    public void updateOpponentNameWhenJoin(ClientPlayer opponent) {
         for (int i = 2; i < ClientGameMaster.getInstance().getNumOfRacers() + 1; ++i) {
             if (((JLabel)racerStatusList.get(i*2-1)).getText().equals("ImpostorNo"+(i-1))) {
                 ((JLabel)racerStatusList.get(i*2-1)).setText(opponent.getNickname()); // update opponent name
 
+                break;
+            }
+        }
+    }
+
+    public void updateOpponentProgress(ClientPlayer opponent) {
+        for (int i = 2; i < ClientGameMaster.getInstance().getNumOfRacers() + 1; ++i) {
+            if (((JLabel)racerStatusList.get(i*2-1)).getText().equals(opponent.getNickname())) {
                 ((JProgressBar)racerStatusList.get(i*2)).setValue(opponent.getPosition()); // update opponent progress
                 ((JProgressBar)racerStatusList.get(i*2)).setString(Integer.toString(opponent.getPosition())); // update progress number
 
@@ -681,7 +703,8 @@ public class ClientGUI extends JFrame {
     // update other racers' IU when a racer quit
     public void updateOpponentProgressWhenARacerQuit(ClientPlayer opponent) {
         for (int i = 2; i < ClientGameMaster.getInstance().getNumOfRacers() + 1; ++i) {
-            if (((JLabel)racerStatusList.get(i*2-1)).getText().equals(opponent.getNickname())) {
+            String nickName = ((JLabel)racerStatusList.get(i*2-1)).getText();
+            if (nickName.equals(opponent.getNickname()) || nickName.equals("<HTML><STRIKE>" + opponent.getNickname() + "</STRIKE></HTML>")) {
                 ((JLabel)racerStatusList.get(i*2-1)).setText("ImpostorNo"+(i-1)); // reset opponent name
 
                 ((JProgressBar)racerStatusList.get(i*2)).setValue(ClientGameConfig.INIT_RACER_POSITION); // reset progress
@@ -689,6 +712,24 @@ public class ClientGUI extends JFrame {
 
                 break;
             }
+        }
+    }
+
+    public void strikeThroughEliminatedRacer(ClientPlayer opponent) {
+        for (int i = 2; i < ClientGameMaster.getInstance().getNumOfRacers() + 1; ++i) {
+            if (((JLabel)racerStatusList.get(i*2-1)).getText().equals(opponent.getNickname())) {
+                String nickName = ((JLabel)racerStatusList.get(i*2-1)).getText();
+                ((JLabel)racerStatusList.get(i*2-1)).setText(strikeThroughText(nickName)); // strike through opponent name
+
+                break;
+            }
+        }
+    }
+
+    public void resetProgressBarForReplay(ClientPlayer opponent) {
+        for (int i = 2; i < ClientGameMaster.getInstance().getNumOfRacers() + 1; ++i) {
+            ((JProgressBar)racerStatusList.get(i*2)).setValue(ClientGameConfig.INIT_RACER_POSITION); // reset progress
+            ((JProgressBar)racerStatusList.get(i*2)).setString(Integer.toString(ClientGameConfig.INIT_RACER_POSITION)); // reset progress number
         }
     }
 }
