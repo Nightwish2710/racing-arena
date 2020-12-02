@@ -329,6 +329,7 @@ public class ServerGUI extends JFrame {
 
     public void updateSRacerToUI(String racerName, int gain, int status, int position) {
         String gainStr = gain >= 0 ? ("+"+String.valueOf(gain)) : String.valueOf(gain);
+
         for (int i = 0; i < ServerGameMaster.getInstance().getNumOfRacers(); ++i) {
             if (dtm.getValueAt(i, 0) == racerName) {
                 dtm.setValueAt(gainStr, i, 2);

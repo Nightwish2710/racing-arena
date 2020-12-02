@@ -171,12 +171,12 @@ public class ClientReceiverThread implements Runnable {
         CRecAllRacersInfo cRecAllRacersInfo = new CRecAllRacersInfo();
         cRecAllRacersInfo.unpack(bytes);
 
-        _RR_updateThisRacer(cRecAllRacersInfo);
+        _RR_updateThisRacer(cRecAllRacersInfo, false);
         _RR_updateOpponentsInfo(cRecAllRacersInfo);
         _RR_updateCorrectAnswer(cRecAllRacersInfo);
     }
 
-    private void _RR_updateThisRacer (CRecAllRacersInfo cRecAllRacersInfo) {
+    private void _RR_updateThisRacer(CRecAllRacersInfo cRecAllRacersInfo, boolean isNewMatch) {
         // update this racer info
         ClientRacer thisCRacer = ClientGameMaster.getInstance().getCRacer();
         ClientPlayer thisPlayer = cRecAllRacersInfo.getThisRacer(thisCRacer.getNickname());
@@ -185,9 +185,14 @@ public class ClientReceiverThread implements Runnable {
         thisCRacer.setStatusFlag(thisPlayer.getStatusFlag());
 
         // player's position on server
-        int newPositionOfThisRacer = thisPlayer.getPosition();
-        thisCRacer.setGain(newPositionOfThisRacer - thisCRacer.getPosition());
-        thisCRacer.setPosition(newPositionOfThisRacer);
+        if (isNewMatch) {
+            thisCRacer.setGain(0);
+        }
+        else {
+            int newPositionOfThisRacer = thisPlayer.getPosition();
+            thisCRacer.setGain(newPositionOfThisRacer - thisCRacer.getPosition());
+            thisCRacer.setPosition(newPositionOfThisRacer);
+        }
 
         // signal the master to update its racer with these info
         ClientGameMaster.getInstance().updateThisRacer();
@@ -206,7 +211,7 @@ public class ClientReceiverThread implements Runnable {
         CRecAllRacersInfo cRecAllRacersInfo = new CRecAllRacersInfo();
         cRecAllRacersInfo.unpack(bytes);
 
-        _RR_updateThisRacer(cRecAllRacersInfo);
+        _RR_updateThisRacer(cRecAllRacersInfo, true);
         _RR_updateOpponentsInfo(cRecAllRacersInfo);
 
         ClientGameMaster.getInstance().replay();

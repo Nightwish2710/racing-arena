@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="racing-arena-server:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/racing_arena_server_jar</output-path>
+    <root id="archive" name="ra-server.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/resources/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="ra-server" />
+      <element id="extracted-dir" path="C:/Program Files (x86)/H2/bin/h2-1.4.200.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/h2-1.4.200.jar" path-in-jar="/" />
+      <element id="dir-copy" path="$PROJECT_DIR$/assets" />
+    </root>
+  </artifact>
+</component>
