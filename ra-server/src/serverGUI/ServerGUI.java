@@ -12,6 +12,8 @@ import javax.swing.border.*;
 
 import javax.imageio.ImageIO;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.awt.*;
@@ -204,8 +206,7 @@ public class ServerGUI extends JFrame {
         startGameButton.setBackground(ServerGUIConfig.LIGHT_GREEN);
         startGameButton.setBorder(new LineBorder(ServerGUIConfig.LIGHT_GREEN));
         startGameButton.setEnabled(false);
-
-        startGameButton.addActionListener(e -> { ServerGameMaster.getInstance().giveQuestion(); });
+        startGameButton.addActionListener(e2 -> ServerGameMaster.getInstance().giveQuestion());
     }
 
     private void setSeparatorUI() {
@@ -299,6 +300,22 @@ public class ServerGUI extends JFrame {
         openConnectionButton.setEnabled(false);
     }
 
+    public void updateControllButtonToReplayButton() {
+        startGameButton.setText("REPLAY");
+        startGameButton.setBackground(Color.RED);
+        startGameButton.setForeground(Color.WHITE);
+    }
+
+    public void changeStateOfControllButton() {
+        startGameButton.addActionListener(e1 -> {
+            ServerGameMaster.getInstance().replay();
+            startGameButton.setText("GIVE QUESTION");
+            startGameButton.setBackground(ServerGUIConfig.LIGHT_GREEN);
+            startGameButton.setForeground(Color.WHITE);
+            startGameButton.addActionListener(e2 -> ServerGameMaster.getInstance().giveQuestion());
+        });
+    }
+
     public void addSRacerToUI(String racerName, int gain, int status, int position) {
         String gainStr = gain >= 0 ? ("+"+gain) : String.valueOf(gain);
         dtm.addRow(new Object[]{racerName, gainStr, ServerGameConfig.STATUS_STRING[status], position});
@@ -350,6 +367,14 @@ public class ServerGUI extends JFrame {
                 dtm.setValueAt(strikeThroughText((String)dtm.getValueAt(i, 0)), i, 0);
             }
         }
+    }
+
+    public void resetUIForReplay() {
+        // reset question info
+        firstNum.setText("1st no.");
+        operator.setText("op");
+        secondNum.setText("2nd no.");
+        setAnswer(0);
     }
 
     public void setConsoleTextArea(String str) {

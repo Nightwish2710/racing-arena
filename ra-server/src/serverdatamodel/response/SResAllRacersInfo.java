@@ -11,7 +11,7 @@ public class SResAllRacersInfo extends ServerDataModel {
     private int cmd;
     private ServerGameMaster sGameMaster;
 
-    public SResAllRacersInfo(int _cmd, int _eventFlag, ServerGameMaster _sGameMaster) {
+    public SResAllRacersInfo(int _cmd, ServerGameMaster _sGameMaster) {
         this.cmd = _cmd;
         this.sGameMaster = _sGameMaster;
     }

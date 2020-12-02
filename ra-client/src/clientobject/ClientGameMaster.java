@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ClientGameMaster {
-    private int numOfRacers;
+    private int numOfRacers, numOfEliminatedRacers;
     private ClientRacer cRacer;
     private HashMap<String, ClientPlayer> cOpponents; // <username, opponentObject>
     private ClientQuestion currentQuestion;
@@ -68,8 +68,6 @@ public class ClientGameMaster {
 
         switch (cOpponent.getStatusFlag()) {
             case ClientGameConfig.RACER_STATUS_FLAG.FLAG_READY:
-                ClientGUI.getInstance().resetProgressBarForReplay(cOpponent);
-                break;
             case ClientGameConfig.RACER_STATUS_FLAG.FLAG_NORMAL:
             case ClientGameConfig.RACER_STATUS_FLAG.FLAG_FASTEST:
             case ClientGameConfig.RACER_STATUS_FLAG.FLAG_WRONG:
@@ -77,11 +75,15 @@ public class ClientGameMaster {
                 ClientGUI.getInstance().updateOpponentProgress(cOpponent);
                 break;
             case ClientGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED:
+                checkForEndgameOnElimination();
                 ClientGUI.getInstance().strikeThroughEliminatedRacer(cOpponent);
                 break;
             case ClientGameConfig.RACER_STATUS_FLAG.FLAG_QUIT:
                 ClientGUI.getInstance().updateOpponentProgressWhenARacerQuit(cOpponent);
                 this.cOpponents.remove(cOpponent.getNickname());
+                break;
+            case ClientGameConfig.RACER_STATUS_FLAG.FLAG_VICTORY:
+                ClientGUI.getInstance().announceWinner(cOpponent.getNickname());
                 break;
             default:
                 break;
@@ -115,26 +117,26 @@ public class ClientGameMaster {
         }
     }
 
-    private void prepareRacersToStartTheRace() {
+    public void replay() {
         _prepareRacer();
         _prepareOpponents();
+
+        currentQuestion = null;
+        numOfEliminatedRacers = 0;
+        ClientGUI.getInstance().resetUIForReplay();
     }
 
     private void _prepareRacer() {
-        cRacer.setPosition(ClientGameConfig.INIT_RACER_POSITION);
-        cRacer.setStatusFlag(ClientGameConfig.RACER_STATUS_FLAG.FLAG_READY);
-        cRacer.setStatusStr(ClientGameConfig.STATUS_STRING[ClientGameConfig.RACER_STATUS_FLAG.FLAG_READY]);
-        cRacer.setNumOfIncorrect(0);
-        cRacer.setGain(0);
-
         // update UI
+        ClientGUI.getInstance().renewRacerNickname(cRacer);
         ClientGUI.getInstance().resetYouProgressBar();
     }
 
     private void _prepareOpponents() {
         for (Map.Entry<String, ClientPlayer> opps : cOpponents.entrySet()) {
+            ClientGUI.getInstance().updateOpponentProgress(opps.getValue());
             ClientGUI.getInstance().updateOpponentNameWhenJoin(opps.getValue());
-            //
+            ClientGUI.getInstance().renewRacerNickname(opps.getValue());
         }
     }
 
@@ -154,9 +156,8 @@ public class ClientGameMaster {
         ClientGUI.getInstance().updateYouPoint(cRacer.getPosition());
         ClientGUI.getInstance().setUpdateStatus(ClientGameConfig.STATUS_STRING[cRacer.getStatusFlag()]);
 
-        String gainStr = cRacer.getGain() >= 0 ? ("+"+String.valueOf(cRacer.getGain())) : String.valueOf(cRacer.getGain());
+        String gainStr = cRacer.getGain() >= 0 ? ("+"+ cRacer.getGain()) : String.valueOf(cRacer.getGain());
         ClientGUI.getInstance().setUpdateExtraStatus("Gain: " + gainStr + " ");
-        System.out.println(getClass().getSimpleName() + ": racer status flag: " + cRacer.getStatusFlag());
 
         switch (cRacer.getStatusFlag()) {
             case ClientGameConfig.RACER_STATUS_FLAG.FLAG_READY:
@@ -169,11 +170,27 @@ public class ClientGameMaster {
             case ClientGameConfig.RACER_STATUS_FLAG.FLAG_TIMEOUT:
                 break;
             case ClientGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED:
+                checkForEndgameOnElimination();
+
                 ClientGUI.getInstance().strikeThroughYouNickname();
                 ClientGUI.getInstance().setUpdateExtraStatus("You were ejected :>> ");
                 break;
+            case ClientGameConfig.RACER_STATUS_FLAG.FLAG_VICTORY:
+                cRacer.updateNumOfVictoryBy(1);
+                ClientGUI.getInstance().updateYouNumOfVictory(cRacer.getNumOfVictory());
+                ClientGUI.getInstance().setUpdateExtraStatus("Yay, you big brain :< ");
+                break;
             default:
                 break;
+        }
+    }
+
+    private void checkForEndgameOnElimination() {
+        numOfEliminatedRacers += 1;
+
+        // if all racers are eliminated
+        if (numOfEliminatedRacers >= getCurrentNumOfRacers()) {
+            ClientGUI.getInstance().announceNoWinner();
         }
     }
 

@@ -29,4 +29,5 @@ public class ClientRacer extends ClientPlayer {
     public void setNumOfVictory(int numOfVictory) {
         this.numOfVictory = numOfVictory;
     }
+    public void updateNumOfVictoryBy(int delta) { this.numOfVictory += delta; }
 }

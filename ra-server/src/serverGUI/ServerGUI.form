@@ -145,7 +145,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="START GAME"/>
+          <text value="GIVE QUESTION"/>
         </properties>
       </component>
       <vspacer id="451db">

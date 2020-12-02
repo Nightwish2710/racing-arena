@@ -28,6 +28,7 @@ public class CRecAllRacersInfo extends ClientDataModel {
             int lUsername = byteBuffer.getInt();
             byte[] bUsername = new byte[lUsername];
             byteBuffer.get(bUsername);
+
             String rUsername = new String(bUsername);
 
             int rPosition = byteBuffer.getInt();
