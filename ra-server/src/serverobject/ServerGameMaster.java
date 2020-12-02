@@ -244,6 +244,7 @@ public class ServerGameMaster {
                     numOfRemainRacers -= 1; // decrease number of remaining racers
 
                     ServerGUI.getInstance().strikeThroughEliminatedRacer(currRacer.getUsername()); // update table UI
+
                 }
             }
         }
@@ -305,12 +306,15 @@ public class ServerGameMaster {
         for (Map.Entry<String, ServerRacerObject> racerEntry : this.sRacers.entrySet()) {
             ServerRacerObject currRacer = racerEntry.getValue();
             // update values on UI
+            System.out.println("CHECK FLAG: " + currRacer.getUsername() + ": " + currRacer.getStatus() + " : " +ServerGameConfig.STATUS_STRING[currRacer.getStatus()]);
             ServerGUI.getInstance().updateSRacerToUI(currRacer.getUsername(), currRacer.getGain(), currRacer.getStatus(), currRacer.getPosition());
 
             // reset flags, ignore eliminated or disconnected racer
             if (currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED &&
                     currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_QUIT) {
                 currRacer.resetRacerForNewQuestion();
+
+                System.out.println("CHECK FLAG 317: " + currRacer.getUsername() + ": " + currRacer.getStatus() + " : " +ServerGameConfig.STATUS_STRING[currRacer.getStatus()]);
             }
         }
     }

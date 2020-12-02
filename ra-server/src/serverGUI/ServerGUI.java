@@ -331,10 +331,14 @@ public class ServerGUI extends JFrame {
         String gainStr = gain >= 0 ? ("+"+String.valueOf(gain)) : String.valueOf(gain);
 
         for (int i = 0; i < ServerGameMaster.getInstance().getNumOfRacers(); ++i) {
-            if (dtm.getValueAt(i, 0) == racerName) {
+            System.out.println("ServerGUI "+ dtm.getValueAt(i, 0));
+            if (dtm.getValueAt(i, 0) == racerName ||
+                    dtm.getValueAt(i, 0) == "<HTML><STRIKE>" + racerName + "</STRIKE></HTML>") {
                 dtm.setValueAt(gainStr, i, 2);
                 dtm.setValueAt(ServerGameConfig.STATUS_STRING[status], i, 3);
                 dtm.setValueAt(position, i, 4);
+
+                System.out.println("ServerGUI340 "+ dtm.getValueAt(i, 2) + " " + dtm.getValueAt(i, 3) + " " + dtm.getValueAt(i, 2));
             }
         }
     }
