@@ -35,7 +35,7 @@ public class ClientGUI extends JFrame {
     private JPasswordField enterPassword;
 
     private JLabel victoryLabel;
-    private JLabel updateNumOfVictory;
+    private JLabel numOfVictory;
 
     private JButton joinServerButton;
     private JLabel joinServerNoti;
@@ -59,7 +59,7 @@ public class ClientGUI extends JFrame {
     private JPanel racerStatusPanel;
     private List<Component> racerStatusList;
     private JLabel winnerLabel;
-    private JLabel updateWinner;
+    private JLabel winner;
 
     private JButton c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15;
     private JLabel questionWarn;
@@ -93,11 +93,11 @@ public class ClientGUI extends JFrame {
         this.setErrorPaneUI();
     }
 
-    @Override
-    public void addNotify() {
-        super.addNotify();
-        SwingUtilities.getRootPane(submitAnswerButton).setDefaultButton(submitAnswerButton);
-    }
+//    @Override
+//    public void addNotify() {
+//        super.addNotify();
+//        SwingUtilities.getRootPane(submitAnswerButton).setDefaultButton(submitAnswerButton);
+//    }
 
     // dont't change the function name
     private void createUIComponents() {
@@ -117,7 +117,7 @@ public class ClientGUI extends JFrame {
         racerStatusLabel.setForeground(ACCENT_COLOR);
         racerStatusLabel.setFont(new Font("Britannic Bold", Font.PLAIN, 20));
 
-        updateNumOfVictory.setForeground(ACCENT_COLOR);
+        numOfVictory.setForeground(ACCENT_COLOR);
 
         // set buttons
         joinServerButton.setBackground(ACCENT_COLOR);
@@ -148,17 +148,12 @@ public class ClientGUI extends JFrame {
 
         // set label
         victoryLabel.setFont(new Font("Britannic Bold", Font.PLAIN, 20));
-        updateNumOfVictory.setFont(new Font("Britannic Bold", Font.PLAIN, 40));
+        numOfVictory.setFont(new Font("Britannic Bold", Font.PLAIN, 40));
         joinServerNoti.setFont(new Font("Arial", Font.ITALIC, 9));
 
         winnerLabel.setFont(new Font("Britannic Bold", Font.PLAIN, 15));
 
-        updateWinner.setHorizontalTextPosition(SwingConstants.LEFT);
-//        updateWinner.setFont(new Font("Arial", Font.ITALIC, 9));
-//        updateWinner.setText("Ppl in this server are not so smart.");
-        updateWinner.setFont(new Font("Britannic Bold", Font.PLAIN, 18));
-        updateWinner.setText("QQQQQQQQQQ");
-
+        winner.setHorizontalTextPosition(SwingConstants.LEFT);
 
         // set separator
         setSeparatorUI();
@@ -376,15 +371,15 @@ public class ClientGUI extends JFrame {
             submitAnswer();
         });
         // press [Enter] to submit answer
-        submitAnswerButton.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                if(e.getKeyChar() == KeyEvent.VK_ENTER && submitAnswerButton.isEnabled()) {
-                    submitAnswerButton.setEnabled(false);
-                    submitAnswer();
-                }
-            }
-        });
+//        submitAnswerButton.addKeyListener(new KeyAdapter() {
+//            @Override
+//            public void keyReleased(KeyEvent e) {
+//                if(e.getKeyChar() == KeyEvent.VK_ENTER && submitAnswerButton.isEnabled()) {
+//                    submitAnswerButton.setEnabled(false);
+//                    submitAnswer();
+//                }
+//            }
+//        });
     }
 
     private CompoundBorder createProgressBarBorder(int rightThickness) {
@@ -590,7 +585,7 @@ public class ClientGUI extends JFrame {
     }
 
     public void updateYouNumOfVictory(int numOfVictory) {
-        updateNumOfVictory.setText(Integer.toString(numOfVictory));
+        this.numOfVictory.setText(Integer.toString(numOfVictory));
     }
 
     public void updateYouNickname(String nickname) {
@@ -738,8 +733,8 @@ public class ClientGUI extends JFrame {
 
     public void resetUIForReplay() {
         // reset winner announcement
-        updateWinner.setFont(new Font("Arial", Font.ITALIC, 9));
-        updateWinner.setText("Unknown.");
+        winner.setFont(new Font("Arial", Font.ITALIC, 9));
+        winner.setText("Unknown.");
 
         // reset question info
         firstNum.setText("1st no.");
@@ -751,10 +746,24 @@ public class ClientGUI extends JFrame {
         updateStatus.setText("Extra status");
     }
 
-    public void resetProgressBarForReplay(ClientPlayer opponent) {
-        for (int i = 2; i < ClientGameMaster.getInstance().getNumOfRacers() + 1; ++i) {
-            ((JProgressBar)racerStatusList.get(i*2)).setValue(ClientGameConfig.INIT_RACER_POSITION); // reset progress
-            ((JProgressBar)racerStatusList.get(i*2)).setString(Integer.toString(ClientGameConfig.INIT_RACER_POSITION)); // reset progress number
+    public void updateNumOfVictory(int victory) {
+        numOfVictory.setText(Integer.toString(victory));
+    }
+
+    public void announceWinner(String winnerName) {
+        winner.setFont(new Font("Britannic Bold", Font.PLAIN, 18));
+        winner.setText(winnerName);
+    }
+
+    public void announceNoWinner() {
+        winner.setFont(new Font("Arial", Font.ITALIC, 9));
+        winner.setText("Ppl in this server are not so smart.");
+    }
+
+    public void renewRacerNickname(ClientPlayer racer) {
+        if (racer.getNickname().contains("<HTML><STRIKE>")) {
+            racer.setNickname(racer.getNickname().replace("<HTML><STRIKE>", ""));
+            racer.setNickname(racer.getNickname().replace("</STRIKE></HTML>", ""));
         }
     }
 }

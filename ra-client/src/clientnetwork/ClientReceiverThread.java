@@ -52,7 +52,9 @@ public class ClientReceiverThread implements Runnable {
                     case ClientNetworkConfig.CMD.CMD_RESULT:
                         receiveResult(bytes);
                         break;
-
+                    case ClientNetworkConfig.CMD.CMD_REPLAY:
+                        receiveReplay(bytes);
+                        break;
                     default:
                         break;
                 }
@@ -109,7 +111,7 @@ public class ClientReceiverThread implements Runnable {
 
                 // confirm this racer, i.e., local input username and password are accepted
                 ClientGameMaster.getInstance().confirmRacerPostLogin(cRecLogin.getRacerVictory());
-                ClientGUI.getInstance().setJoinServerNoti("Login Successfully ", 9);
+                ClientGUI.getInstance().setJoinServerNoti("Registration Completed Successfully ", 9);
 
                 // record his opponents' array
                 ClientGameMaster.getInstance().setNumOfRacers(cRecLogin.getNumOfRacers());
@@ -135,13 +137,12 @@ public class ClientReceiverThread implements Runnable {
             case ClientNetworkConfig.INFO_TYPE_FLAG.TYPE_NOTICE_UPDATE_OPPONENT:
                 _ROI_updateOpponentInfo(cRecOpponentInfo);
                 break;
-
             default:
                 break;
         }
     }
 
-    private void _ROI_newOpponentInfo (CRecOpponentInfo info) {
+    private void _ROI_newOpponentInfo(CRecOpponentInfo info) {
         // added new racer
         ClientPlayer clientOpponent = new ClientPlayer(
                 info.getOpponentUsername(),
@@ -152,7 +153,7 @@ public class ClientReceiverThread implements Runnable {
         ClientGameMaster.getInstance().addNewOpponent(clientOpponent);
     }
 
-    private void _ROI_updateOpponentInfo (CRecOpponentInfo info) {
+    private void _ROI_updateOpponentInfo(CRecOpponentInfo info) {
         // updated a racer
         ClientPlayer clientOpponent = new ClientPlayer(
                 info.getOpponentUsername(),
@@ -181,8 +182,6 @@ public class ClientReceiverThread implements Runnable {
 
         // player's position on server
         int newPositionOfThisRacer = thisPlayer.getPosition();
-        System.out.println(getClass().getSimpleName() + ": new pos " + newPositionOfThisRacer);
-        System.out.println(getClass().getSimpleName() + ": old pos " + thisCRacer.getPosition());
         thisCRacer.setGain(newPositionOfThisRacer - thisCRacer.getPosition());
         thisCRacer.setPosition(newPositionOfThisRacer);
 
@@ -195,4 +194,13 @@ public class ClientReceiverThread implements Runnable {
         ClientGameMaster.getInstance().updateAllOpponents(cRecAllRacersInfo.getAllRacers());
     }
 
+    private void receiveReplay(byte[] bytes) {
+        CRecAllRacersInfo cRecAllRacersInfo = new CRecAllRacersInfo();
+        cRecAllRacersInfo.unpack(bytes);
+
+        _RR_updateThisRacer(cRecAllRacersInfo);
+        _RR_updateOpponentsInfo(cRecAllRacersInfo);
+
+        ClientGameMaster.getInstance().replay();
+    }
 }

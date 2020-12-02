@@ -1,6 +1,8 @@
 package serverobject;
 
 import serverGUI.ServerGUI;
+import serverdatabase.ServerDBConfig;
+import serverdatabase.ServerDBHelper;
 import serverdatamodel.response.SResAllRacersInfo;
 import serverdatamodel.response.SResQuestion;
 import servernetwork.ServerNetwork;
@@ -14,6 +16,7 @@ public class ServerGameMaster {
     private HashMap<String, ServerRacerObject> sRacers;
     private HashMap<Integer, ServerQuestion> sQuestions;
     private Timer questionTimer;
+    private boolean isEndgame;
 
     // Singleton
     private static ServerGameMaster serverGameMaster = null;
@@ -28,6 +31,7 @@ public class ServerGameMaster {
         this.sRacers = new HashMap<>();
         this.sQuestions = new HashMap<>();
         this.numOfRacers = ServerGameConfig.INIT_NUM_OF_RACERS;
+        this.isEndgame = false;
         serverGameMaster = this;
     }
 
@@ -151,7 +155,6 @@ public class ServerGameMaster {
         // if it is the first question, then send default racers info first
         SResAllRacersInfo sResAllRacersInfo = new SResAllRacersInfo(
                 ServerNetworkConfig.CMD.CMD_RESULT,
-                ServerNetworkConfig.INFO_TYPE_FLAG.TYPE_NOTICE_UPDATE_ALL_RACERS,
                 ServerGameMaster.getInstance());
         ServerNetwork.getInstance().sendToAllClient(sResAllRacersInfo, -1, false);
 
@@ -202,6 +205,7 @@ public class ServerGameMaster {
     public void finalEvaluateAfterAnAnswer() {
         long _minDeltaSAnsweringTime = Long.MAX_VALUE - 1;
         int lostPointsOfFuckedUpRacers = ServerGameConfig.GAME_BALANCE.GAIN_FASTEST;
+        int numOfRemainRacers = getCurrentNumOfRacers();
 
         for (Map.Entry<String, ServerRacerObject> racerEntry : this.sRacers.entrySet()) {
             ServerRacerObject currRacer = racerEntry.getValue();
@@ -233,6 +237,9 @@ public class ServerGameMaster {
                 if (currRacer.getNumOfWrong() == ServerGameConfig.GAME_BALANCE.MAX_NUM_OF_WRONG) {
                     currRacer.setStatus(ServerGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED);
 
+                    // decrease number of remaining racers
+                    numOfRemainRacers -= 1;
+
                     // update table UI
                     ServerGUI.getInstance().strikeThroughEliminatedRacer(currRacer.getUsername());
                 }
@@ -254,21 +261,32 @@ public class ServerGameMaster {
                     currRacer.updatePositionBy(lostPointsOfFuckedUpRacers);
 
                     // may also be the victor
-                    if (currRacer.getPosition() >= this.raceLength) {
+                    if (currRacer.getPosition() >= raceLength) {
                         currRacer.updateNumOfVictoryBy(1);
                         currRacer.setStatus(ServerGameConfig.RACER_STATUS_FLAG.FLAG_VICTORY);
 
-                        // prepare to play a new match
-                        prepareToPlayNewMatch();
+                        // write updated number of victory to database
+                        String updateUser = "UPDATE " + ServerDBConfig.TABLE_RACER
+                                + " SET " + ServerDBConfig.TABLE_RACER_victory + " = "+ currRacer.getNumOfVictory() + " WHERE "
+                                + ServerDBConfig.TABLE_RACER_username + " = '" + currRacer.getUsername() + "'";
+                        ServerDBHelper.getInstance().exec(updateUser);
+
+                        isEndgame = true;
+                        ServerGUI.getInstance().updateControllButtonToReplayButton();
+                        ServerGUI.getInstance().changeStateOfControllButton();
                     }
                 }
             }
         }
 
+        if (numOfRemainRacers <= 0) {
+            isEndgame = true;
+            ServerGUI.getInstance().changeStateOfControllButton();
+        }
+
         // send to clients
         SResAllRacersInfo sResAllRacersInfo = new SResAllRacersInfo(
                 ServerNetworkConfig.CMD.CMD_RESULT,
-                ServerNetworkConfig.INFO_TYPE_FLAG.TYPE_NOTICE_UPDATE_ALL_RACERS,
                 ServerGameMaster.getInstance());
         ServerNetwork.getInstance().sendToAllClient(sResAllRacersInfo, -1, false);
 
@@ -279,10 +297,21 @@ public class ServerGameMaster {
             ServerGUI.getInstance().updateSRacerToUI(currRacer.getUsername(), currRacer.getGain(), currRacer.getStatus(), currRacer.getPosition());
 
             // reset flags, ignore eliminated or disconnected racer
-            if (currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED && currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_QUIT) {
+            if (currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED &&
+                    currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_QUIT) {
                 currRacer.resetRacerForNewQuestion();
             }
         }
+    }
+
+    public void replay() {
+        isEndgame = false;
+        this.sQuestions.clear();
+        resetAllRacersForNewMatch(); // reset table
+        ServerGUI.getInstance().resetUIForReplay();
+
+        SResAllRacersInfo sResAllRacersInfo = new SResAllRacersInfo(ServerNetworkConfig.CMD.CMD_REPLAY, this);
+        ServerNetwork.getInstance().sendToAllClient(sResAllRacersInfo, -1, false);
     }
 
     private void resetAllRacersForNewMatch() {
@@ -293,12 +322,5 @@ public class ServerGameMaster {
             // update values on UI
             ServerGUI.getInstance().updateSRacerToUI(currRacer.getUsername(), currRacer.getGain(), currRacer.getStatus(), currRacer.getPosition());
         }
-    }
-
-    private void prepareToPlayNewMatch() {
-        this.sQuestions.clear();
-
-        resetAllRacersForNewMatch(); // reset table
-
     }
 }

@@ -12,6 +12,7 @@ public class ServerNetworkConfig {
         public static final int CMD_QUESTION = 2;
         public static final int CMD_ANSWER = 3;
         public static final int CMD_RESULT = 4;
+        public static final int CMD_REPLAY = 5;
     }
 
     public static class LOGIN_FLAG {
