@@ -5,6 +5,9 @@ CS494: Socket Programming
 * Trần Thị Anh Thư - 1751036
 * Lê Phạm Ngọc Yến - 1751028
 
+**REQUIREMENT INSTALL**: 
+* H2 database: https://www.h2database.com/html/main.html
+
 **ASSETS**: https://www.iconarchive.com/show/tailwaggers-icons-by-iconka.html
 
 **CODE REFERENCES**:
