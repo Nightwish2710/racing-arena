@@ -341,7 +341,7 @@ public class ServerGUI extends JFrame {
     public void setUpdateTimer(int time) { this.updateTimer.setText(Integer.toString(time)); }
 
     // strike through name of whom is eliminated from the race
-    private void strikeThroughEliminatedRacer(String racerName) {
+    public void strikeThroughEliminatedRacer(String racerName) {
         for (int i = 0; i < ServerGameMaster.getInstance().getNumOfRacers(); ++i) {
             if (dtm.getValueAt(i, 0).equals(racerName)) {
                 dtm.setValueAt(strikeThroughText((String)dtm.getValueAt(i, 0)), i, 0);

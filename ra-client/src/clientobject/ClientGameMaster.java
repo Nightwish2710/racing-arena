@@ -96,6 +96,11 @@ public class ClientGameMaster {
     public void setCurrentQuestion(ClientQuestion currentQuestion) {
         this.currentQuestion = currentQuestion;
 
+//        if (this.currentQuestion.getQuestionId() == ClientGameConfig.INIT_QUESTION_ID) {
+//            // put all racers back to the start
+//            prepareRacersToStartTheRace();
+//        }
+
         ClientGUI.getInstance().setFirstNum(currentQuestion.getFirstNum());
         ClientGUI.getInstance().setOperator(currentQuestion.getOperator());
         ClientGUI.getInstance().setSecondNum(currentQuestion.getSecondNum());
@@ -105,6 +110,29 @@ public class ClientGameMaster {
             ClientGUI.getInstance().stopAnswering();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void prepareRacersToStartTheRace() {
+        _prepareRacer();
+        _prepareOpponents();
+    }
+
+    private void _prepareRacer() {
+        this.cRacer.setPosition(ClientGameConfig.INIT_RACER_POSITION);
+        this.cRacer.setStatusFlag(ClientGameConfig.RACER_STATUS_FLAG.FLAG_READY);
+        this.cRacer.setStatusStr(ClientGameConfig.STATUS_STRING[ClientGameConfig.RACER_STATUS_FLAG.FLAG_READY]);
+        this.cRacer.setNumOfIncorrect(0);
+        this.cRacer.setGain(0);
+
+        // update UI
+        ClientGUI.getInstance().resetYouProgressBar();
+    }
+
+    private void _prepareOpponents() {
+        for (Map.Entry<String, ClientPlayer> opps : this.cOpponents.entrySet()) {
+            ClientGUI.getInstance().updateOpponentNameWhenJoin(opps.getValue());
+            //
         }
     }
 

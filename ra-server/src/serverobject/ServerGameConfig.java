@@ -10,8 +10,8 @@ public class ServerGameConfig {
     public static final long MAX_TIMER_MILIS = MAX_TIMER_SEC * 1000;
 
     // initial race value
-    public static final int INIT_NUM_OF_RACERS = 6;
-    public static final int INIT_RACE_LENGTH = 15;
+    public static final int INIT_NUM_OF_RACERS = 2;
+    public static final int INIT_RACE_LENGTH = 3;
     public static final int INIT_RACER_POSITION = 1;
     public static final long INIT_RACER_DELTA_ANSWERING_TIME = Long.MAX_VALUE;
 
@@ -39,6 +39,7 @@ public class ServerGameConfig {
         public static final int FLAG_TIMEOUT = 4;
         public static final int FLAG_ELIMINATED = 5;
         public static final int FLAG_QUIT = 6;
+        public static final int FLAG_VICTORY = 7;
     }
     public static final String[] STATUS_STRING = {
             "Racer Ready",
@@ -47,7 +48,8 @@ public class ServerGameConfig {
             "Incorrect",
             "Timeout",
             "Eliminated",
-            "Raged Quit"
+            "Rage Quit",
+            "Victory"
     };
 
     public static class GAME_BALANCE {

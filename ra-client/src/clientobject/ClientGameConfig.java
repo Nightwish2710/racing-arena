@@ -14,6 +14,7 @@ public class ClientGameConfig {
     public static final int INIT_RACE_LENGTH = 15;
     public static final int INIT_RACER_POSITION = 1;
     public static final long INIT_RACER_DELTA_ANSWERING_TIME = Long.MAX_VALUE;
+    public static final int INIT_QUESTION_ID = 1;
 
     // question configurations
     public static final int MAX_NUMBER = 10000, MIN_NUMBER = -10000;
@@ -35,14 +36,16 @@ public class ClientGameConfig {
         public static final int FLAG_TIMEOUT = 4;
         public static final int FLAG_ELIMINATED = 5;
         public static final int FLAG_QUIT = 6;
+        public static final int FLAG_VICTORY = 7;
     }
     public static final String[] STATUS_STRING = {
-            "ClientRacer Ready",
+            "Racer Ready",
             "Correct",
             "Correct & Fastest",
             "Incorrect",
             "Timeout",
             "Eliminated",
-            "Rage Quit"
+            "Rage Quit",
+            "Victory"
     };
 }
