@@ -103,11 +103,11 @@ public class ServerNetwork {
             }
         }
 
-        public void subscribeClientSocket (int cSocketThreadID, ServerCSocketThread cSockThread) {
+        public void subscribeClientSocket(int cSocketThreadID, ServerCSocketThread cSockThread) {
             this.cSocketThreads.put(cSocketThreadID, cSockThread);
         }
 
-        public void unSubscribeClientSocket (int cSocketThreadID) {
+        public void unSubscribeClientSocket(int cSocketThreadID) {
             this.cSocketThreads.remove(cSocketThreadID);
         }
 

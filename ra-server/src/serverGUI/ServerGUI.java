@@ -284,30 +284,10 @@ public class ServerGUI extends JFrame {
             racerStatTable.getColumnModel().getColumn(i).setMaxWidth(ServerGUIConfig.PREFERRED_WIDTH[i]); // set column width
             racerStatTable.getColumnModel().getColumn(i).setCellRenderer(center); // align center text in each cell
         }
-
-//        dtm.setValueAt(strikeThroughText((String)dtm.getValueAt(0, 3)), 0, 3);
-//        dtm.setValueAt(atStarToCurrentLeadingRacer((String)dtm.getValueAt(0, 1)), 0, 1);
-//        dtm.setValueAt(removeStarFromPreviouslyLeadingRacer((String)dtm.getValueAt(0, 1)), 0, 1);
     }
 
-    // strike through name of whom is eliminated from the race
     private String strikeThroughText(String str) {
         return "<HTML><STRIKE>" + str + "</STRIKE></HTML>";
-    }
-
-    // add star to name of whom is currently leading the race
-    private String atStarToCurrentLeadingRacer(String str) {
-        return "<HTML><p style=\"color:red;\">&#9733;" + str + "&#9733;</p></HTML>";
-    }
-
-    // remove star from name of whom is not leading the race anymore
-    private String removeStarFromPreviouslyLeadingRacer(String str) {
-        Pattern pattern = Pattern.compile("<HTML><p style=\"color:red;\">&#9733;(\\S+)&#9733;</p></HTML>");
-        Matcher matcher = pattern.matcher(str);
-
-        if (matcher.find()) { return matcher.group(1); }
-
-        return str;
     }
 
     private void disableComponentAfterOpenConnection() {
@@ -317,7 +297,7 @@ public class ServerGUI extends JFrame {
     }
 
     public void addSRacerToUI(String racerName, int gain, int status, int position) {
-        String gainStr = gain >= 0 ? ("+"+String.valueOf(gain)) : String.valueOf(gain);
+        String gainStr = gain >= 0 ? ("+"+gain) : String.valueOf(gain);
         dtm.addRow(new Object[]{racerName, gainStr, ServerGameConfig.STATUS_STRING[status], position});
     }
 
@@ -356,8 +336,18 @@ public class ServerGUI extends JFrame {
     public void setFirstNum(int firstNum) { this.firstNum.setText(Integer.toString(firstNum)); }
     public void setSecondNum(int secondNum) { this.secondNum.setText(Integer.toString(secondNum)); }
     public void setOperator(int operator) { this.operator.setText(ServerGameConfig.OPERATORS[operator]); }
+    public void setAnswer(int answer) { this.updateCorrectAns.setText(Integer.toString(answer)); }
 
     public void setUpdateTimer(int time) { this.updateTimer.setText(Integer.toString(time)); }
+
+    // strike through name of whom is eliminated from the race
+    private void strikeThroughEliminatedRacer(String racerName) {
+        for (int i = 0; i < ServerGameMaster.getInstance().getNumOfRacers(); ++i) {
+            if (dtm.getValueAt(i, 0).equals(racerName)) {
+                dtm.setValueAt(strikeThroughText((String)dtm.getValueAt(i, 0)), i, 0);
+            }
+        }
+    }
 
     public void setConsoleTextArea(String str) {
         if (EventQueue.isDispatchThread()) {

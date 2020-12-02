@@ -67,11 +67,9 @@ public class ServerCSocketThread implements Runnable{
                     case ServerNetworkConfig.CMD.CMD_LOGIN:
                         handleLogin(cmd, bytes, this.outStream, this.parentThread);
                         break;
-
                     case ServerNetworkConfig.CMD.CMD_ANSWER:
                         handleAnswer(bytes);
                         break;
-
                     case ServerNetworkConfig.CMD.DISCONNECT:
                         finalizeOnClose();
                         break;
@@ -87,8 +85,11 @@ public class ServerCSocketThread implements Runnable{
         }
     }
 
+    public String getsRacerName() {
+        return sRacerName;
+    }
 
-    public void finalizeOnClose () throws IOException {
+    public void finalizeOnClose() throws IOException {
         // set isOnline status of myself to 0
         String updateUser = "UPDATE " + ServerDBConfig.TABLE_RACER
                 + " SET " + ServerDBConfig.TABLE_RACER_isonline + " = 0 WHERE "
@@ -97,6 +98,7 @@ public class ServerCSocketThread implements Runnable{
 
         // update myself with new status: disconnected to master array
         ServerGameMaster.getInstance().getRacerByUsername(this.sRacerName).setStatus(ServerGameConfig.RACER_STATUS_FLAG.FLAG_QUIT);
+
         // signal this info to other opponents
         SResOpponentInfo sResOpponentInfo = new SResOpponentInfo(
                 ServerNetworkConfig.CMD.CMD_INFO,
@@ -105,17 +107,14 @@ public class ServerCSocketThread implements Runnable{
                 ServerGameMaster.getInstance());
         this.parentThread.signalAllClients(sResOpponentInfo, this.cSocketID, true);
 
-        // close all streams
-        inStream.close();
-        outStream.close();
-        // close the given socket
-        socketOfServer.close();
-        // remove this client socket from the array of network's client sockets
-        this.parentThread.unSubscribeClientSocket(this.cSocketID);
-        // break loop in run()
-        this.isPermittedToRun = false;
-        // tell master to remove myself
-        ServerGameMaster.getInstance().removeRacer(this.sRacerName);
+        inStream.close(); // close input stream
+        outStream.close(); // close output stream
+        socketOfServer.close(); // close the given socket
+
+        this.parentThread.unSubscribeClientSocket(this.cSocketID); // remove this client socket from the array of network's client sockets
+        this.isPermittedToRun = false; // break loop in run()
+
+        ServerGameMaster.getInstance().removeRacer(this.sRacerName); // tell master to remove itself
 
         System.out.println(getClass().getSimpleName() + ": Client "+ this.getsRacerName() +" disconnected");
     }
@@ -126,10 +125,6 @@ public class ServerCSocketThread implements Runnable{
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public String getsRacerName() {
-        return sRacerName;
     }
 
     private void handleLogin(int cmd, byte[] bytes, DataOutputStream outStream, ServerNetwork.ServerNetworkThread parentThread) throws SQLException, IOException {
@@ -241,24 +236,27 @@ public class ServerCSocketThread implements Runnable{
         System.out.println(getClass().getSimpleName() + "this racer init pos: " + thisRacer.getPosition());
         System.out.println(getClass().getSimpleName() + ": " + sReqAnswer.getCAnswer() + " " + sReqAnswer.getCQuestionID() + " " + sDeltaAnsweringTime);
 
-        if (sDeltaAnsweringTime <= ServerGameConfig.MAX_TIMER_MILIS) {
+        if (sDeltaAnsweringTime <= ServerGameConfig.MAX_TIMER_MILIS) { // if not timeout, then check for correctness
             System.out.println(thisRacer.getUsername() + ": IN TIME");
-            // not timeout, go check for correctness
+
             // get actual answer from server
             int sAnswer = currentSQuestion.getAnswer();
+
             if (sAnswer == sReqAnswer.getCAnswer()) {
                 System.out.println(thisRacer.getUsername() + ": NORMAL");
                 // correct answer, get 1 point, status normal
                 thisRacer.updatePositionBy(ServerGameConfig.GAME_BALANCE.GAIN_NORMAL);
                 thisRacer.setStatus(ServerGameConfig.RACER_STATUS_FLAG.FLAG_NORMAL);
-            } else {
+            }
+            else {
                 System.out.println(thisRacer.getUsername() + ": WRONG");
-                // incorrect answer, get -1 point, status wrong
+                // incorrect answer, get -1 point, status incorrect
                 thisRacer.updatePositionBy(ServerGameConfig.GAME_BALANCE.GAIN_WRONG);
                 thisRacer.setStatus(ServerGameConfig.RACER_STATUS_FLAG.FLAG_WRONG);
                 thisRacer.updateNumOfWrongBy(1);
             }
-        } else {
+        }
+        else {
             System.out.println(thisRacer.getUsername() + ": TIME OUT");
             // timeout
             thisRacer.updatePositionBy(ServerGameConfig.GAME_BALANCE.GAIN_TIMEOUT);

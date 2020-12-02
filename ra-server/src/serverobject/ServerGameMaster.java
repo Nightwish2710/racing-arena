@@ -153,6 +153,7 @@ public class ServerGameMaster {
         ServerGUI.getInstance().setFirstNum(serverQuestion.getFirstNum());
         ServerGUI.getInstance().setSecondNum(serverQuestion.getSecondNum());
         ServerGUI.getInstance().setOperator(serverQuestion.getOperator());
+        ServerGUI.getInstance().setAnswer(serverQuestion.getAnswer());
 
         // Send packet to all clients
         SResQuestion sResQuestion = new SResQuestion(
@@ -173,12 +174,14 @@ public class ServerGameMaster {
         this.questionTimer = new Timer();
         questionTimer.scheduleAtFixedRate(new TimerTask() {
             int time = ServerGameConfig.MAX_TIMER_SEC;
+
             @Override
             public void run() {
                 if (time > 0) {
                     time -= 1;
-                    ServerGUI.getInstance().setUpdateTimer(time);
-                } else {
+                    ServerGUI.getInstance().setUpdateTimer(time+1);
+                }
+                else {
                     finalEvaluateAfterAnAnswer();
                     questionTimer.cancel();
                 }
@@ -196,15 +199,19 @@ public class ServerGameMaster {
 
         for (Map.Entry<String, ServerRacerObject> racerEntry : this.sRacers.entrySet()) {
             ServerRacerObject currRacer = racerEntry.getValue();
+
             // ignore previous eliminated or disconnected racer
-            if (currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED && currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_QUIT) {
+            if (currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED &&
+                    currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_QUIT) {
                 // prepare shortest answering time, ignore wrong answers
-                if (currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_WRONG && currRacer.getCurrDeltaSAnsweringTime() < _minDeltaSAnsweringTime) {
+                if (currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_WRONG &&
+                        currRacer.getCurrDeltaSAnsweringTime() < _minDeltaSAnsweringTime) {
                     _minDeltaSAnsweringTime = currRacer.getCurrDeltaSAnsweringTime();
                 }
 
                 // timeout
                 if (currRacer.getCurrDeltaSAnsweringTime() == ServerGameConfig.INIT_RACER_DELTA_ANSWERING_TIME) {
+                    currRacer.updatePositionBy(ServerGameConfig.GAME_BALANCE.GAIN_TIMEOUT);
                     currRacer.setStatus(ServerGameConfig.RACER_STATUS_FLAG.FLAG_TIMEOUT);
                 }
 
@@ -226,10 +233,13 @@ public class ServerGameMaster {
         // reward the fastest
         for (Map.Entry<String, ServerRacerObject> racerEntry : this.sRacers.entrySet()) {
             ServerRacerObject currRacer = racerEntry.getValue();
+
             // ignore eliminated or disconnected racer
-            if (currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED && currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_QUIT) {
+            if (currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED &&
+                    currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_QUIT) {
                 // prepare shortest answering time
-                if (currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_WRONG && currRacer.getCurrDeltaSAnsweringTime() <= _minDeltaSAnsweringTime) {
+                if (currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_WRONG &&
+                        currRacer.getCurrDeltaSAnsweringTime() <= _minDeltaSAnsweringTime) {
                     // the fastest
                     currRacer.setStatus(ServerGameConfig.RACER_STATUS_FLAG.FLAG_FASTEST);
                     currRacer.updatePositionBy(lostPointsOfFuckedUpRacers);
@@ -244,10 +254,10 @@ public class ServerGameMaster {
                 ServerGameMaster.getInstance());
         ServerNetwork.getInstance().sendToAllClient(sResAllRacersInfo, -1, false);
 
-        // show UI and reset flags
+        // update values on UI and reset flags
         for (Map.Entry<String, ServerRacerObject> racerEntry : this.sRacers.entrySet()) {
             ServerRacerObject currRacer = racerEntry.getValue();
-            // show UI
+            // update values on UI
             ServerGUI.getInstance().updateSRacerToUI(currRacer.getUsername(), currRacer.getGain(), currRacer.getStatus(), currRacer.getPosition());
 
             // reset flags, ignore eliminated or disconnected racer

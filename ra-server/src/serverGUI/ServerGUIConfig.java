@@ -11,7 +11,7 @@ public class ServerGUIConfig {
     // table configurations
     public static final int ROW_HEIGHT = 25;
     public static final String[] TABLE_COLS = {"RACER NAME", "GAIN", "STATUS", "POSITION"};
-    public static final int[] PREFERRED_WIDTH = {120, 50, 100, 70};
+    public static final int[] PREFERRED_WIDTH = {120, 50, 120, 70};
 
     // overall color theme
     public static final Color BACKGROUND_COLOR = new Color(0xF5F5F5);

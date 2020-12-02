@@ -431,7 +431,7 @@ public class ClientGUI extends JFrame {
 
         JLabel tmpLabel = new JLabel();
         tmpLabel.setMinimumSize(new Dimension(ClientGUIConfig.RACER_STAT_PANEL_LABEL_WIDTH, 25));
-        tmpLabel.setText("<HTML>&#x2666; ME &#x2666;</HTML>");
+        tmpLabel.setText("<HTML>&#x2666; Me &#x2666;</HTML>");
         tmpLabel.setFont(new Font("Arial", Font.PLAIN, 9));
         tmpLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         tmpLabel.setVerticalAlignment(SwingConstants.CENTER);
@@ -481,7 +481,7 @@ public class ClientGUI extends JFrame {
         for (int i = 0; i < ClientGameConfig.MAX_NUM_OF_RACERS - 1; ++i) {
             JLabel tmpLabel = new JLabel();
             tmpLabel.setMinimumSize(new Dimension(ClientGUIConfig.RACER_STAT_PANEL_LABEL_WIDTH, 25));
-            tmpLabel.setText("Opponent_" + Integer.toString(i+1));
+            tmpLabel.setText("ImpostorNo" + Integer.toString(i+1));
             tmpLabel.setFont(new Font("Arial", Font.PLAIN, 9));
             tmpLabel.setHorizontalAlignment(SwingConstants.RIGHT);
             tmpLabel.setVerticalAlignment(SwingConstants.CENTER);
@@ -503,27 +503,6 @@ public class ClientGUI extends JFrame {
         // change other racers' progress bar
         for (int i = 2; i < ClientGameMaster.getInstance().getNumOfRacers() + 1; ++i) {
             racerStatusList.get(i*2).setForeground(ClientGUIConfig.COLOR_LIST.get(colorIndex));
-        }
-    }
-
-    // update the progress bar to show how far each racer has come
-    public void updateOpponentProgress(int order, ClientPlayer opponent) {
-        ((JLabel)racerStatusList.get(order*2-1)).setText(opponent.getNickname()); // update opponent name
-
-        ((JProgressBar)racerStatusList.get(order*2)).setValue(opponent.getPosition()); // update opponent progress
-        ((JProgressBar)racerStatusList.get(order*2)).setString(Integer.toString(opponent.getPosition())); // update progress number
-    }
-
-    public void initOpponentBarWhenReceiveNumOfPplJoinning() {
-        ((JSeparator)racerStatusList.get(2)).setBorder(BorderFactory.createMatteBorder(4, 0, 0, 0, ClientGUIConfig.BORDER_COLOR));
-
-        for (int i = 2; i < ClientGameMaster.getInstance().getNumOfRacers() + 1; ++i) {
-            racerStatusList.get(i*2-1).setVisible(true); // show opponent name
-
-            JProgressBar tmpBar = (JProgressBar)(racerStatusList.get(i*2));
-            tmpBar.setForeground(ClientGUIConfig.COLOR_LIST.get(colorIndex)); // show opponent bar
-            tmpBar.setStringPainted(true); // show opponent bar value
-            tmpBar.setBorder(createProgressBarBorder(3)); // show finnish line
         }
     }
 
@@ -638,6 +617,16 @@ public class ClientGUI extends JFrame {
         }
     }
 
+    public void stopAnswering() {
+        System.out.println("STOP ANSWERING");
+
+        timerBar.setValue(ClientGameConfig.MAX_TIMER_SEC);
+        timerBar.setString(Integer.toString(ClientGameConfig.MAX_TIMER_SEC));
+
+        enterAnswer.setEnabled(false);
+        submitAnswerButton.setEnabled(false);
+    }
+
     public void setFirstNum(int firstNum) { this.firstNum.setText(Integer.toString(firstNum)); }
     public void setOperator(int operator) { this.operator.setText(ClientGameConfig.OPERATORS[operator]); }
     public void setSecondNum(int secondNum) { this.secondNum.setText(Integer.toString(secondNum)); }
@@ -653,21 +642,94 @@ public class ClientGUI extends JFrame {
         ClientGameMaster.getInstance().giveAnswer(answer);
     }
 
+    private String strikeThroughText(String str) {
+        return "<HTML><STRIKE>" + str + "</STRIKE></HTML>";
+    }
+
     public void updateYouPoint(int point) {
         ((JProgressBar)racerStatusList.get(1)).setValue(point);
         ((JProgressBar)racerStatusList.get(1)).setString(String.valueOf(point));
     }
 
+    public void resetYouProgressBar() {
+        ((JProgressBar)racerStatusList.get(1)).setValue(ClientGameConfig.INIT_RACER_POSITION); // reset progress
+        ((JProgressBar)racerStatusList.get(1)).setString(Integer.toString(ClientGameConfig.INIT_RACER_POSITION)); // reset progress number
+    }
+
+    public void strikeThroughYouNickname() {
+        String str = ((JLabel)racerStatusList.get(0)).getText();
+        ((JLabel)racerStatusList.get(0)).setText(strikeThroughText(str));
+    }
+
     public void setUpdateStatus(String status) { updateStatus.setText(status); }
     public void setUpdateExtraStatus(String status) { updateExtraStatus.setText(status); }
 
-    public void stopAnswering() {
-        System.out.println("STOP ANSWERING");
+    public void initOpponentProgressWhenReceiveNumOfPplJoinning() {
+        ((JSeparator)racerStatusList.get(2)).setBorder(BorderFactory.createMatteBorder(4, 0, 0, 0, ClientGUIConfig.BORDER_COLOR));
 
-        timerBar.setValue(ClientGameConfig.MAX_TIMER_SEC);
-        timerBar.setString(Integer.toString(ClientGameConfig.MAX_TIMER_SEC));
+        for (int i = 2; i < ClientGameMaster.getInstance().getNumOfRacers() + 1; ++i) {
+            racerStatusList.get(i*2-1).setVisible(true); // show opponent name
 
-        enterAnswer.setEnabled(false);
-        submitAnswerButton.setEnabled(false);
+            JProgressBar tmpBar = (JProgressBar)(racerStatusList.get(i*2));
+            tmpBar.setForeground(ClientGUIConfig.COLOR_LIST.get(colorIndex)); // show opponent bar
+            tmpBar.setStringPainted(true); // show opponent bar value
+            tmpBar.setBorder(createProgressBarBorder(3)); // show finnish line
+        }
+    }
+
+    // update the progress bar to show how far each racer has come
+    // first label to contain "ImpostorNo" will be the empty slot
+    public void updateOpponentNameWhenJoin(ClientPlayer opponent) {
+        for (int i = 2; i < ClientGameMaster.getInstance().getNumOfRacers() + 1; ++i) {
+            if (((JLabel)racerStatusList.get(i*2-1)).getText().equals("ImpostorNo"+(i-1))) {
+                ((JLabel)racerStatusList.get(i*2-1)).setText(opponent.getNickname()); // update opponent name
+
+                break;
+            }
+        }
+    }
+
+    public void updateOpponentProgress(ClientPlayer opponent) {
+        for (int i = 2; i < ClientGameMaster.getInstance().getNumOfRacers() + 1; ++i) {
+            if (((JLabel)racerStatusList.get(i*2-1)).getText().equals(opponent.getNickname())) {
+                ((JProgressBar)racerStatusList.get(i*2)).setValue(opponent.getPosition()); // update opponent progress
+                ((JProgressBar)racerStatusList.get(i*2)).setString(Integer.toString(opponent.getPosition())); // update progress number
+
+                break;
+            }
+        }
+    }
+
+    // update other racers' IU when a racer quit
+    public void updateOpponentProgressWhenARacerQuit(ClientPlayer opponent) {
+        for (int i = 2; i < ClientGameMaster.getInstance().getNumOfRacers() + 1; ++i) {
+            String nickName = ((JLabel)racerStatusList.get(i*2-1)).getText();
+            if (nickName.equals(opponent.getNickname()) || nickName.equals("<HTML><STRIKE>" + opponent.getNickname() + "</STRIKE></HTML>")) {
+                ((JLabel)racerStatusList.get(i*2-1)).setText("ImpostorNo"+(i-1)); // reset opponent name
+
+                ((JProgressBar)racerStatusList.get(i*2)).setValue(ClientGameConfig.INIT_RACER_POSITION); // reset progress
+                ((JProgressBar)racerStatusList.get(i*2)).setString(Integer.toString(ClientGameConfig.INIT_RACER_POSITION)); // reset progress number
+
+                break;
+            }
+        }
+    }
+
+    public void strikeThroughEliminatedRacer(ClientPlayer opponent) {
+        for (int i = 2; i < ClientGameMaster.getInstance().getNumOfRacers() + 1; ++i) {
+            if (((JLabel)racerStatusList.get(i*2-1)).getText().equals(opponent.getNickname())) {
+                String nickName = ((JLabel)racerStatusList.get(i*2-1)).getText();
+                ((JLabel)racerStatusList.get(i*2-1)).setText(strikeThroughText(nickName)); // strike through opponent name
+
+                break;
+            }
+        }
+    }
+
+    public void resetProgressBarForReplay(ClientPlayer opponent) {
+        for (int i = 2; i < ClientGameMaster.getInstance().getNumOfRacers() + 1; ++i) {
+            ((JProgressBar)racerStatusList.get(i*2)).setValue(ClientGameConfig.INIT_RACER_POSITION); // reset progress
+            ((JProgressBar)racerStatusList.get(i*2)).setString(Integer.toString(ClientGameConfig.INIT_RACER_POSITION)); // reset progress number
+        }
     }
 }
