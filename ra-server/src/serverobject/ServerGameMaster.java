@@ -175,7 +175,7 @@ public class ServerGameMaster {
             int time = ServerGameConfig.MAX_TIMER_SEC;
             @Override
             public void run() {
-                if (time >= 0) {
+                if (time > 0) {
                     time -= 1;
                     ServerGUI.getInstance().setUpdateTimer(time);
                 } else {
