@@ -128,6 +128,7 @@ public class ClientGameMaster {
 
     private void _prepareRacer() {
         // update UI
+        cRacer.setNumOfIncorrect(0);
         ClientGUI.getInstance().renewRacerNickname(cRacer);
         ClientGUI.getInstance().resetYouProgressBar();
     }

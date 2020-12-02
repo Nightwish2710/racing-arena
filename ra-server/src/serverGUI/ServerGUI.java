@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.awt.*;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class ServerGUI extends JFrame {
@@ -62,6 +63,8 @@ public class ServerGUI extends JFrame {
 
     DefaultTableModel dtm;
 
+    private HashMap<Integer, ActionListener> startGameButtonlisteners;
+
     // Singleton
     private static ServerGUI serverGUI = null;
     public static ServerGUI getInstance() {
@@ -74,6 +77,8 @@ public class ServerGUI extends JFrame {
     public ServerGUI(String _gameName) {
         super(_gameName);
         serverGUI = this;
+
+        this.startGameButtonlisteners = new HashMap<>();
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
@@ -206,7 +211,29 @@ public class ServerGUI extends JFrame {
         startGameButton.setBackground(ServerGUIConfig.LIGHT_GREEN);
         startGameButton.setBorder(new LineBorder(ServerGUIConfig.LIGHT_GREEN));
         startGameButton.setEnabled(false);
-        startGameButton.addActionListener(e2 -> ServerGameMaster.getInstance().giveQuestion());
+
+        ActionListener alGiveQuestion = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ServerGameMaster.getInstance().giveQuestion();
+            }
+        };
+
+        ActionListener alReplay = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ServerGameMaster.getInstance().replay();
+                startGameButton.setText("GIVE QUESTION");
+                startGameButton.setBackground(ServerGUIConfig.LIGHT_GREEN);
+                startGameButton.setForeground(Color.WHITE);
+                startGameButton.removeActionListener(startGameButtonlisteners.get(1));
+                startGameButton.addActionListener(startGameButtonlisteners.get(0));
+            }
+        };
+        startGameButton.addActionListener(alGiveQuestion);
+
+        startGameButtonlisteners.put(0, alGiveQuestion);
+        startGameButtonlisteners.put(1, alReplay);
     }
 
     private void setSeparatorUI() {
@@ -307,13 +334,8 @@ public class ServerGUI extends JFrame {
     }
 
     public void changeStateOfControllButton() {
-        startGameButton.addActionListener(e1 -> {
-            ServerGameMaster.getInstance().replay();
-            startGameButton.setText("GIVE QUESTION");
-            startGameButton.setBackground(ServerGUIConfig.LIGHT_GREEN);
-            startGameButton.setForeground(Color.WHITE);
-            startGameButton.addActionListener(e2 -> ServerGameMaster.getInstance().giveQuestion());
-        });
+        startGameButton.removeActionListener(startGameButtonlisteners.get(0));
+        startGameButton.addActionListener(startGameButtonlisteners.get(1));
     }
 
     public void addSRacerToUI(String racerName, int gain, int status, int position) {
