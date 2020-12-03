@@ -67,6 +67,6 @@ https://vovanhai.wordpress.com/java/l%E1%BA%ADp-trinh-java-nang-cao/networking/c
 <p float="left">
   <img src="application-snippet/17-FifthQuestionRacer2Answer.PNG" height="140">
   <img src="application-snippet/18-SixthQuestionRacer2Answer.PNG" height="140">
-  <img src="application-snippet19-Finalize.PNG" height="140">
+  <img src="application-snippet/19-Finalize.PNG" height="140">
 </p>
 
