@@ -45,13 +45,13 @@ https://vovanhai.wordpress.com/java/l%E1%BA%ADp-trinh-java-nang-cao/networking/c
   <img src="application-snippet/4-newRacer2.PNG" width="400">
 </p>
 <p float="left">
-  <img src="application-snippet/5-ServerGiveFirstQuestion.PNG" height="150">
-  <img src="application-snippet/6-FirstQuestionRacer1AnswerFirst.PNG" height="150">
-  <img src="application-snippet/7-FirstQuestionRacer2AnswerSecond.PNG" height="150">
+  <img src="application-snippet/5-ServerGiveFirstQuestion.PNG" height="140">
+  <img src="application-snippet/6-FirstQuestionRacer1AnswerFirst.PNG" height="140">
+  <img src="application-snippet/7-FirstQuestionRacer2AnswerSecond.PNG" height="140">
 </p>
 <p float="left">
-  <img src="application-snippet/8-ServerGiveSecondQuestion.PNG" height="150">
-  <img src="application-snippet/9-SecondQuestionRacer1AnswerFirst.PNG" height="150">
-  <img src="application-snippet/10-SecondQuestionRacer2AnswerSecond.PNG" height="150">
+  <img src="application-snippet/8-ServerGiveSecondQuestion.PNG" height="140">
+  <img src="application-snippet/9-SecondQuestionRacer1AnswerFirst.PNG" height="140">
+  <img src="application-snippet/10-SecondQuestionRacer2AnswerSecond.PNG" height="140">
 </p>
 
