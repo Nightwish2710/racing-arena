@@ -46,8 +46,6 @@ public class ServerCSocketThread implements Runnable{
 
         this.parentThread = _parentThread;
         this.sRacerName = null;
-
-        System.out.println(this.getClass().getSimpleName() + " new connection with client# " + this.cSocketID + " at " + socketOfServer);
     }
 
     @Override
@@ -117,7 +115,7 @@ public class ServerCSocketThread implements Runnable{
         System.out.println(getClass().getSimpleName() + ": Client "+ this.getsRacerName() +" disconnected");
     }
 
-    public void reply (ServerDataModel data) {
+    public void reply(ServerDataModel data) {
         try {
             outStream.write(data.pack());
         } catch (IOException e) {
@@ -133,6 +131,7 @@ public class ServerCSocketThread implements Runnable{
 
         // check if there is available slots
         if (ServerGameMaster.getInstance().getCurrentNumOfRacers() < ServerGameMaster.getInstance().getNumOfRacers()) {
+
             // check if username exists in database
             String queryUser = "SELECT * FROM " + ServerDBConfig.TABLE_RACER
                     + " WHERE " + ServerDBConfig.TABLE_RACER_username + " = '" + sReqAccount.getUsername() + "'";

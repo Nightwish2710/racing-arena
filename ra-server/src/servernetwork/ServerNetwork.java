@@ -1,9 +1,7 @@
 package servernetwork;
 
-import serverGUI.ServerGUIConfig;
 import serverdatamodel.ServerDataModel;
 import serverobject.ServerGameConfig;
-import serverobject.ServerGameMaster;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -11,7 +9,6 @@ import java.net.Socket;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -141,7 +138,7 @@ public class ServerNetwork {
         }
 
         public int getNumberOfClient() {
-            return cSocketThreads.size();
+            return this.cSocketThreads.size();
         }
     }
 }

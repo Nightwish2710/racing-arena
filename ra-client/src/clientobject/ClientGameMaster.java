@@ -160,21 +160,23 @@ public class ClientGameMaster {
         ClientGUI.getInstance().setUpdateStatus(ClientGameConfig.STATUS_STRING[cRacer.getStatusFlag()]);
 
         String gainStr = cRacer.getGain() >= 0 ? ("+"+ cRacer.getGain()) : String.valueOf(cRacer.getGain());
-        ClientGUI.getInstance().setUpdateExtraStatus("Gain: " + gainStr + " ");
 
         switch (cRacer.getStatusFlag()) {
             case ClientGameConfig.RACER_STATUS_FLAG.FLAG_READY:
                 ClientGUI.getInstance().resetYouProgressBar();
+                ClientGUI.getInstance().setUpdateExtraStatus("Extra Status ");
+                break;
+            case ClientGameConfig.RACER_STATUS_FLAG.FLAG_NORMAL:
+            case ClientGameConfig.RACER_STATUS_FLAG.FLAG_FASTEST:
+            case ClientGameConfig.RACER_STATUS_FLAG.FLAG_TIMEOUT:
+                ClientGUI.getInstance().setUpdateExtraStatus("Gain: " + gainStr + " ");
                 break;
             case ClientGameConfig.RACER_STATUS_FLAG.FLAG_WRONG:
                 cRacer.updateNumOfIncorrectBy(1);
-                ClientGUI.getInstance().setUpdateExtraStatus("Wrong: " + this.cRacer.getNumOfIncorrect() + " times ");
-                break;
-            case ClientGameConfig.RACER_STATUS_FLAG.FLAG_TIMEOUT:
+                ClientGUI.getInstance().setUpdateExtraStatus("Wrong: " + this.cRacer.getNumOfIncorrect() + " times - Gain: " + gainStr + " ");
                 break;
             case ClientGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED:
                 checkForEndgameOnElimination();
-
                 ClientGUI.getInstance().strikeThroughYouNickname();
                 ClientGUI.getInstance().setUpdateExtraStatus("You were ejected :>> ");
                 break;

@@ -51,9 +51,7 @@ public class ServerRacerObject {
 
     public int getGain() { return this.position - prevPosition; }
 
-    public int getNumOfWrong() {
-        return numOfWrong;
-    }
+    public int getNumOfWrong() { return this.numOfWrong; }
     public void setNumOfWrong(int numOfWrong) {
         this.numOfWrong = numOfWrong;
     }

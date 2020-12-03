@@ -218,6 +218,7 @@ public class ServerGameMaster {
             // ignore previous eliminated or disconnected racer
             if (currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED &&
                     currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_QUIT) {
+
                 // prepare shortest answering time, ignore wrong answers
                 if (currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_WRONG &&
                         currRacer.getCurrDeltaSAnsweringTime() < _minDeltaSAnsweringTime) {
@@ -305,16 +306,18 @@ public class ServerGameMaster {
         // update values on UI and reset flags
         for (Map.Entry<String, ServerRacerObject> racerEntry : this.sRacers.entrySet()) {
             ServerRacerObject currRacer = racerEntry.getValue();
+
             // update values on UI
-            System.out.println("CHECK FLAG: " + currRacer.getUsername() + ": " + currRacer.getStatus() + " : " +ServerGameConfig.STATUS_STRING[currRacer.getStatus()]);
-            ServerGUI.getInstance().updateSRacerToUI(currRacer.getUsername(), currRacer.getGain(), currRacer.getStatus(), currRacer.getPosition());
+            ServerGUI.getInstance().updateSRacerToUI(
+                    currRacer.getUsername(),
+                    currRacer.getGain(),
+                    currRacer.getStatus(),
+                    currRacer.getPosition());
 
             // reset flags, ignore eliminated or disconnected racer
             if (currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_ELIMINATED &&
                     currRacer.getStatus() != ServerGameConfig.RACER_STATUS_FLAG.FLAG_QUIT) {
                 currRacer.resetRacerForNewQuestion();
-
-                System.out.println("CHECK FLAG 317: " + currRacer.getUsername() + ": " + currRacer.getStatus() + " : " +ServerGameConfig.STATUS_STRING[currRacer.getStatus()]);
             }
         }
     }
@@ -342,7 +345,11 @@ public class ServerGameMaster {
             // update values on UI
             System.out.println(currRacer.getUsername());
             ServerGUI.getInstance().renewRacerNickname(currRacer);
-            ServerGUI.getInstance().updateSRacerToUI(currRacer.getUsername(), currRacer.getGain(), currRacer.getStatus(), currRacer.getPosition());
+            ServerGUI.getInstance().updateSRacerToUI(
+                    currRacer.getUsername(),
+                    currRacer.getGain(),
+                    currRacer.getStatus(),
+                    currRacer.getPosition());
             ServerGUI.getInstance().updateSRacerAnswerToUI(currRacer.getUsername(), Integer.MAX_VALUE);
         }
     }

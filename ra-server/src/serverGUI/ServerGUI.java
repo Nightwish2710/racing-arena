@@ -12,9 +12,7 @@ import javax.swing.border.*;
 
 import javax.imageio.ImageIO;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
+import java.awt.event.*;
 import java.io.IOException;
 import java.awt.*;
 import java.util.Arrays;
@@ -118,8 +116,8 @@ public class ServerGUI extends JFrame {
     private void setServerGUI() {
         // set icon
         try {
-            ServerGUI.getInstance().setIconImage(ImageIO.read(new File("assets/dog-russel-grin-icon.png")));
-            image.setIcon(new ImageIcon(ImageIO.read(new File("assets/background.png")).getScaledInstance(216, 115, Image.SCALE_SMOOTH)));
+            ServerGUI.getInstance().setIconImage(ImageIO.read(this.getClass().getResource("assets/dog-russel-grin-icon.png")));
+            image.setIcon(new ImageIcon(ImageIO.read(this.getClass().getResource("assets/background.png")).getScaledInstance(216, 115, Image.SCALE_SMOOTH)));
         } catch (IOException e) {
             System.err.println("Cannot set icon for Server UI");
             e.printStackTrace();
@@ -304,6 +302,13 @@ public class ServerGUI extends JFrame {
         return str;
     }
 
+    private Boolean checkIfEqualToNickname(String str, String nickname) {
+        if (str.equals(nickname) || str.equals("<HTML><STRIKE>" + nickname + "</STRIKE></HTML>")) {
+            return true;
+        }
+        return false;
+    }
+
     private void disableComponentAfterOpenConnection() {
         numOfRacersSpinner.setEnabled(false);
         raceLengthSpinner.setEnabled(false);
@@ -331,9 +336,9 @@ public class ServerGUI extends JFrame {
         String gainStr = gain >= 0 ? ("+"+String.valueOf(gain)) : String.valueOf(gain);
 
         for (int i = 0; i < ServerGameMaster.getInstance().getNumOfRacers(); ++i) {
-            System.out.println("ServerGUI "+ dtm.getValueAt(i, 0));
-            if (dtm.getValueAt(i, 0) == racerName ||
-                    dtm.getValueAt(i, 0) == "<HTML><STRIKE>" + racerName + "</STRIKE></HTML>") {
+            String str = (String)dtm.getValueAt(i, 0);
+
+            if (checkIfEqualToNickname(str, racerName)) {
                 dtm.setValueAt(gainStr, i, 2);
                 dtm.setValueAt(ServerGameConfig.STATUS_STRING[status], i, 3);
                 dtm.setValueAt(position, i, 4);
@@ -345,7 +350,9 @@ public class ServerGUI extends JFrame {
 
     public void updateSRacerAnswerToUI(String racerName, int answer) {
         for (int i = 0; i < ServerGameMaster.getInstance().getNumOfRacers(); ++i) {
-            if (dtm.getValueAt(i, 0) == racerName) {
+            String str = (String)dtm.getValueAt(i, 0);
+
+            if (checkIfEqualToNickname(str, racerName)) {
                 if (answer == Integer.MAX_VALUE) {
                     dtm.setValueAt("Empty", i, 1);
                 }
@@ -358,7 +365,9 @@ public class ServerGUI extends JFrame {
 
     public void removeSRacerFromUI(String racerName) {
         for (int i = 0; i < ServerGameMaster.getInstance().getNumOfRacers(); ++i) {
-            if (dtm.getValueAt(i, 0).equals(racerName)) {
+            String str = (String)dtm.getValueAt(i, 0);
+
+            if (checkIfEqualToNickname(str, racerName)) {
                 dtm.removeRow(i);
                 break;
             }
@@ -387,7 +396,9 @@ public class ServerGUI extends JFrame {
     // strike through name of whom is eliminated from the race
     public void strikeThroughEliminatedRacer(String racerName) {
         for (int i = 0; i < ServerGameMaster.getInstance().getNumOfRacers(); ++i) {
-            if (dtm.getValueAt(i, 0).equals(racerName)) {
+            String str = (String)dtm.getValueAt(i, 0);
+
+            if (checkIfEqualToNickname(str, racerName)) {
                 dtm.setValueAt(strikeThroughText((String)dtm.getValueAt(i, 0)), i, 0);
             }
         }
@@ -416,10 +427,11 @@ public class ServerGUI extends JFrame {
     }
 
     public void renewRacerNickname(ServerRacerObject racer) {
-        String racerName = racer.getUsername();
         for (int i = 0; i < ServerGameMaster.getInstance().getNumOfRacers(); ++i) {
-            if (dtm.getValueAt(i, 0).equals("<HTML><STRIKE>" + racerName + "</STRIKE></HTML>")) {
-                dtm.setValueAt(removeStrikeThrough((String)dtm.getValueAt(i, 0)), i, 0);
+            String str = (String)dtm.getValueAt(i, 0);
+
+            if (checkIfEqualToNickname(str, racer.getUsername())) {
+                dtm.setValueAt(removeStrikeThrough(str), i, 0);
             }
         }
     }

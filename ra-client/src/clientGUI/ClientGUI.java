@@ -136,7 +136,7 @@ public class ClientGUI extends JFrame {
     private void setPermanentClientGUI() {
         // set icon
         try {
-            ClientGUI.getInstance().setIconImage(ImageIO.read(new File("assets/dog-sharpei-icon.png")));
+            ClientGUI.getInstance().setIconImage(ImageIO.read(this.getClass().getResource("assets/dog-sharpei-icon.png")));
         } catch (IOException e) {
             System.err.println("Cannot set icon for Client UI");
             e.printStackTrace();
@@ -438,7 +438,7 @@ public class ClientGUI extends JFrame {
         gbconstraints.fill = GridBagConstraints.HORIZONTAL;
 
         JLabel tmpLabel = new JLabel();
-        tmpLabel.setMinimumSize(new Dimension(ClientGUIConfig.RACER_STAT_PANEL_LABEL_WIDTH, 25));
+        tmpLabel.setMinimumSize(new Dimension(ClientGUIConfig.RACER_STAT_PANEL_LABEL_WIDTH, 20));
         tmpLabel.setText("<HTML>&#x2666; Me &#x2666;</HTML>");
         tmpLabel.setFont(new Font("Arial", Font.PLAIN, 9));
         tmpLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -546,7 +546,7 @@ public class ClientGUI extends JFrame {
         noOpenConnectionPane.setOptions(new Object[]{retryButton, cancelButton});
 
         try {
-            noOpenConnectionDialog.setIconImage(ImageIO.read(new File("assets/metal-error.png")));
+            noOpenConnectionDialog.setIconImage(ImageIO.read(this.getClass().getResource("assets/metal-error.png")));
         } catch (IOException e) {
             System.err.println("Cannot set icon for Error Message Popup");
             e.printStackTrace();
@@ -670,6 +670,13 @@ public class ClientGUI extends JFrame {
         return str;
     }
 
+    private Boolean checkIfEqualToNickname(String str, String nickname) {
+        if (str.equals(nickname) || str.equals("<HTML><STRIKE>" + nickname + "</STRIKE></HTML>")) {
+            return true;
+        }
+        return false;
+    }
+
     public void updateYouPoint(int point) {
         ((JProgressBar)racerStatusList.get(1)).setValue(point);
         ((JProgressBar)racerStatusList.get(1)).setString(String.valueOf(point));
@@ -715,7 +722,9 @@ public class ClientGUI extends JFrame {
 
     public void updateOpponentProgress(ClientPlayer opponent) {
         for (int i = 2; i < ClientGameMaster.getInstance().getNumOfRacers() + 1; ++i) {
-            if (((JLabel)racerStatusList.get(i*2-1)).getText().equals(opponent.getNickname())) {
+            String str = ((JLabel)racerStatusList.get(i*2-1)).getText();
+
+            if (checkIfEqualToNickname(str, opponent.getNickname())) {
                 ((JProgressBar)racerStatusList.get(i*2)).setValue(opponent.getPosition()); // update opponent progress
                 ((JProgressBar)racerStatusList.get(i*2)).setString(Integer.toString(opponent.getPosition())); // update progress number
 
@@ -727,8 +736,9 @@ public class ClientGUI extends JFrame {
     // update other racers' IU when a racer quit
     public void updateOpponentProgressWhenARacerQuit(ClientPlayer opponent) {
         for (int i = 2; i < ClientGameMaster.getInstance().getNumOfRacers() + 1; ++i) {
-            String nickName = ((JLabel)racerStatusList.get(i*2-1)).getText();
-            if (nickName.equals(opponent.getNickname()) || nickName.equals("<HTML><STRIKE>" + opponent.getNickname() + "</STRIKE></HTML>")) {
+            String str = ((JLabel)racerStatusList.get(i*2-1)).getText();
+
+            if (checkIfEqualToNickname(str, opponent.getNickname())) {
                 ((JLabel)racerStatusList.get(i*2-1)).setText("ImpostorNo"+(i-1)); // reset opponent name
 
                 ((JProgressBar)racerStatusList.get(i*2)).setValue(ClientGameConfig.INIT_RACER_POSITION); // reset progress
@@ -746,7 +756,9 @@ public class ClientGUI extends JFrame {
 
     public void strikeThroughEliminatedRacer(ClientPlayer opponent) {
         for (int i = 2; i < ClientGameMaster.getInstance().getNumOfRacers() + 1; ++i) {
-            if (((JLabel)racerStatusList.get(i*2-1)).getText().equals(opponent.getNickname())) {
+            String str = ((JLabel)racerStatusList.get(i*2-1)).getText();
+
+            if (checkIfEqualToNickname(str, opponent.getNickname())) {
                 String nickName = ((JLabel)racerStatusList.get(i*2-1)).getText();
                 ((JLabel)racerStatusList.get(i*2-1)).setText(strikeThroughText(nickName)); // strike through opponent name
 

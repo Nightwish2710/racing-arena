@@ -95,7 +95,7 @@ public class ClientNetwork {
         }
     }
 
-    private void _wait (int sec) {
+    private void _wait(int sec) {
         try {
             Thread.sleep(sec);
         } catch(InterruptedException ex){

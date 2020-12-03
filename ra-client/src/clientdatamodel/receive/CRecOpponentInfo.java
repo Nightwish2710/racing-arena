@@ -53,7 +53,7 @@ public class CRecOpponentInfo extends ClientDataModel {
     }
 
     public int getOpponentPosition() {
-        return opponentPosition;
+        return this.opponentPosition;
     }
     public void setOpponentPosition(int opponentPosition) {
         this.opponentPosition = opponentPosition;

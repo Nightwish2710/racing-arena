@@ -60,7 +60,7 @@ public class CRecLogin extends ClientDataModel {
     }
 
     public int getEventFlag() {
-        return eventFlag;
+        return this.eventFlag;
     }
     public void setEventFlag(int eventFlag) {
         this.eventFlag = eventFlag;
@@ -95,7 +95,7 @@ public class CRecLogin extends ClientDataModel {
     }
 
     public HashMap<String, ClientPlayer> getcOpponents() {
-        return cOpponents;
+        return this.cOpponents;
     }
 
     public void setcOpponents(HashMap<String, ClientPlayer> cOpponents) {
