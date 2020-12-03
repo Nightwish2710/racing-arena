@@ -54,4 +54,19 @@ https://vovanhai.wordpress.com/java/l%E1%BA%ADp-trinh-java-nang-cao/networking/c
   <img src="application-snippet/9-SecondQuestionRacer1AnswerFirst.PNG" height="140">
   <img src="application-snippet/10-SecondQuestionRacer2AnswerSecond.PNG" height="140">
 </p>
+<p float="left">
+  <img src="application-snippet/11-ServerGiveThirdQuestion.PNG" height="140">
+  <img src="application-snippet/12-ThirdQuestionRacer2AnswerFirst.PNG" height="140">
+  <img src="application-snippet/13-ThirdQuestionRacer1AnswerSecond.PNG" height="140">
+</p>
+<p float="left">
+  <img src="application-snippet/14-ServerGiveFourthQuestion.PNG" height="140">
+  <img src="application-snippet/15-FourthQuestionRacer1AnswerFirst.PNG" height="140">
+  <img src="application-snippet/16-FourthQuestionRacer2AnswerSecond.PNG" height="140">
+</p>
+<p float="left">
+  <img src="application-snippet/17-FifthQuestionRacer2Answer.PNG" height="140">
+  <img src="application-snippet/18-SixthQuestionRacer2Answer.PNG" height="140">
+  <img src="application-snippet19-Finalize.PNG" height="140">
+</p>
 
