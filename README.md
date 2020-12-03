@@ -37,25 +37,21 @@ https://vovanhai.wordpress.com/java/l%E1%BA%ADp-trinh-java-nang-cao/networking/c
 **SOME GAMEPLAY SCREENS**:
 
 <p float="left">
-  <img src="application-snippet/1-racerJoin1.PNG" width="500">
-  <img src="application-snippet/2-newRacer1.PNG" width="500">
+  <img src="application-snippet/1-racerJoin1.PNG" width="400">
+  <img src="application-snippet/2-newRacer1.PNG" width="400">
 </p>
 <p float="left">
-  <img src="application-snippet/3-racerJoin2.PNG" width="500">
-  <img src="application-snippet/4-newRacer2.PNG" width="500">
+  <img src="application-snippet/3-racerJoin2.PNG" width="400">
+  <img src="application-snippet/4-newRacer2.PNG" width="400">
 </p>
 <p float="left">
-  <img src="application-snippet/5-ServerGiveFirstQuestion.PNG" width="400">
-  <img src="application-snippet/6-FirstQuestionRacer1AnswerFirst.PNG" width="300">
-  <img src="application-snippet/7-FirstQuestionRacer2AnswerSecond.PNG" width="300">
+  <img src="application-snippet/5-ServerGiveFirstQuestion.PNG" width="350">
+  <img src="application-snippet/6-FirstQuestionRacer1AnswerFirst.PNG" width="200">
+  <img src="application-snippet/7-FirstQuestionRacer2AnswerSecond.PNG" width="200">
 </p>
 <p float="left">
-  <img src="application-snippet/8-ServerGiveSecondQuestion.PNG" width="400">
-  <img src="application-snippet/9-SecondQuestionRacer1AnswerFirst.PNG" width="300">
-  <img src="application-snippet/10-SecondQuestionRacer2AnswerSecond.PNG" width="300">
-</p>
-<p float="left">
-  <img src="application-snippet/11-ServerGiveThirdQuestion.PNG" width="400">
-  <img src="application-snippet/10-SecondQuestionRacer2AnswerSecond.PNG" width="300">
+  <img src="application-snippet/8-ServerGiveSecondQuestion.PNG" width="350">
+  <img src="application-snippet/9-SecondQuestionRacer1AnswerFirst.PNG" width="200">
+  <img src="application-snippet/10-SecondQuestionRacer2AnswerSecond.PNG" width="200">
 </p>
 
