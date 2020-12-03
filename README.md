@@ -35,12 +35,12 @@ https://vovanhai.wordpress.com/java/l%E1%BA%ADp-trinh-java-nang-cao/networking/c
 <img src='application-snippet/errorMessage.PNG' width='250px'>
 
 <p float="left">
-  <img src="application-snippet/1-racerJoin1.PNG" width="250">
-  <img src="application-snippet/2-newRacer1.PNG" width="250">
+  <img src="application-snippet/1-racerJoin1.PNG" width="400">
+  <img src="application-snippet/2-newRacer1.PNG" width="400">
 </p>
 <p float="left">
-  <img src="application-snippet/3-racerJoin2.PNG" width="100">
-  <img src="application-snippet/4-newRacer2.PNG" width="100">
+  <img src="application-snippet/3-racerJoin2.PNG" width="400">
+  <img src="application-snippet/4-newRacer2.PNG" width="400">
 </p>
 
 
