@@ -35,7 +35,7 @@ public class ServerGameMaster {
         this.numOfRemainRacers = this.numOfRacers;
         this.raceLength = ServerGameConfig.INIT_RACE_LENGTH;
         this.isEndgame = false;
-        serverGameMaster = this;
+        serverGameMaster = this; 
     }
 
     public int getNumOfRacers() { return this.numOfRacers; }

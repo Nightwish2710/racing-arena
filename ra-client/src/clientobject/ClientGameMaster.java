@@ -101,11 +101,6 @@ public class ClientGameMaster {
     public void setCurrentQuestion(ClientQuestion currentQuestion) {
         this.currentQuestion = currentQuestion;
 
-//        if (this.currentQuestion.getQuestionId() == ClientGameConfig.INIT_QUESTION_ID) {
-//            // put all racers back to the start
-//            prepareRacersToStartTheRace();
-//        }
-
         ClientGUI.getInstance().setFirstNum(currentQuestion.getFirstNum());
         ClientGUI.getInstance().setOperator(currentQuestion.getOperator());
         ClientGUI.getInstance().setSecondNum(currentQuestion.getSecondNum());
